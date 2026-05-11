@@ -456,13 +456,13 @@ function FeaturedStat({ active }: { active: boolean }) {
                 transition: "stroke-dashoffset 0.05s linear",
               }}
             />
-            <text x="70" y="66" textAnchor="middle" fill="#ffffff" fontSize="28" fontWeight="800" fontFamily="system-ui">
+            <text x="70" y="66" textAnchor="middle" fontSize="28" fontWeight="800" fontFamily="system-ui" style={{ fill: "var(--text-1)" }}>
               {count}
             </text>
             <text x="70" y="66" textAnchor="start" fill="#22c55e" fontSize="16" fontWeight="700" fontFamily="system-ui" dx="18" dy="0">
               %
             </text>
-            <text x="70" y="84" textAnchor="middle" fill="rgba(255,255,255,0.35)" fontSize="9" fontFamily="system-ui" letterSpacing="1">
+            <text x="70" y="84" textAnchor="middle" fontSize="9" fontFamily="system-ui" letterSpacing="1" style={{ fill: "var(--text-3)" }}>
               SATISFACTION
             </text>
           </svg>

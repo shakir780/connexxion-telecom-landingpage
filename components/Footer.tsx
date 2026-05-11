@@ -379,7 +379,7 @@ export default function Footer() {
             <input
               type="email"
               placeholder="your@company.com"
-              className="flex-1 sm:w-56 px-4 py-2.5 rounded-xl text-sm outline-none placeholder:text-[rgba(255,255,255,0.25)] focus:ring-1"
+              className="flex-1 sm:w-56 px-4 py-2.5 rounded-xl text-sm outline-none placeholder:text-[var(--text-4)] focus:ring-1"
               style={{
                 background: "var(--bg-input)",
                 border: "1px solid var(--border-1)",
