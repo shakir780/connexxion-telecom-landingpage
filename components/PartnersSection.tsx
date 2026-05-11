@@ -113,8 +113,8 @@ function LogoPill({ partner, delay }: { partner: (typeof PARTNERS)[number]; dela
       whileHover={{ y: -4, scale: 1.04 }}
       className="group relative flex items-center justify-center px-7 py-5 rounded-xl cursor-default"
       style={{
-        background: "rgba(255,255,255,0.025)",
-        border: "1px solid rgba(255,255,255,0.07)",
+        background: "var(--bg-input)",
+        border: "1px solid var(--border-1)",
         boxShadow: "0 2px 16px rgba(0,0,0,0.25)",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease",
       }}
@@ -126,8 +126,8 @@ function LogoPill({ partner, delay }: { partner: (typeof PARTNERS)[number]; dela
       }}
       onMouseLeave={(e) => {
         const el = e.currentTarget as HTMLElement;
-        el.style.borderColor = "rgba(255,255,255,0.07)";
-        el.style.background = "rgba(255,255,255,0.025)";
+        el.style.borderColor = "var(--border-1)";
+        el.style.background = "var(--bg-input)";
         el.style.boxShadow = "0 2px 16px rgba(0,0,0,0.25)";
       }}
     >
@@ -139,8 +139,8 @@ function LogoPill({ partner, delay }: { partner: (typeof PARTNERS)[number]; dela
 
       {/* Logo — muted by default, brighter on hover */}
       <div
-        className="transition-all duration-300 group-hover:text-white"
-        style={{ color: "rgba(255,255,255,0.28)" }}
+        className="transition-all duration-300 group-hover:text-gray-900 dark:group-hover:text-white"
+        style={{ color: "var(--text-3)" }}
         title={partner.label}
       >
         <partner.Logo />
@@ -158,11 +158,11 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
       {/* Fade masks */}
       <div
         className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-        style={{ background: "linear-gradient(90deg, #080c14 0%, transparent 100%)" }}
+        style={{ background: "linear-gradient(90deg, var(--bg) 0%, transparent 100%)" }}
       />
       <div
         className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-        style={{ background: "linear-gradient(270deg, #080c14 0%, transparent 100%)" }}
+        style={{ background: "linear-gradient(270deg, var(--bg) 0%, transparent 100%)" }}
       />
 
       <div
@@ -177,8 +177,8 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
             key={`${p.id}-${i}`}
             className="group relative flex items-center justify-center px-8 py-4 rounded-xl shrink-0 cursor-default"
             style={{
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "var(--bg-input)",
+              border: "1px solid var(--border-1)",
               minWidth: 160,
               transition: "border-color 0.3s ease, background 0.3s ease",
             }}
@@ -189,13 +189,13 @@ function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
             }}
             onMouseLeave={(e) => {
               const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = "rgba(255,255,255,0.07)";
-              el.style.background = "rgba(255,255,255,0.025)";
+              el.style.borderColor = "var(--border-1)";
+              el.style.background = "var(--bg-input)";
             }}
           >
             <div
-              className="transition-all duration-300 group-hover:text-white"
-              style={{ color: "rgba(255,255,255,0.3)" }}
+              className="transition-all duration-300 group-hover:text-gray-900 dark:group-hover:text-white"
+              style={{ color: "var(--text-3)" }}
               title={p.label}
             >
               <p.Logo />
@@ -217,9 +217,9 @@ function TestimonialCard() {
       transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.2 }}
       className="relative max-w-3xl mx-auto rounded-2xl px-8 py-8 sm:px-12"
       style={{
-        background: "linear-gradient(145deg, rgba(12,18,30,0.92) 0%, rgba(8,12,20,0.96) 100%)",
+        background: "var(--bg-card)",
         border: "1px solid rgba(34,197,94,0.14)",
-        boxShadow: "0 8px 48px rgba(0,0,0,0.45)",
+        boxShadow: "var(--shadow-lg)",
       }}
     >
       {/* Top accent */}
@@ -261,17 +261,17 @@ function TestimonialCard() {
             ))}
           </div>
 
-          <p className="text-sm sm:text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.62)" }}>
+          <p className="text-sm sm:text-base leading-relaxed" style={{ color: "var(--text-2)" }}>
             &ldquo;Connexxion&apos;s infrastructure refresh reduced our network latency by 67% and
             gave our engineering team confidence that our backbone will support the next decade
             of growth. Their NOC team is responsive, knowledgeable, and genuinely proactive.&rdquo;
           </p>
 
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.88)" }}>
+            <span className="text-sm font-semibold" style={{ color: "var(--text-1)" }}>
               Marcus Reynolds
             </span>
-            <span className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
+            <span className="text-xs" style={{ color: "var(--text-3)" }}>
               Chief Technology Officer — MidAtlantic Financial Group
             </span>
           </div>
@@ -296,24 +296,24 @@ function TrustBar() {
       viewport={{ once: true }}
       transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.3 }}
       className="flex flex-wrap justify-center gap-px rounded-2xl overflow-hidden mt-8"
-      style={{ border: "1px solid rgba(255,255,255,0.07)" }}
+      style={{ border: "1px solid var(--border-1)" }}
     >
       {indicators.map(({ value, label }, i) => (
         <div
           key={label}
           className="flex flex-col items-center gap-1 px-8 py-5 grow"
           style={{
-            background: "rgba(255,255,255,0.02)",
-            borderRight: i < indicators.length - 1 ? "1px solid rgba(255,255,255,0.07)" : "none",
+            background: "var(--bg-input)",
+            borderRight: i < indicators.length - 1 ? "1px solid var(--border-1)" : "none",
           }}
         >
           <span
             className="text-2xl font-black tabular-nums"
-            style={{ color: "#ffffff" }}
+            style={{ color: "var(--text-1)" }}
           >
             {value}
           </span>
-          <span className="text-xs font-medium text-center" style={{ color: "rgba(255,255,255,0.38)" }}>
+          <span className="text-xs font-medium text-center" style={{ color: "var(--text-3)" }}>
             {label}
           </span>
         </div>
@@ -390,7 +390,7 @@ function SectionHeader() {
         viewport={{ once: true }}
         transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.08 }}
         className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]"
-        style={{ color: "#ffffff" }}
+        style={{ color: "var(--text-1)" }}
       >
         Trusted by{" "}
         <span
@@ -413,7 +413,7 @@ function SectionHeader() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.16 }}
         className="text-base lg:text-lg leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.5)" }}
+        style={{ color: "var(--text-2)" }}
       >
         From Fortune 500 enterprises to fast-scaling technology companies, the world&apos;s
         most connectivity-dependent organizations rely on Connexxion&apos;s infrastructure
@@ -440,9 +440,9 @@ function LogoGrid() {
 function SectionDivider() {
   return (
     <div className="flex items-center gap-4">
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06))" }} />
+      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--border-2))" }} />
       <div className="w-1.5 h-1.5 rounded-full" style={{ background: "rgba(34,197,94,0.5)", boxShadow: "0 0 8px rgba(34,197,94,0.5)" }} />
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.06), transparent)" }} />
+      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--border-2), transparent)" }} />
     </div>
   );
 }
@@ -454,7 +454,7 @@ export default function PartnersSection() {
       id="partners"
       className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #080c14 0%, #07090f 50%, #080c14 100%)",
+        background: "var(--bg)",
       }}
     >
       <SectionDivider />
@@ -514,14 +514,14 @@ export default function PartnersSection() {
           transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.1 }}
           className="flex items-center gap-4 mt-16 mb-10"
         >
-          <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+          <div className="flex-1 h-px" style={{ background: "var(--border-2)" }} />
           <span
             className="text-[10px] font-bold tracking-widest uppercase"
-            style={{ color: "rgba(255,255,255,0.2)" }}
+            style={{ color: "var(--text-4)" }}
           >
             Client Testimonial
           </span>
-          <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+          <div className="flex-1 h-px" style={{ background: "var(--border-2)" }} />
         </motion.div>
 
         {/* Testimonial */}

@@ -90,10 +90,10 @@ function FloatingBadge() {
       transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.45 }}
       className="absolute left-6 bottom-6 sm:left-10 sm:bottom-10 hidden sm:flex items-center gap-3 px-4 py-3 rounded-xl"
       style={{
-        background: "rgba(12,18,30,0.85)",
+        background: "var(--bg-card)",
         border: "1px solid rgba(34,197,94,0.18)",
         backdropFilter: "blur(16px)",
-        boxShadow: "0 4px 32px rgba(0,0,0,0.5)",
+        boxShadow: "var(--shadow-md)",
       }}
     >
       <div
@@ -106,8 +106,8 @@ function FloatingBadge() {
         </svg>
       </div>
       <div className="flex flex-col gap-0.5">
-        <span className="text-[11px] font-bold" style={{ color: "#ffffff" }}>47 States Connected</span>
-        <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.4)" }}>Nationwide backbone</span>
+        <span className="text-[11px] font-bold" style={{ color: "var(--text-1)" }}>47 States Connected</span>
+        <span className="text-[10px]" style={{ color: "var(--text-3)" }}>Nationwide backbone</span>
       </div>
     </motion.div>
   );
@@ -123,10 +123,10 @@ function UptimeBadge() {
       transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.55 }}
       className="absolute right-6 top-6 sm:right-10 sm:top-10 hidden sm:flex items-center gap-3 px-4 py-3 rounded-xl"
       style={{
-        background: "rgba(12,18,30,0.85)",
+        background: "var(--bg-card)",
         border: "1px solid rgba(34,197,94,0.18)",
         backdropFilter: "blur(16px)",
-        boxShadow: "0 4px 32px rgba(0,0,0,0.5)",
+        boxShadow: "var(--shadow-md)",
       }}
     >
       <div className="flex items-center gap-1.5">
@@ -136,7 +136,7 @@ function UptimeBadge() {
         </span>
         <span className="text-[11px] font-bold" style={{ color: "#22c55e" }}>99.9% Uptime</span>
       </div>
-      <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.35)" }}>SLA Guaranteed</span>
+      <span className="text-[10px]" style={{ color: "var(--text-3)" }}>SLA Guaranteed</span>
     </motion.div>
   );
 }
@@ -148,14 +148,14 @@ export default function CTASection() {
       id="contact"
       className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #080c14 0%, #050810 50%, #080c14 100%)",
+        background: "var(--bg)",
       }}
     >
       {/* Top separator */}
       <div className="flex items-center gap-4">
-        <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06))" }} />
+        <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--border-2))" }} />
         <div className="w-1.5 h-1.5 rounded-full" style={{ background: "rgba(34,197,94,0.5)", boxShadow: "0 0 8px rgba(34,197,94,0.5)" }} />
-        <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.06), transparent)" }} />
+        <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--border-2), transparent)" }} />
       </div>
 
       {/* Background */}
@@ -180,7 +180,7 @@ export default function CTASection() {
           transition={{ duration: 0.75, ease: EASE_OUT }}
           className="relative rounded-3xl overflow-hidden px-8 py-16 sm:px-16 sm:py-20 lg:py-24 text-center"
           style={{
-            background: "linear-gradient(145deg, rgba(12,18,32,0.95) 0%, rgba(7,11,22,0.98) 100%)",
+            background: "var(--bg-card)",
             border: "1px solid rgba(34,197,94,0.14)",
             boxShadow:
               "0 0 0 1px rgba(255,255,255,0.04), 0 24px 80px rgba(0,0,0,0.55), 0 0 120px rgba(34,197,94,0.05) inset",
@@ -223,7 +223,7 @@ export default function CTASection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.18 }}
             className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.08] max-w-4xl mx-auto"
-            style={{ color: "#ffffff" }}
+            style={{ color: "var(--text-1)" }}
           >
             Ready to Build the{" "}
             <span
@@ -248,7 +248,7 @@ export default function CTASection() {
             viewport={{ once: true }}
             transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.28 }}
             className="mt-6 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto"
-            style={{ color: "rgba(255,255,255,0.5)" }}
+            style={{ color: "var(--text-2)" }}
           >
             From nationwide fiber deployment to fully managed enterprise connectivity —
             our solutions engineers are ready to architect a tailored solution that keeps
@@ -295,9 +295,9 @@ export default function CTASection() {
               href="#services"
               className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-sm font-bold transition-all duration-300"
               style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.14)",
-                color: "rgba(255,255,255,0.85)",
+                background: "var(--bg-input)",
+                border: "1px solid var(--border-3)",
+                color: "var(--text-1)",
                 backdropFilter: "blur(12px)",
               }}
               onMouseEnter={(e) => {
@@ -309,9 +309,9 @@ export default function CTASection() {
               }}
               onMouseLeave={(e) => {
                 const el = e.currentTarget as HTMLElement;
-                el.style.background = "rgba(255,255,255,0.04)";
-                el.style.borderColor = "rgba(255,255,255,0.14)";
-                el.style.color = "rgba(255,255,255,0.85)";
+                el.style.background = "var(--bg-input)";
+                el.style.borderColor = "var(--border-3)";
+                el.style.color = "var(--text-1)";
                 el.style.transform = "translateY(0)";
               }}
             >
@@ -339,7 +339,7 @@ export default function CTASection() {
                 <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5 shrink-0" stroke="#22c55e" strokeWidth={2}>
                   <path d="M3 8l3.5 3.5 6.5-7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <span className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.4)" }}>
+                <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
                   {text}
                 </span>
               </div>

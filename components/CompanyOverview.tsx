@@ -230,7 +230,7 @@ function NetworkGlobe() {
           key={i}
           x={c.cx} y={c.cy}
           textAnchor="middle"
-          fill="rgba(255,255,255,0.35)"
+          fill="var(--text-4)"
           fontSize="9"
           fontFamily="system-ui, sans-serif"
           letterSpacing="0.5"
@@ -263,11 +263,11 @@ function StatCard({
       whileHover={{ scale: 1.04, y: -4 }}
       className="relative flex flex-col gap-1 px-4 py-3 rounded-xl cursor-default"
       style={{
-        background: "rgba(15, 22, 35, 0.75)",
+        background: "var(--bg-card)",
         backdropFilter: "blur(18px)",
         WebkitBackdropFilter: "blur(18px)",
         border: "1px solid rgba(34,197,94,0.18)",
-        boxShadow: "0 4px 32px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(34,197,94,0.08) inset",
+        boxShadow: "var(--shadow-md)",
         minWidth: "110px",
       }}
     >
@@ -282,13 +282,13 @@ function StatCard({
         </span>
         <span
           className="text-2xl font-bold tabular-nums"
-          style={{ color: "#ffffff", lineHeight: 1 }}
+          style={{ color: "var(--text-1)", lineHeight: 1 }}
         >
           {count}
           <span style={{ color: "#22c55e", fontSize: "0.8em" }}>{suffix}</span>
         </span>
       </div>
-      <span className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.45)", letterSpacing: "0.04em" }}>
+      <span className="text-xs font-medium" style={{ color: "var(--text-3)", letterSpacing: "0.04em" }}>
         {label}
       </span>
     </motion.div>
@@ -307,9 +307,9 @@ function RightPanel({ statsActive }: { statsActive: boolean }) {
         transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.15 }}
         className="relative rounded-2xl overflow-hidden"
         style={{
-          background: "linear-gradient(145deg, #0d1626 0%, #0a1120 60%, #081018 100%)",
-          border: "1px solid rgba(255,255,255,0.07)",
-          boxShadow: "0 24px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(34,197,94,0.06)",
+          background: "var(--bg-surface)",
+          border: "1px solid var(--border-1)",
+          boxShadow: "var(--shadow-xl)",
         }}
       >
         {/* Corner accent */}
@@ -329,12 +329,12 @@ function RightPanel({ statsActive }: { statsActive: boolean }) {
         {/* Top bar */}
         <div
           className="flex items-center gap-2 px-5 py-3"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+          style={{ borderBottom: "1px solid var(--border-2)" }}
         >
           {["#ef4444", "#f59e0b", "#22c55e"].map((c, i) => (
             <span key={i} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />
           ))}
-          <span className="ml-2 text-xs font-mono" style={{ color: "rgba(255,255,255,0.25)", letterSpacing: "0.08em" }}>
+          <span className="ml-2 text-xs font-mono" style={{ color: "var(--text-4)", letterSpacing: "0.08em" }}>
             CONNEXXION — NETWORK OPERATIONS CENTER
           </span>
         </div>
@@ -347,7 +347,7 @@ function RightPanel({ statsActive }: { statsActive: boolean }) {
         {/* Bottom status bar */}
         <div
           className="flex items-center justify-between px-5 py-3 gap-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+          style={{ borderTop: "1px solid var(--border-2)" }}
         >
           {[
             { label: "LATENCY", value: "12ms", ok: true },
@@ -355,7 +355,7 @@ function RightPanel({ statsActive }: { statsActive: boolean }) {
             { label: "ACTIVE NODES", value: "1,247", ok: true },
           ].map(({ label, value, ok }) => (
             <div key={label} className="flex flex-col gap-0.5">
-              <span className="text-[9px] font-semibold tracking-widest uppercase" style={{ color: "rgba(255,255,255,0.3)" }}>
+              <span className="text-[9px] font-semibold tracking-widest uppercase" style={{ color: "var(--text-3)" }}>
                 {label}
               </span>
               <span className="text-xs font-bold font-mono" style={{ color: ok ? "#22c55e" : "#ef4444" }}>
@@ -413,7 +413,7 @@ function LeftPanel() {
       >
         <h2
           className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.08]"
-          style={{ color: "#ffffff" }}
+          style={{ color: "var(--text-1)" }}
         >
           Built on Infrastructure.{" "}
           <br className="hidden sm:block" />
@@ -439,7 +439,7 @@ function LeftPanel() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.16 }}
         className="text-base lg:text-lg leading-relaxed max-w-lg"
-        style={{ color: "rgba(255,255,255,0.55)" }}
+        style={{ color: "var(--text-2)" }}
       >
         Connexxion Telecom delivers enterprise-grade connectivity solutions powering
         the backbone of America&apos;s most demanding industries. From coast-to-coast
@@ -470,10 +470,10 @@ function LeftPanel() {
               <Icon />
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+              <span className="text-sm font-semibold" style={{ color: "var(--text-1)" }}>
                 {title}
               </span>
-              <span className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.42)" }}>
+              <span className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
                 {desc}
               </span>
             </div>
@@ -517,20 +517,18 @@ function LeftPanel() {
           href="#contact"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300"
           style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.12)",
-            color: "rgba(255,255,255,0.8)",
+            background: "var(--bg-input)",
+            border: "1px solid var(--border-3)",
+            color: "var(--text-1)",
             backdropFilter: "blur(10px)",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.08)";
+            (e.currentTarget as HTMLElement).style.background = "var(--bg-surface)";
             (e.currentTarget as HTMLElement).style.borderColor = "rgba(34,197,94,0.35)";
-            (e.currentTarget as HTMLElement).style.color = "#ffffff";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.04)";
-            (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.12)";
-            (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.8)";
+            (e.currentTarget as HTMLElement).style.background = "var(--bg-input)";
+            (e.currentTarget as HTMLElement).style.borderColor = "var(--border-3)";
           }}
         >
           Talk to an Expert
@@ -544,12 +542,12 @@ function LeftPanel() {
 function SectionDivider() {
   return (
     <div className="flex items-center gap-4">
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06))" }} />
+      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--border-1))" }} />
       <div
         className="w-1.5 h-1.5 rounded-full"
         style={{ background: "rgba(34,197,94,0.5)", boxShadow: "0 0 8px rgba(34,197,94,0.5)" }}
       />
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.06), transparent)" }} />
+      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--border-1), transparent)" }} />
     </div>
   );
 }
@@ -565,7 +563,7 @@ export default function CompanyOverview() {
       ref={sectionRef}
       id="about"
       className="relative overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #080c14 0%, #0a1020 50%, #080c14 100%)" }}
+      style={{ background: "var(--bg)" }}
     >
       {/* Subtle top separator */}
       <SectionDivider />

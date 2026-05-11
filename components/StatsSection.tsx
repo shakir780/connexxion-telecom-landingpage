@@ -274,9 +274,9 @@ function StatCard({
       whileHover={{ y: -8, scale: 1.015 }}
       className="group relative flex flex-col gap-4 rounded-2xl p-6 sm:p-7 overflow-hidden cursor-default"
       style={{
-        background: "linear-gradient(145deg, rgba(12,18,30,0.92) 0%, rgba(8,12,20,0.96) 100%)",
-        border: "1px solid rgba(255,255,255,0.07)",
-        boxShadow: "0 4px 32px rgba(0,0,0,0.4)",
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-1)",
+        boxShadow: "var(--shadow-md)",
         transition: "border-color 0.35s ease, box-shadow 0.35s ease",
       }}
       onMouseEnter={(e) => {
@@ -285,8 +285,8 @@ function StatCard({
           "0 12px 56px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,0.1) inset, 0 0 40px rgba(34,197,94,0.07)";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 32px rgba(0,0,0,0.4)";
+        (e.currentTarget as HTMLElement).style.borderColor = "var(--border-1)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-md)";
       }}
     >
       {/* Corner accent glow */}
@@ -347,7 +347,7 @@ function StatCard({
           )}
           <span
             className="text-5xl sm:text-6xl font-black tabular-nums tracking-tight"
-            style={{ color: "#ffffff", fontVariantNumeric: "tabular-nums" }}
+            style={{ color: "var(--text-1)", fontVariantNumeric: "tabular-nums" }}
           >
             {count.toLocaleString()}
           </span>
@@ -367,11 +367,11 @@ function StatCard({
       <div className="flex flex-col gap-1 mt-auto">
         <p
           className="text-sm font-semibold leading-snug"
-          style={{ color: "rgba(255,255,255,0.88)" }}
+          style={{ color: "var(--text-1)" }}
         >
           {stat.label}
         </p>
-        <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.38)" }}>
+        <p className="text-xs leading-relaxed" style={{ color: "var(--text-3)" }}>
           {stat.sub}
         </p>
       </div>
@@ -379,7 +379,7 @@ function StatCard({
       {/* Index watermark */}
       <span
         className="absolute bottom-5 right-5 text-[11px] font-bold font-mono tabular-nums"
-        style={{ color: "rgba(255,255,255,0.06)" }}
+        style={{ color: "var(--text-4)" }}
       >
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -398,7 +398,7 @@ function FeaturedStat({ active }: { active: boolean }) {
       transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.1 }}
       className="relative col-span-full rounded-2xl overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, rgba(14,22,38,0.95) 0%, rgba(8,14,26,0.98) 100%)",
+        background: "var(--bg-card)",
         border: "1px solid rgba(34,197,94,0.15)",
         boxShadow: "0 8px 48px rgba(0,0,0,0.5), 0 0 80px rgba(34,197,94,0.04) inset",
       }}
@@ -428,10 +428,10 @@ function FeaturedStat({ active }: { active: boolean }) {
             </span>
             Client Satisfaction
           </div>
-          <h3 className="text-2xl font-extrabold" style={{ color: "#ffffff" }}>
+          <h3 className="text-2xl font-extrabold" style={{ color: "var(--text-1)" }}>
             Industry-Leading Satisfaction Score
           </h3>
-          <p className="text-sm max-w-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <p className="text-sm max-w-sm" style={{ color: "var(--text-3)" }}>
             Based on independent surveys across 500+ enterprise accounts. Measured across
             reliability, responsiveness, and service quality.
           </p>
@@ -491,9 +491,9 @@ function BadgeRow() {
           key={i}
           className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl text-xs font-semibold"
           style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            color: "rgba(255,255,255,0.6)",
+            background: "var(--bg-input)",
+            border: "1px solid var(--border-1)",
+            color: "var(--text-2)",
           }}
         >
           <span style={{ color: "#22c55e" }}>
@@ -532,7 +532,7 @@ function SectionHeader() {
         viewport={{ once: true }}
         transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.08 }}
         className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]"
-        style={{ color: "#ffffff" }}
+        style={{ color: "var(--text-1)" }}
       >
         Trusted at{" "}
         <span
@@ -555,7 +555,7 @@ function SectionHeader() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.16 }}
         className="text-base lg:text-lg leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.5)" }}
+        style={{ color: "var(--text-2)" }}
       >
         Fifteen years of continuous infrastructure investment, nationwide deployment,
         and unwavering commitment to enterprise reliability — measured in real outcomes.
@@ -568,9 +568,9 @@ function SectionHeader() {
 function SectionDivider() {
   return (
     <div className="flex items-center gap-4">
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.06))" }} />
+      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--border-2))" }} />
       <div className="w-1.5 h-1.5 rounded-full" style={{ background: "rgba(34,197,94,0.5)", boxShadow: "0 0 8px rgba(34,197,94,0.5)" }} />
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.06), transparent)" }} />
+      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--border-2), transparent)" }} />
     </div>
   );
 }
@@ -586,7 +586,7 @@ export default function StatsSection() {
       id="stats"
       className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #080c14 0%, #060a10 40%, #080c14 100%)",
+        background: "var(--bg)",
       }}
     >
       <SectionDivider />

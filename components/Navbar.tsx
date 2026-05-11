@@ -1,16 +1,48 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "./ThemeToggle";
 
+/* ─── Navigation structure ─── */
 const NAV_LINKS = [
-  { label: "Solutions", href: "#solutions" },
-  { label: "Network", href: "#network" },
-  { label: "Enterprise", href: "#enterprise" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
+  { label: "About",    hash: "about" },
+  { label: "Services", hash: "services" },
+  { label: "Team",     hash: "team" },
+  { label: "Partners", hash: "partners" },
+  { label: "Contact",  hash: "contact" },
+] as const;
+
+type NavHash = (typeof NAV_LINKS)[number]["hash"];
+
+/* ─── Active section via scroll offset ─── */
+function useActiveSection(isHome: boolean): NavHash | "" {
+  const [active, setActive] = useState<NavHash | "">("");
+
+  useEffect(() => {
+    if (!isHome) { setActive(""); return; }
+
+    const NAV_OFFSET = 88;
+
+    const compute = () => {
+      const scrollY = window.scrollY + NAV_OFFSET;
+      let current: NavHash | "" = "";
+      for (const { hash } of NAV_LINKS) {
+        const el = document.getElementById(hash);
+        if (el && el.offsetTop <= scrollY) current = hash;
+      }
+      setActive(current);
+    };
+
+    window.addEventListener("scroll", compute, { passive: true });
+    compute();
+    return () => window.removeEventListener("scroll", compute);
+  }, [isHome]);
+
+  return active;
+}
 
 /* ─── Logo ─── */
 function Logo() {
@@ -19,11 +51,8 @@ function Logo() {
       <div className="relative flex items-center justify-center w-9 h-9 rounded-lg overflow-hidden">
         <div
           className="absolute inset-0"
-          style={{
-            background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-          }}
+          style={{ background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)" }}
         />
-        {/* Signal icon */}
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="relative z-10">
           <path d="M10 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" fill="white" />
           <path d="M7 11.5A4.24 4.24 0 0 1 10 10.5a4.24 4.24 0 0 1 3 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
@@ -32,7 +61,7 @@ function Logo() {
         </svg>
       </div>
       <div className="flex flex-col leading-none">
-        <span className="text-white font-bold text-sm tracking-wider uppercase">
+        <span className="font-bold text-sm tracking-wider uppercase" style={{ color: "var(--text-1)" }}>
           Connexxion
         </span>
         <span className="text-green-500 text-[9px] tracking-[0.2em] uppercase font-medium">
@@ -44,14 +73,31 @@ function Logo() {
 }
 
 /* ─── Desktop nav link ─── */
-function NavLink({ href, label }: { href: string; label: string }) {
+function NavLink({
+  href,
+  label,
+  active,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+}) {
   return (
     <Link
       href={href}
-      className="relative text-sm font-medium text-zinc-400 hover:text-white transition-colors duration-200 group py-1"
+      className="nav-link relative text-sm font-medium py-1 group"
+      style={active ? { color: "var(--text-1)" } : undefined}
     >
       {label}
-      <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-green-500 group-hover:w-full transition-all duration-300" />
+      {/* Active/hover underline */}
+      <span
+        className="absolute -bottom-0.5 left-0 h-px bg-green-500 transition-all duration-300"
+        style={{ width: active ? "100%" : "0%", opacity: active ? 1 : undefined }}
+      />
+      {/* Hover underline (only when not active) */}
+      {!active && (
+        <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-green-500 group-hover:w-full transition-all duration-300" />
+      )}
     </Link>
   );
 }
@@ -61,17 +107,20 @@ function HamburgerIcon({ open }: { open: boolean }) {
   return (
     <div className="relative w-5 h-4 flex flex-col justify-between">
       <motion.span
-        className="block h-0.5 bg-white rounded-full origin-center"
+        className="block h-0.5 rounded-full origin-center"
+        style={{ background: "var(--text-1)" }}
         animate={open ? { rotate: 45, y: 7.5 } : { rotate: 0, y: 0 }}
         transition={{ duration: 0.25 }}
       />
       <motion.span
-        className="block h-0.5 bg-white rounded-full"
+        className="block h-0.5 rounded-full"
+        style={{ background: "var(--text-1)" }}
         animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
         transition={{ duration: 0.2 }}
       />
       <motion.span
-        className="block h-0.5 bg-white rounded-full origin-center"
+        className="block h-0.5 rounded-full origin-center"
+        style={{ background: "var(--text-1)" }}
         animate={open ? { rotate: -45, y: -7.5 } : { rotate: 0, y: 0 }}
         transition={{ duration: 0.25 }}
       />
@@ -83,11 +132,12 @@ function HamburgerIcon({ open }: { open: boolean }) {
 function MobileDrawer({
   open,
   onClose,
+  links,
 }: {
   open: boolean;
   onClose: () => void;
+  links: Array<{ label: string; href: string; active: boolean }>;
 }) {
-  // Lock body scroll when drawer is open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -110,8 +160,10 @@ function MobileDrawer({
           <motion.div
             className="fixed top-0 right-0 bottom-0 z-50 w-72 flex flex-col"
             style={{
-              background: "rgba(10, 15, 28, 0.97)",
-              borderLeft: "1px solid rgba(34, 197, 94, 0.15)",
+              background: "var(--nav-scrolled-bg)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+              borderLeft: "1px solid var(--border-green, rgba(34,197,94,0.15))",
             }}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -119,22 +171,35 @@ function MobileDrawer({
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-white/6">
+            <div
+              className="flex items-center justify-between px-6 py-5"
+              style={{ borderBottom: "1px solid var(--border-1)" }}
+            >
               <Logo />
-              <button
-                onClick={onClose}
-                className="p-2 rounded-lg hover:bg-white/6 transition-colors"
-                aria-label="Close menu"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M12 4L4 12M4 4l8 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <button
+                  onClick={onClose}
+                  className="p-2 rounded-lg transition-colors"
+                  style={{ background: "var(--bg-input)" }}
+                  aria-label="Close menu"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M12 4L4 12M4 4l8 8"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      style={{ color: "var(--text-1)" }}
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Links */}
             <nav className="flex flex-col gap-1 px-4 py-6 flex-1">
-              {NAV_LINKS.map((link, i) => (
+              {links.map((link, i) => (
                 <motion.div
                   key={link.href}
                   initial={{ opacity: 0, x: 20 }}
@@ -144,35 +209,26 @@ function MobileDrawer({
                   <Link
                     href={link.href}
                     onClick={onClose}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-300 hover:text-white hover:bg-white/5 transition-all duration-200 text-sm font-medium group"
+                    className="drawer-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium group"
+                    style={
+                      link.active
+                        ? {
+                            color: "var(--text-1)",
+                            background: "rgba(34,197,94,0.07)",
+                            borderLeft: "2px solid rgba(34,197,94,0.6)",
+                          }
+                        : undefined
+                    }
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span
+                      className="w-1.5 h-1.5 rounded-full bg-green-500 transition-opacity"
+                      style={{ opacity: link.active ? 1 : 0 }}
+                    />
                     {link.label}
                   </Link>
                 </motion.div>
               ))}
             </nav>
-
-            {/* CTA */}
-            <div className="px-4 py-6 border-t border-white/6">
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Link
-                  href="#contact"
-                  onClick={onClose}
-                  className="flex items-center justify-center w-full py-3 rounded-xl font-semibold text-sm text-white transition-all duration-200 relative overflow-hidden"
-                  style={{ background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)" }}
-                >
-                  Get Started
-                </Link>
-              </motion.div>
-              <p className="text-center text-xs text-zinc-600 mt-3">
-                Enterprise solutions available
-              </p>
-            </div>
           </motion.div>
         </>
       )}
@@ -184,6 +240,9 @@ function MobileDrawer({
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  const activeSection = useActiveSection(isHome);
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 20);
@@ -194,18 +253,25 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
+  /* Build resolved link objects once per render */
+  const resolvedLinks = NAV_LINKS.map((link) => ({
+    label: link.label,
+    href: isHome ? `#${link.hash}` : `/#${link.hash}`,
+    active: link.hash === activeSection,
+  }));
+
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-30 transition-all duration-500"
+        className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500${!scrolled ? " nav-not-scrolled" : ""}`}
         style={
           scrolled
             ? {
-                background: "rgba(8, 12, 20, 0.92)",
+                background: "var(--nav-scrolled-bg)",
                 backdropFilter: "blur(20px)",
                 WebkitBackdropFilter: "blur(20px)",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                boxShadow: "0 4px 30px rgba(0,0,0,0.4)",
+                borderBottom: "1px solid var(--nav-border)",
+                boxShadow: "var(--nav-shadow)",
               }
             : {
                 background: "transparent",
@@ -226,37 +292,20 @@ export default function Navbar() {
 
             {/* Desktop center nav */}
             <nav className="hidden md:flex items-center gap-8">
-              {NAV_LINKS.map((link) => (
-                <NavLink key={link.href} href={link.href} label={link.label} />
+              {resolvedLinks.map((link) => (
+                <NavLink key={link.href} href={link.href} label={link.label} active={link.active} />
               ))}
             </nav>
 
-            {/* Desktop CTA */}
+            {/* Desktop right: theme toggle */}
             <div className="hidden md:flex items-center gap-3">
-              <Link
-                href="#contact"
-                className="text-sm font-medium text-zinc-400 hover:text-white transition-colors duration-200 px-2"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="#contact"
-                className="relative overflow-hidden flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:shadow-lg btn-shine"
-                style={{
-                  background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-                  boxShadow: "0 0 20px rgba(34,197,94,0.2)",
-                }}
-              >
-                <span>Get Started</span>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2.5 6H9.5M6.5 3L9.5 6L6.5 9" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
+              <ThemeToggle />
             </div>
 
             {/* Mobile menu button */}
             <button
-              className="md:hidden p-2.5 rounded-lg hover:bg-white/6 transition-colors"
+              className="md:hidden p-2.5 rounded-lg transition-colors"
+              style={{ background: "var(--bg-input)" }}
               onClick={() => setDrawerOpen(true)}
               aria-label="Open navigation menu"
             >
@@ -266,7 +315,11 @@ export default function Navbar() {
         </div>
       </motion.header>
 
-      <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <MobileDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        links={resolvedLinks}
+      />
     </>
   );
 }

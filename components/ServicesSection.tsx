@@ -165,7 +165,7 @@ function SectionHeader() {
         viewport={{ once: true }}
         transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.08 }}
         className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]"
-        style={{ color: "#ffffff" }}
+        style={{ color: "var(--text-1)" }}
       >
         Solutions Built for{" "}
         <span
@@ -188,7 +188,7 @@ function SectionHeader() {
         viewport={{ once: true }}
         transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.16 }}
         className="text-base lg:text-lg leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.5)" }}
+        style={{ color: "var(--text-2)" }}
       >
         From nationwide fiber backbone to fully managed IT ecosystems — our service
         portfolio covers every layer of the modern enterprise communications stack.
@@ -217,9 +217,9 @@ function ServiceCard({
       whileHover={{ y: -6 }}
       className="group relative flex flex-col gap-5 rounded-2xl p-6 cursor-default"
       style={{
-        background: "linear-gradient(145deg, rgba(15,22,35,0.9) 0%, rgba(10,16,28,0.95) 100%)",
-        border: "1px solid rgba(255,255,255,0.07)",
-        boxShadow: "0 4px 32px rgba(0,0,0,0.35)",
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-1)",
+        boxShadow: "var(--shadow-md)",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
       }}
       onMouseEnter={(e) => {
@@ -228,8 +228,8 @@ function ServiceCard({
           "0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(34,197,94,0.1) inset, 0 0 32px rgba(34,197,94,0.06)";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.07)";
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 32px rgba(0,0,0,0.35)";
+        (e.currentTarget as HTMLElement).style.borderColor = "var(--border-1)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-md)";
       }}
     >
       {/* Top green accent line — reveals on hover */}
@@ -276,8 +276,8 @@ function ServiceCard({
       {/* Title */}
       <div className="flex flex-col gap-2">
         <h3
-          className="text-base font-bold leading-snug transition-colors duration-200 group-hover:text-white"
-          style={{ color: "rgba(255,255,255,0.88)" }}
+          className="text-base font-bold leading-snug transition-colors duration-200 group-hover:text-gray-900 dark:group-hover:text-white"
+          style={{ color: "var(--text-1)" }}
         >
           {service.title}
         </h3>
@@ -285,7 +285,7 @@ function ServiceCard({
         {/* Description */}
         <p
           className="text-sm leading-relaxed"
-          style={{ color: "rgba(255,255,255,0.42)" }}
+          style={{ color: "var(--text-3)" }}
         >
           {service.description}
         </p>
@@ -336,7 +336,7 @@ function ServiceCard({
       {/* Corner number */}
       <span
         className="absolute top-5 right-5 text-[11px] font-bold font-mono tabular-nums"
-        style={{ color: "rgba(255,255,255,0.08)" }}
+        style={{ color: "var(--text-4)" }}
       >
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -354,8 +354,7 @@ function BottomCTA() {
       transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.2 }}
       className="relative flex flex-col sm:flex-row items-center justify-between gap-6 rounded-2xl px-8 py-7 mt-6"
       style={{
-        background:
-          "linear-gradient(135deg, rgba(15,22,35,0.9) 0%, rgba(10,16,32,0.95) 100%)",
+        background: "var(--bg-card)",
         border: "1px solid rgba(34,197,94,0.15)",
         boxShadow: "0 0 60px rgba(34,197,94,0.04) inset, 0 8px 40px rgba(0,0,0,0.4)",
       }}
@@ -370,10 +369,10 @@ function BottomCTA() {
       />
 
       <div className="flex flex-col gap-1 text-center sm:text-left">
-        <p className="text-base font-bold" style={{ color: "rgba(255,255,255,0.88)" }}>
+        <p className="text-base font-bold" style={{ color: "var(--text-1)" }}>
           Don&apos;t see what you&apos;re looking for?
         </p>
-        <p className="text-sm" style={{ color: "rgba(255,255,255,0.4)" }}>
+        <p className="text-sm" style={{ color: "var(--text-3)" }}>
           Our solutions engineers will architect a custom package around your exact requirements.
         </p>
       </div>
@@ -418,7 +417,7 @@ function SectionDivider() {
         className="flex-1 h-px"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.06))",
+            "linear-gradient(90deg, transparent, var(--border-2))",
         }}
       />
       <div
@@ -432,7 +431,7 @@ function SectionDivider() {
         className="flex-1 h-px"
         style={{
           background:
-            "linear-gradient(90deg, rgba(255,255,255,0.06), transparent)",
+            "linear-gradient(90deg, var(--border-2), transparent)",
         }}
       />
     </div>
@@ -446,8 +445,7 @@ export default function ServicesSection() {
       id="services"
       className="relative overflow-hidden"
       style={{
-        background:
-          "linear-gradient(180deg, #080c14 0%, #070b12 50%, #080c14 100%)",
+        background: "var(--bg)",
       }}
     >
       <SectionDivider />

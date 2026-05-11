@@ -83,7 +83,7 @@ function FooterLogo() {
         </svg>
       </div>
       <div className="flex flex-col leading-none">
-        <span className="text-base font-extrabold tracking-tight" style={{ color: "#ffffff" }}>
+        <span className="text-base font-extrabold tracking-tight" style={{ color: "var(--text-1)" }}>
           Connexxion
         </span>
         <span className="text-[9px] font-semibold tracking-widest uppercase" style={{ color: "rgba(34,197,94,0.8)" }}>
@@ -112,9 +112,9 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
     <Link
       href={href}
       className="group flex items-center gap-2 text-sm transition-colors duration-200"
-      style={{ color: "rgba(255,255,255,0.45)" }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#ffffff"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.45)"; }}
+      style={{ color: "var(--text-3)" }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-1)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-3)"; }}
     >
       <svg
         viewBox="0 0 12 12"
@@ -150,7 +150,7 @@ function ContactRow({
       >
         {icon}
       </div>
-      <div className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.48)" }}>
+      <div className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
         {children}
       </div>
     </div>
@@ -194,8 +194,8 @@ export default function Footer() {
     <footer
       className="relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #080c14 0%, #050810 100%)",
-        borderTop: "1px solid rgba(255,255,255,0.06)",
+        background: "var(--bg)",
+        borderTop: "1px solid var(--border-2)",
       }}
     >
       <FooterBackground />
@@ -214,7 +214,7 @@ export default function Footer() {
           >
             <FooterLogo />
 
-            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--text-3)" }}>
               Connexxion Telecom delivers enterprise-grade connectivity and managed
               technology services, powering the backbone of Nigeria&apos;s most
               demanding industries.
@@ -229,9 +229,9 @@ export default function Footer() {
                   aria-label={label}
                   className="flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.09)",
-                    color: "rgba(255,255,255,0.45)",
+                    background: "var(--bg-input)",
+                    border: "1px solid var(--border-1)",
+                    color: "var(--text-3)",
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLElement;
@@ -241,9 +241,9 @@ export default function Footer() {
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLElement;
-                    el.style.background = "rgba(255,255,255,0.05)";
-                    el.style.borderColor = "rgba(255,255,255,0.09)";
-                    el.style.color = "rgba(255,255,255,0.45)";
+                    el.style.background = "var(--bg-input)";
+                    el.style.borderColor = "var(--border-1)";
+                    el.style.color = "var(--text-3)";
                   }}
                 >
                   <Icon />
@@ -306,7 +306,7 @@ export default function Footer() {
             >
               <span>Mon – Sat &nbsp; 9:00 – 18:00</span>
               <br />
-              <span style={{ color: "rgba(255,255,255,0.28)" }}>Closed Sunday</span>
+              <span style={{ color: "var(--text-4)" }}>Closed Sunday</span>
             </ContactRow>
 
             <ContactRow
@@ -316,10 +316,10 @@ export default function Footer() {
                 </svg>
               }
             >
-              <a href="tel:+2349016400000" className="block hover:text-white transition-colors">
+              <a href="tel:+2349016400000" className="block hover:text-gray-900 dark:hover:text-white transition-colors">
                 +234 0 901 640 0000
               </a>
-              <a href="tel:+23409290541" className="block hover:text-white transition-colors">
+              <a href="tel:+23409290541" className="block hover:text-gray-900 dark:hover:text-white transition-colors">
                 +234 09 290 5141
               </a>
             </ContactRow>
@@ -332,7 +332,7 @@ export default function Footer() {
                 </svg>
               }
             >
-              <a href="mailto:info@connexxiontelecom.com" className="hover:text-white transition-colors break-all">
+              <a href="mailto:info@connexxiontelecom.com" className="hover:text-gray-900 dark:hover:text-white transition-colors break-all">
                 info@connexxiontelecom.com
               </a>
             </ContactRow>
@@ -360,15 +360,15 @@ export default function Footer() {
           transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.3 }}
           className="mt-14 rounded-2xl px-6 py-6 sm:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
           style={{
-            background: "rgba(255,255,255,0.025)",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "var(--bg-input)",
+            border: "1px solid var(--border-1)",
           }}
         >
           <div className="flex flex-col gap-1">
-            <p className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.85)" }}>
+            <p className="text-sm font-semibold" style={{ color: "var(--text-1)" }}>
               Stay ahead of the network
             </p>
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.38)" }}>
+            <p className="text-xs" style={{ color: "var(--text-3)" }}>
               Industry insights, infrastructure updates, and technology briefs — delivered monthly.
             </p>
           </div>
@@ -381,9 +381,9 @@ export default function Footer() {
               placeholder="your@company.com"
               className="flex-1 sm:w-56 px-4 py-2.5 rounded-xl text-sm outline-none placeholder:text-[rgba(255,255,255,0.25)] focus:ring-1"
               style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "#ffffff",
+                background: "var(--bg-input)",
+                border: "1px solid var(--border-1)",
+                color: "var(--text-1)",
                 // @ts-expect-error CSS custom prop
                 "--tw-ring-color": "rgba(34,197,94,0.4)",
               }}
@@ -411,9 +411,9 @@ export default function Footer() {
         {/* ── Bottom bar ── */}
         <div
           className="mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+          style={{ borderTop: "1px solid var(--border-2)" }}
         >
-          <p className="text-xs text-center sm:text-left" style={{ color: "rgba(255,255,255,0.28)" }}>
+          <p className="text-xs text-center sm:text-left" style={{ color: "var(--text-4)" }}>
             © {year} Connexxion Telecom Ltd. All rights reserved.
           </p>
 
@@ -426,9 +426,9 @@ export default function Footer() {
                 key={label}
                 href={href}
                 className="text-xs transition-colors duration-200"
-                style={{ color: "rgba(255,255,255,0.28)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.7)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.28)"; }}
+                style={{ color: "var(--text-4)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-2)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-4)"; }}
               >
                 {label}
               </a>
@@ -438,7 +438,7 @@ export default function Footer() {
               className="w-1 h-1 rounded-full"
               style={{ background: "rgba(34,197,94,0.4)", boxShadow: "0 0 6px rgba(34,197,94,0.4)" }}
             />
-            <span className="text-xs" style={{ color: "rgba(255,255,255,0.18)" }}>
+            <span className="text-xs" style={{ color: "var(--text-4)" }}>
               Nigeria
             </span>
           </div>
