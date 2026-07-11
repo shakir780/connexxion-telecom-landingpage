@@ -294,9 +294,10 @@ function ScanLine() {
 export default function AnimatedBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Base gradient */}
+      {/* Base gradient — dark-mode only; light mode hides it via CSS so the
+          green particles render over the pale hero instead of a grey veil */}
       <div
-        className="absolute inset-0"
+        className="hero-dark-base absolute inset-0"
         style={{
           background:
             "linear-gradient(135deg, #080c14 0%, #0a1020 40%, #081018 70%, #080c14 100%)",
@@ -325,9 +326,9 @@ export default function AnimatedBackground() {
       <SignalTower x="88%" y="48%" scale={0.55} />
       <SignalTower x="78%" y="62%" scale={0.45} />
 
-      {/* Bottom fade overlay */}
+      {/* Bottom fade overlay — dark-mode only (hidden in light via CSS) */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-64"
+        className="hero-dark-base absolute bottom-0 left-0 right-0 h-64"
         style={{
           background:
             "linear-gradient(to bottom, transparent, rgba(8,12,20,0.9))",

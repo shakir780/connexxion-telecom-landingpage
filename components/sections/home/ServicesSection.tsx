@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 /* ─── Ease presets ─── */
 const EASE_OUT = "easeOut" as const;
@@ -9,10 +10,11 @@ const EASE_OUT = "easeOut" as const;
 /* ─── Service data ─── */
 const SERVICES = [
   {
-    id: "network-infra",
+    id: "network-infrastructure",
     title: "Network Infrastructure",
     description:
-      "End-to-end design, deployment, and management of carrier-grade network infrastructure engineered for maximum throughput and resilience.",
+      "High-availability design, structured cabling, and LAN/WAN setup for enterprise environments.",
+    caseStudyHref: "/insights/case-studies/network-infrastructure",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
         <rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
@@ -27,14 +29,13 @@ const SERVICES = [
         <circle cx="26.5" cy="27" r="1.5" fill="currentColor" />
       </svg>
     ),
-    tags: ["BGP Routing", "SD-WAN", "MPLS"],
-    accent: "#22c55e",
   },
   {
-    id: "fiber-optic",
-    title: "Fiber Optic Solutions",
+    id: "fibre-optic-solutions",
+    title: "Fibre Optic Solutions",
     description:
-      "Ultra-low latency, symmetrical fiber connectivity with dedicated last-mile delivery for enterprise campuses, data centers, and multi-site organizations.",
+      "Implementation of high-speed internet fibre networks with ultra low latency, including trenching, splicing, and long-term maintenance.",
+    caseStudyHref: "/insights/case-studies/fibre-optic-solutions",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
         <path d="M4 20 C4 20 8 10 14 18 C20 26 24 10 30 18 C34 24 36 20 36 20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -44,33 +45,61 @@ const SERVICES = [
         <circle cx="4" cy="20" r="2.5" fill="currentColor" />
       </svg>
     ),
-    tags: ["10Gbps+", "Dark Fiber", "Last Mile"],
-    accent: "#22c55e",
   },
   {
-    id: "telecom-support",
-    title: "Telecommunications Support",
+    id: "enterprise-voip",
+    title: "Enterprise VoIP",
     description:
-      "Round-the-clock NOC monitoring, incident management, and proactive maintenance ensuring your telecom infrastructure stays performant at all times.",
+      "Scalable voice communication systems for remote and office-based teams, reducing operational telephony costs.",
+    caseStudyHref: "/insights/case-studies/enterprise-voip",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <circle cx="20" cy="20" r="14" stroke="currentColor" strokeWidth="1.5" />
-        <circle cx="20" cy="20" r="8" stroke="currentColor" strokeWidth="1.2" strokeDasharray="3 2" />
-        <circle cx="20" cy="20" r="3" fill="currentColor" />
-        <line x1="20" y1="6" x2="20" y2="11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="20" y1="29" x2="20" y2="34" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="6" y1="20" x2="11" y2="20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="29" y1="20" x2="34" y2="20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M8 10h24a2 2 0 012 2v12a2 2 0 01-2 2H22l-5 5v-5H8a2 2 0 01-2-2V12a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        <line x1="13" y1="16" x2="27" y2="16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        <line x1="13" y1="20" x2="22" y2="20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
       </svg>
     ),
-    tags: ["24/7 NOC", "< 2hr Response", "SLA-backed"],
-    accent: "#22c55e",
   },
   {
-    id: "managed-it",
-    title: "Managed IT Services",
+    id: "cctv-security",
+    title: "CCTV & Security",
     description:
-      "Fully managed technology stacks from cloud hosting and cybersecurity to helpdesk and hardware lifecycle management — freeing your team to focus on core business.",
+      "Intelligent surveillance systems with remote monitoring capabilities and integration with access control.",
+    caseStudyHref: "/insights/case-studies/cctv-security",
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
+        <rect x="6" y="14" width="20" height="12" rx="3" stroke="currentColor" strokeWidth="1.6" />
+        <circle cx="26" cy="20" r="4" stroke="currentColor" strokeWidth="1.6" />
+        <circle cx="26" cy="20" r="1.4" fill="currentColor" />
+        <path d="M6 17l-4-2v10l4-2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M14 26v4M14 34h6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        <path d="M30 10a4 4 0 018 0" stroke="currentColor" strokeWidth="1.2" strokeDasharray="2 2" strokeOpacity="0.6" />
+        <circle cx="34" cy="10" r="1.3" fill="currentColor" opacity="0.5" />
+      </svg>
+    ),
+  },
+  {
+    id: "server-cloud-administration",
+    title: "Server & Cloud Administration",
+    description:
+      "Managed hosting, server migration, and infrastructure-as-a-service (IaaS) support for reliable uptime.",
+    caseStudyHref: "/insights/case-studies/server-cloud-administration",
+    icon: (
+      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
+        <path d="M11 22a5 5 0 01.4-9.98A7 7 0 0125 10a6 6 0 015 6 5 5 0 01-1 9.9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M11 22h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        <rect x="10" y="27" width="20" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+        <circle cx="14" cy="30.5" r="1" fill="currentColor" />
+        <circle cx="18" cy="30.5" r="1" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    id: "managed-it-support",
+    title: "Managed IT Support",
+    description:
+      "Dedicated 24/7/365 NOC support, troubleshooting, and proactive maintenance for your IT fleet.",
+    caseStudyHref: "/insights/case-studies/managed-it-support",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
         <rect x="4" y="8" width="32" height="18" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
@@ -80,40 +109,36 @@ const SERVICES = [
         <path d="M14 17l3 3 6-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
-    tags: ["Cloud", "Cybersecurity", "Helpdesk"],
-    accent: "#22c55e",
   },
-  {
-    id: "wireless",
-    title: "Wireless Connectivity",
-    description:
-      "High-density 5G and Wi-Fi 7 deployments for enterprise campuses, stadiums, and public venues, with centralized management and seamless roaming.",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <path d="M6 16 a20 20 0 0 1 28 0" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        <path d="M10 21 a14 14 0 0 1 20 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-        <path d="M14 26 a9 9 0 0 1 12 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="20" cy="32" r="2.5" fill="currentColor" />
-      </svg>
-    ),
-    tags: ["5G", "Wi-Fi 7", "High Density"],
-    accent: "#22c55e",
-  },
-  {
-    id: "enterprise-comms",
-    title: "Enterprise Communications",
-    description:
-      "Unified communications platforms combining VoIP, video conferencing, secure messaging, and collaboration tools into a single integrated ecosystem.",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <path d="M8 10h24a2 2 0 012 2v12a2 2 0 01-2 2H22l-5 5v-5H8a2 2 0 01-2-2V12a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <line x1="13" y1="16" x2="27" y2="16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        <line x1="13" y1="20" x2="22" y2="20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      </svg>
-    ),
-    tags: ["VoIP", "UCaaS", "Video"],
-    accent: "#22c55e",
-  },
+];
+
+/* ─── Trust badge icons ─── */
+const IconHeadset = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4" stroke="currentColor" strokeWidth={1.6}>
+    <path d="M3 11a9 9 0 1118 0" strokeLinecap="round" />
+    <rect x="2" y="11" width="4" height="7" rx="1.5" />
+    <rect x="18" y="11" width="4" height="7" rx="1.5" />
+    <path d="M22 18v1a4 4 0 01-4 4h-3" strokeLinecap="round" />
+  </svg>
+);
+const IconMap = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4" stroke="currentColor" strokeWidth={1.6}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M2 12h20M12 3a15.3 15.3 0 014 9 15.3 15.3 0 01-4 9 15.3 15.3 0 01-4-9 15.3 15.3 0 014-9z" strokeLinecap="round" />
+  </svg>
+);
+const IconShield = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4" stroke="currentColor" strokeWidth={1.6}>
+    <path d="M12 3l8 3.5V11c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6.5L12 3z" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M9 12l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/* ─── Trust badges below the grid ─── */
+const TRUST_BADGES = [
+  { Icon: IconHeadset, text: "24/7/365 NOC Support" },
+  { Icon: IconMap, text: "Nationwide Coverage" },
+  { Icon: IconShield, text: "Enterprise-Grade SLAs" },
 ];
 
 /* ─── Background hex pattern ─── */
@@ -152,7 +177,7 @@ function SectionHeader() {
         style={{
           background: "rgba(34,197,94,0.08)",
           border: "1px solid rgba(34,197,94,0.22)",
-          color: "#22c55e",
+          color: "var(--green-text)",
         }}
       >
         <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
@@ -167,32 +192,9 @@ function SectionHeader() {
         className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]"
         style={{ color: "var(--text-1)" }}
       >
-        Solutions Built for{" "}
-        <span
-          style={{
-            background: "linear-gradient(135deg, #22c55e 0%, #86efac 50%, #22c55e 100%)",
-            backgroundSize: "200% 200%",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            animation: "gradient-shift 5s ease infinite",
-          }}
-        >
-          Enterprise Scale
-        </span>
+        We Handle the Tech.{" "}
+        <span className="gradient-green">You Focus on Business.</span>
       </motion.h2>
-
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.16 }}
-        className="text-base lg:text-lg leading-relaxed"
-        style={{ color: "var(--text-2)" }}
-      >
-        From nationwide fiber backbone to fully managed IT ecosystems — our service
-        portfolio covers every layer of the modern enterprise communications stack.
-      </motion.p>
     </div>
   );
 }
@@ -224,8 +226,7 @@ function ServiceCard({
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLElement).style.borderColor = "rgba(34,197,94,0.28)";
-        (e.currentTarget as HTMLElement).style.boxShadow =
-          "0 8px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(34,197,94,0.1) inset, 0 0 32px rgba(34,197,94,0.06)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-card-hover)";
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLElement).style.borderColor = "var(--border-1)";
@@ -257,7 +258,7 @@ function ServiceCard({
           style={{
             background: "rgba(34,197,94,0.08)",
             border: "1px solid rgba(34,197,94,0.18)",
-            color: "#22c55e",
+            color: "var(--green-text)",
             padding: "9px",
           }}
         >
@@ -291,34 +292,20 @@ function ServiceCard({
         </p>
       </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mt-auto">
-        {service.tags.map((tag) => (
-          <span
-            key={tag}
-            className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[10px] font-semibold tracking-wider uppercase"
-            style={{
-              background: "rgba(34,197,94,0.07)",
-              border: "1px solid rgba(34,197,94,0.16)",
-              color: "rgba(34,197,94,0.8)",
-            }}
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Learn more link */}
-      <div className="flex items-center gap-1.5 mt-1">
+      {/* View case study link */}
+      <Link
+        href={service.caseStudyHref}
+        className="group/link inline-flex items-center gap-1.5 mt-auto"
+      >
         <span
           className="text-xs font-semibold transition-colors duration-200"
-          style={{ color: "rgba(34,197,94,0.6)" }}
+          style={{ color: "var(--green-text)" }}
         >
-          Learn more
+          View Case Study
         </span>
         <motion.span
           className="inline-flex"
-          style={{ color: "rgba(34,197,94,0.6)" }}
+          style={{ color: "var(--green-text)" }}
           initial={{ x: 0 }}
           whileHover={{ x: 3 }}
           transition={{ duration: 0.2 }}
@@ -331,7 +318,7 @@ function ServiceCard({
             />
           </svg>
         </motion.span>
-      </div>
+      </Link>
 
       {/* Corner number */}
       <span
@@ -344,59 +331,56 @@ function ServiceCard({
   );
 }
 
-/* ─── Bottom CTA strip ─── */
-function BottomCTA() {
+/* ─── Trust badges row ─── */
+function TrustBadges() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.2 }}
-      className="relative flex flex-col sm:flex-row items-center justify-between gap-6 rounded-2xl px-8 py-7 mt-6"
-      style={{
-        background: "var(--bg-card)",
-        border: "1px solid rgba(34,197,94,0.15)",
-        boxShadow: "0 0 60px rgba(34,197,94,0.04) inset, 0 8px 40px rgba(0,0,0,0.4)",
-      }}
+      transition={{ duration: 0.55, ease: EASE_OUT }}
+      className="flex flex-wrap justify-center gap-3"
     >
-      {/* Glow line */}
-      <div
-        className="absolute top-0 left-12 right-12 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(34,197,94,0.4), transparent)",
-        }}
-      />
+      {TRUST_BADGES.map(({ Icon, text }, i) => (
+        <div
+          key={i}
+          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl text-xs font-semibold"
+          style={{
+            background: "var(--bg-input)",
+            border: "1px solid var(--border-1)",
+            color: "var(--text-2)",
+          }}
+        >
+          <span style={{ color: "var(--green-text)" }}>
+            <Icon />
+          </span>
+          {text}
+        </div>
+      ))}
+    </motion.div>
+  );
+}
 
-      <div className="flex flex-col gap-1 text-center sm:text-left">
-        <p className="text-base font-bold" style={{ color: "var(--text-1)" }}>
-          Don&apos;t see what you&apos;re looking for?
-        </p>
-        <p className="text-sm" style={{ color: "var(--text-3)" }}>
-          Our solutions engineers will architect a custom package around your exact requirements.
-        </p>
-      </div>
-
-      <a
-        href="#contact"
-        className="relative inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-semibold whitespace-nowrap overflow-hidden btn-shine shrink-0 transition-all duration-300"
+/* ─── Custom solution CTA ─── */
+function CustomSolutionCTA() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.1 }}
+      className="flex justify-center"
+    >
+      <Link
+        href="/consultation"
+        className="relative group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-semibold overflow-hidden btn-shine transition-all duration-300 hover:-translate-y-0.5"
         style={{
           background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
           color: "#000",
-          boxShadow: "0 0 24px rgba(34,197,94,0.3), 0 4px 16px rgba(0,0,0,0.3)",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.boxShadow =
-            "0 0 40px rgba(34,197,94,0.5), 0 4px 24px rgba(0,0,0,0.4)";
-          (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.boxShadow =
-            "0 0 24px rgba(34,197,94,0.3), 0 4px 16px rgba(0,0,0,0.3)";
-          (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+          boxShadow: "0 0 24px rgba(34,197,94,0.3), 0 4px 16px rgba(0,0,0,0.2)",
         }}
       >
-        Speak to an Engineer
+        Need a Custom Solution?
         <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path
             fillRule="evenodd"
@@ -404,7 +388,7 @@ function BottomCTA() {
             clipRule="evenodd"
           />
         </svg>
-      </a>
+      </Link>
     </motion.div>
   );
 }
@@ -487,15 +471,22 @@ export default function ServicesSection() {
         {/* Header */}
         <SectionHeader />
 
-        {/* Cards grid */}
+        {/* Cards grid — 3 columns, 2 rows */}
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {SERVICES.map((service, index) => (
             <ServiceCard key={service.id} service={service} index={index} />
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <BottomCTA />
+        {/* Trust badges */}
+        <div className="mt-12">
+          <TrustBadges />
+        </div>
+
+        {/* Custom solution CTA */}
+        <div className="mt-8">
+          <CustomSolutionCTA />
+        </div>
       </div>
 
       <SectionDivider />

@@ -38,35 +38,88 @@
   --nav-scrolled-bg: rgba(8, 12, 20, 0.92);
   --nav-border: rgba(255, 255, 255, 0.06);
   --nav-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+
+  /* Theme-aware accents — #22c55e reads fine on dark but fails
+     contrast on light surfaces, so light mode swaps these darker. */
+  --green-text: #22c55e;
+  --accent-indigo: #818cf8;
+  --accent-teal: #2dd4bf;
+  --danger: #f87171;
+  --focus-ring: rgba(34, 197, 94, 0.6);
+
+  /* Card hover elevation (dark: deep shadow + green inner glow) */
+  --shadow-card-hover: 0 8px 48px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(34, 197, 94, 0.1) inset, 0 0 32px rgba(34, 197, 94, 0.06);
+
+  --scrollbar-track: #0a0f1e;
+
+  /* Alternating section surface — identical to --bg in dark (the dark
+     theme's depth comes from glows, not surface shifts); light mode
+     uses it to layer sections instead of one flat page color. */
+  --bg-2: #080c14;
+
+  /* CTA elevation: dark mode sells depth with green glow */
+  --cta-shadow: 0 0 30px rgba(34, 197, 94, 0.3), 0 4px 15px rgba(34, 197, 94, 0.2);
+
+  /* Secondary (glass) button surfaces */
+  --btn-2-bg: rgba(255, 255, 255, 0.05);
+  --btn-2-border: rgba(255, 255, 255, 0.12);
+  --btn-2-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ── Light theme ── */
 [data-theme="light"] {
-  --bg:         #f2f5fb;
-  --bg-card:    rgba(255, 255, 255, 0.97);
+  /* Soft neutral base (not pure white) so white cards read as elevated */
+  --bg:         #eef1f7;
+  --bg-card:    #ffffff;
   --bg-surface: rgba(255, 255, 255, 0.92);
   --bg-input:   rgba(15, 23, 42, 0.05);
   --bg-tag:     rgba(22, 163, 74, 0.08);
 
   --text-1: #0f172a;
-  --text-2: rgba(15, 23, 42, 0.6);
-  --text-3: rgba(15, 23, 42, 0.45);
-  --text-4: rgba(15, 23, 42, 0.3);
+  --text-2: rgba(15, 23, 42, 0.68);
+  --text-3: rgba(15, 23, 42, 0.54);
+  --text-4: rgba(15, 23, 42, 0.38);
   --text-5: rgba(15, 23, 42, 0.1);
 
-  --border-1: rgba(15, 23, 42, 0.1);
-  --border-2: rgba(15, 23, 42, 0.06);
+  --border-1: rgba(15, 23, 42, 0.12);
+  --border-2: rgba(15, 23, 42, 0.08);
   --border-3: rgba(15, 23, 42, 0.16);
 
-  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+  /* Two-layer shadows (ambient + contact) read as premium elevation;
+     single flat blurs read as smudges on pale surfaces */
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 6px 24px -4px rgba(15, 23, 42, 0.1), 0 2px 6px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 12px 40px -8px rgba(15, 23, 42, 0.14), 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-xl: 0 24px 64px -16px rgba(15, 23, 42, 0.18), 0 8px 20px rgba(15, 23, 42, 0.07);
 
-  /* Navbar */
-  --nav-scrolled-bg: rgba(242, 245, 251, 0.94);
-  --nav-border: rgba(15, 23, 42, 0.1);
-  --nav-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  /* Navbar — brighter glass than the page bg so it separates cleanly */
+  --nav-scrolled-bg: rgba(255, 255, 255, 0.85);
+  --nav-border: rgba(15, 23, 42, 0.08);
+  --nav-shadow: 0 8px 30px -10px rgba(15, 23, 42, 0.16);
+
+  /* Theme-aware accents — darker greens for WCAG contrast on light */
+  --green-text: #15803d;
+  --accent-indigo: #4f46e5;
+  --accent-teal: #0d9488;
+  --danger: #dc2626;
+  --focus-ring: rgba(21, 128, 61, 0.55);
+
+  /* Card hover elevation (light: soft diffused shadow, no heavy black) */
+  --shadow-card-hover: 0 12px 32px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(34, 197, 94, 0.18) inset;
+
+  --scrollbar-track: #e7ebf3;
+
+  /* Alternating section surface — a step cooler than --bg for layering */
+  --bg-2: #e7ecf5;
+
+  /* CTA elevation: glow doesn't read on pale surfaces — use a saturated
+     directional drop shadow instead (Stripe/Linear-style button depth) */
+  --cta-shadow: 0 10px 24px -6px rgba(22, 163, 74, 0.45), 0 3px 8px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  /* Secondary button: solid white chip w/ crisp border beats grey-on-grey */
+  --btn-2-bg: #ffffff;
+  --btn-2-border: rgba(15, 23, 42, 0.14);
+  --btn-2-shadow: 0 2px 10px rgba(15, 23, 42, 0.07), inset 0 1px 0 #ffffff;
 }
 
 @theme inline {
@@ -121,7 +174,7 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0f1e;
+  background: var(--scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(34, 197, 94, 0.3);
@@ -144,6 +197,40 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: gradient-shift 4s ease infinite;
+}
+
+[data-theme="light"] .gradient-text {
+  background: linear-gradient(135deg, #0f172a 0%, #16a34a 50%, #15803d 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated green gradient for headline accent spans.
+   Dark uses bright mint highlights; light swaps to deeper greens
+   because #86efac is nearly invisible on a pale background. */
+.gradient-green {
+  background-image: linear-gradient(135deg, #22c55e 0%, #86efac 50%, #22c55e 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 5s ease infinite;
+}
+
+[data-theme="light"] .gradient-green {
+  background-image: linear-gradient(135deg, #15803d 0%, #22c55e 55%, #166534 100%);
+}
+
+/* Visible keyboard focus (element selectors so they beat outline-none utilities) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 /* Particle canvas */
@@ -269,12 +356,21 @@ body {
   opacity: 1;
 }
 
-/* Particle canvas wrapper: dim heavily in light mode */
+/* Particle canvas wrapper: softened (not erased) in light mode. The
+   canvas paints green particles/towers we WANT visible on the pale hero;
+   only its dark base layers are hidden (.hero-dark-base below). */
 .hero-canvas-wrap {
   transition: opacity 0.4s ease;
 }
 [data-theme="light"] .hero-canvas-wrap {
-  opacity: 0.22;
+  opacity: 0.55;
+}
+
+/* Dark-mode-only layers inside AnimatedBackground (opaque dark gradient +
+   dark bottom fade). Left visible in light mode they lay a grey veil over
+   the entire hero — the main reason light mode looked washed out. */
+[data-theme="light"] .hero-dark-base {
+  opacity: 0;
 }
 
 /* Tech floating panel cards — richer glassmorphism in light mode */
@@ -290,10 +386,13 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
-/* Navbar: subtle glass panel in light mode when at top of page */
+/* Navbar: premium glass panel in light mode when at top of page.
+   saturate() keeps colors behind the glass vivid (flat blur greys them),
+   and the inset white line + soft drop shadow separate it from the hero. */
 [data-theme="light"] .nav-not-scrolled {
-  background: rgba(238, 244, 255, 0.72) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.07) !important;
+  background: rgba(255, 255, 255, 0.62) !important;
+  backdrop-filter: blur(18px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.6) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 8px 24px -14px rgba(15, 23, 42, 0.14) !important;
 }

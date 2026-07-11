@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { TEAM_MEMBERS, getTeamMember } from "@/lib/team-data";
-import TeamProfileClient from "@/components/TeamProfileClient";
+import TeamProfileClient from "@/components/sections/team/TeamProfileClient";
 
 /* Pre-render a static page for every team member at build time */
 export function generateStaticParams() {

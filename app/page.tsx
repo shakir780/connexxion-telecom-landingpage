@@ -1,12 +1,13 @@
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import CompanyOverview from "@/components/CompanyOverview";
-import ServicesSection from "@/components/ServicesSection";
-import StatsSection from "@/components/StatsSection";
-import TeamSection from "@/components/TeamSection";
-import PartnersSection from "@/components/PartnersSection";
-import CTASection from "@/components/CTASection";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import HeroSection from "@/components/sections/home/HeroSection";
+import TrustLine from "@/components/sections/home/TrustLine";
+import ServicesSection from "@/components/sections/home/ServicesSection";
+import ProductsSection from "@/components/sections/home/ProductsSection";
+import StatsSection from "@/components/sections/home/StatsSection";
+import TestimonialsSection from "@/components/sections/home/TestimonialsSection";
+import InsightsSection from "@/components/sections/home/InsightsSection";
+import NewsletterSection from "@/components/sections/home/NewsletterSection";
 
 export default function Home() {
   return (
@@ -14,12 +15,13 @@ export default function Home() {
       <Navbar />
       <main className="flex-1">
         <HeroSection />
-        <CompanyOverview />
+        <TrustLine />
         <ServicesSection />
+        <ProductsSection />
         <StatsSection />
-        <TeamSection />
-        <PartnersSection />
-        <CTASection />
+        <TestimonialsSection />
+        <InsightsSection />
+        <NewsletterSection />
       </main>
       <Footer />
     </div>
