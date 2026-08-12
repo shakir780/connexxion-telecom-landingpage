@@ -57,13 +57,10 @@
      uses it to layer sections instead of one flat page color. */
   --bg-2: #080c14;
 
-  /* CTA elevation: dark mode sells depth with green glow */
-  --cta-shadow: 0 0 30px rgba(34, 197, 94, 0.3), 0 4px 15px rgba(34, 197, 94, 0.2);
 
   /* Secondary (glass) button surfaces */
   --btn-2-bg: rgba(255, 255, 255, 0.05);
   --btn-2-border: rgba(255, 255, 255, 0.12);
-  --btn-2-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 /* ── Light theme ── */
@@ -112,14 +109,10 @@
   /* Alternating section surface — a step cooler than --bg for layering */
   --bg-2: #e7ecf5;
 
-  /* CTA elevation: glow doesn't read on pale surfaces — use a saturated
-     directional drop shadow instead (Stripe/Linear-style button depth) */
-  --cta-shadow: 0 10px 24px -6px rgba(22, 163, 74, 0.45), 0 3px 8px rgba(15, 23, 42, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 
   /* Secondary button: solid white chip w/ crisp border beats grey-on-grey */
   --btn-2-bg: #ffffff;
   --btn-2-border: rgba(15, 23, 42, 0.14);
-  --btn-2-shadow: 0 2px 10px rgba(15, 23, 42, 0.07), inset 0 1px 0 #ffffff;
 }
 
 @theme inline {
@@ -223,6 +216,18 @@ body {
   background-image: linear-gradient(135deg, #15803d 0%, #22c55e 55%, #166534 100%);
 }
 
+/* Pill buttons.
+   The body sets `-webkit-font-smoothing: antialiased`, which thins glyph
+   stems — fine for long-form copy, but it makes short bold button labels
+   look soft, especially white-on-green. Opting back into the platform's
+   default smoothing plus geometricPrecision gives fuller, crisper strokes. */
+.btn-pill {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: geometricPrecision;
+  letter-spacing: 0.01em;
+}
+
 /* Visible keyboard focus (element selectors so they beat outline-none utilities) */
 a:focus-visible,
 button:focus-visible,
@@ -277,6 +282,76 @@ textarea:focus-visible {
   animation: float 6s ease-in-out infinite;
 }
 
+/* ─────────────────────────────────────────────────────────── */
+/* Client logo marquee (TrustLine)                             */
+/* ─────────────────────────────────────────────────────────── */
+
+/* The track holds the logo set twice, so shifting it by exactly half its
+   width lands the copy where the original started — a seamless loop with
+   no snap. Spacing lives in each item's padding rather than a flex `gap`,
+   because a gap between the two halves would make the period ≠ 50%. */
+@keyframes marquee-x {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.marquee {
+  overflow: hidden;
+  /* Logos dissolve into the section edges instead of being sliced off */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee-x var(--marquee-duration, 45s) linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* No motion: fall back to the static centred row the section used before,
+   and drop the duplicate set so nothing reads twice. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .marquee-track {
+    animation: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 1.5rem;
+  }
+  .marquee-track > [data-clone] { display: none; }
+}
+
+.client-mark {
+  color: var(--text-3);
+  transition: color 0.25s ease, opacity 0.25s ease;
+}
+.client-mark:hover { color: var(--text-1); }
+
+/* Image logos are normalised to a single ink colour so a mixed bag of
+   brand files (colour, dark-on-transparent, light-on-transparent) still
+   reads evenly on both themes. Opt out per client with `keepColor`. */
+.client-mark-mono {
+  filter: brightness(0) invert(1);
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+[data-theme="light"] .client-mark-mono {
+  filter: brightness(0);
+  opacity: 0.5;
+}
+.client-mark:hover .client-mark-mono { opacity: 1; }
+
 /* Scan line effect */
 @keyframes scan {
   0% { transform: translateY(-100%); }
@@ -288,22 +363,6 @@ textarea:focus-visible {
 }
 
 /* Button shine effect */
-@keyframes shine {
-  0% { left: -100%; }
-  100% { left: 200%; }
-}
-
-.btn-shine::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  animation: shine 3s ease-in-out infinite;
-}
-
 /* Drawer overlay */
 .drawer-overlay {
   background: rgba(8, 12, 20, 0.85);
@@ -343,56 +402,92 @@ textarea:focus-visible {
 }
 
 /* ─────────────────────────────────────────────────────────── */
-/* Hero section — light mode layers                           */
+/* Hero — photo carousel is the visual; everything else is quiet */
 /* ─────────────────────────────────────────────────────────── */
 
-/* Light-mode decorative background: hidden in dark, revealed in light */
-.hero-light-bg {
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-[data-theme="light"] .hero-light-bg {
-  opacity: 1;
+/* Readability scrim over the service photos.
+   Dark  ~70%: cinematic, photo still clearly legible underneath.
+   Light ~48%: deliberately lighter so the imagery reads MORE openly
+   than in dark mode, which is what keeps light mode from looking
+   washed out. See .hero-on-media for why light mode goes light-on-dark
+   rather than using a white veil. */
+.hero-scrim {
+  /* Flat, uniform tint — no gradient, no vignette, no blur. A gradient
+     here is what reads as "fog"; a flat tint just darkens evenly and
+     leaves the photo's own colour relationships untouched. */
+  background: #060a12;
+  opacity: var(--overlay-dark, 0.66);
+  transition: opacity 1.1s ease;
 }
 
-/* Particle canvas wrapper: softened (not erased) in light mode. The
-   canvas paints green particles/towers we WANT visible on the pale hero;
-   only its dark base layers are hidden (.hero-dark-base below). */
+[data-theme="light"] .hero-scrim {
+  opacity: var(--overlay-light, 0.3);
+}
+
+/* The hero is a dark photographic band, so fading its lower edge into the
+   near-white page background (#eef1f7) laid a pale haze back over the
+   image. Dark mode fades into #080c14, which is seamless, so it keeps it. */
+[data-theme="light"] .hero-bottom-fade {
+  display: none;
+}
+
+/* Hero content sits on photography in BOTH themes, so it opts out of the
+   page palette and uses on-media values instead. Scoping the tokens here
+   means the markup keeps using the same var() names it always did.
+
+   Why light mode isn'''t a white veil: the hero copy is near-black in light
+   mode (#0f172a). Two of the three service photos are dark interiors, so a
+   20–30% white overlay would leave dark text on a dark photo at roughly
+   2.4:1 — well under the 4.5:1 minimum. Going light-on-dark keeps the
+   imagery open AND the copy readable, the same approach AWS/Microsoft use
+   for photographic heroes. */
+.hero-on-media {
+  --text-1: #ffffff;
+  --text-2: rgba(255, 255, 255, 0.82);
+  --text-3: rgba(255, 255, 255, 0.66);
+  --text-4: rgba(255, 255, 255, 0.5);
+  --green-text: #4ade80;
+  --border-2: rgba(255, 255, 255, 0.14);
+  --border-3: rgba(255, 255, 255, 0.28);
+  --btn-2-bg: rgba(255, 255, 255, 0.1);
+  --btn-2-border: rgba(255, 255, 255, 0.3);
+}
+
+/* Keep the bright headline gradient on media even in light mode
+   (must follow the [data-theme="light"] .gradient-green rule). */
+.hero-on-media .gradient-green {
+  background-image: linear-gradient(135deg, #22c55e 0%, #86efac 50%, #22c55e 100%);
+}
+
+/* Drifting motes: eased back further in light mode, where the scrim is
+   lighter and there is less tonal room for them to sit in. */
 .hero-canvas-wrap {
+  opacity: 0.6;
   transition: opacity 0.4s ease;
 }
 [data-theme="light"] .hero-canvas-wrap {
-  opacity: 0.55;
+  opacity: 0.4;
 }
 
-/* Dark-mode-only layers inside AnimatedBackground (opaque dark gradient +
-   dark bottom fade). Left visible in light mode they lay a grey veil over
-   the entire hero — the main reason light mode looked washed out. */
-[data-theme="light"] .hero-dark-base {
-  opacity: 0;
-}
 
-/* Tech floating panel cards — richer glassmorphism in light mode */
-.hero-tech-card {
-  transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-}
-[data-theme="light"] .hero-tech-card {
-  background: rgba(255, 255, 255, 0.88) !important;
-  border-color: rgba(34, 197, 94, 0.22) !important;
-  box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.1),
-    0 2px 8px rgba(34, 197, 94, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
-}
-
-/* Navbar: premium glass panel in light mode when at top of page.
-   saturate() keeps colors behind the glass vivid (flat blur greys them),
-   and the inset white line + soft drop shadow separate it from the hero. */
+/* Navbar at the top of the page in light mode.
+   This used to be a 62%-white frosted bar with a white inset highlight —
+   which, sitting directly on the hero photo, read as a pale band across
+   the top of the image. Now that the hero is a dark photographic band in
+   both themes, the nav goes fully transparent here and borrows the
+   on-media text colours instead, exactly as it already does in dark mode.
+   Once scrolled it reverts to the solid --nav-scrolled-bg panel. */
 [data-theme="light"] .nav-not-scrolled {
-  background: rgba(255, 255, 255, 0.62) !important;
-  backdrop-filter: blur(18px) saturate(1.6) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.6) !important;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 8px 24px -14px rgba(15, 23, 42, 0.14) !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid transparent !important;
+  box-shadow: none !important;
+
+  --text-1: #ffffff;
+  --text-2: rgba(255, 255, 255, 0.82);
+  --text-3: rgba(255, 255, 255, 0.66);
+  --green-text: #4ade80;
+  --bg-input: rgba(255, 255, 255, 0.14);
+  --border-3: rgba(255, 255, 255, 0.3);
 }

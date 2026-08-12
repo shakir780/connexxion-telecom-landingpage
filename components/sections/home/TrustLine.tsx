@@ -1,155 +1,152 @@
 "use client";
 
+import type { CSSProperties } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const EASE_OUT = "easeOut" as const;
 
 /* ─────────────────────────────────────────────
-   Client logos — pure SVG wordmarks so zero
-   external image deps are needed (same approach
-   as PartnersSection).
+   Client logos.
+
+   Sources live in /public/images/clients. The
+   raster files were pre-processed into white-ink
+   transparent PNGs and the SVGs carry a single
+   flat fill, so the monochrome tint in
+   globals.css (.client-mark-mono) renders every
+   one of them cleanly as white on the dark theme
+   and black on the light one. Set `keepColor` to
+   opt a logo out of that tint.
+
+   `h` is per-client on purpose: a three-line
+   lockup and a single-line wordmark scaled to the
+   same box height look nothing alike, so each is
+   sized for optical balance, not geometric.
 ───────────────────────────────────────────── */
-const CLIENTS: { id: string; label: string; Logo: () => React.ReactElement }[] = [
+type Client = {
+  id: string;
+  label: string;
+  src: string;
+  width: number;
+  height: number;
+  h: string;
+  keepColor?: boolean;
+};
+
+const CLIENTS: Client[] = [
   {
-    id: "ramco",
-    label: "Ramco Group",
-    Logo: () => (
-      <div className="flex items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M2 13L9 3l7 10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <div className="flex flex-col leading-none">
-          <span className="text-base font-extrabold tracking-tight">RAMCO</span>
-          <span className="text-[8px] font-semibold tracking-[0.2em] opacity-70">GROUP</span>
-        </div>
-      </div>
-    ),
+    id: "slb",
+    label: "SLB",
+    src: "/images/clients/slb.svg",
+    width: 1020,
+    height: 620,
+    h: "h-8 sm:h-10",
   },
   {
-    id: "providusbank",
-    label: "ProvidusBank",
-    Logo: () => (
-      <div className="flex items-center gap-1.5">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M8 1.5L14.5 5v1H1.5V5L8 1.5z" fill="currentColor" />
-          <rect x="2.5" y="7" width="2" height="6.5" fill="currentColor" />
-          <rect x="7" y="7" width="2" height="6.5" fill="currentColor" />
-          <rect x="11.5" y="7" width="2" height="6.5" fill="currentColor" />
-          <rect x="1.5" y="14" width="13" height="1.2" fill="currentColor" />
-        </svg>
-        <span className="text-sm font-bold tracking-tight">ProvidusBank</span>
-      </div>
-    ),
+    id: "nsib",
+    label: "Nigerian Safety Investigation Bureau",
+    src: "/images/clients/nsib.png",
+    width: 541,
+    height: 160,
+    h: "h-8 sm:h-9",
   },
   {
-    id: "shuttlers",
-    label: "Shuttlers",
-    Logo: () => (
-      <div className="flex items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <circle cx="9" cy="9" r="7" stroke="currentColor" strokeWidth="1.4" />
-          <circle cx="9" cy="9" r="2" fill="currentColor" />
-        </svg>
-        <span className="text-base font-bold tracking-tight">Shuttlers</span>
-      </div>
-    ),
+    id: "huawei",
+    label: "Huawei",
+    src: "/images/clients/huawei.svg",
+    width: 576,
+    height: 98,
+    h: "h-4 sm:h-5",
   },
   {
-    id: "mwanga",
-    label: "Mwanga",
-    Logo: () => (
-      <div className="flex items-center gap-2">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path
-            d="M8 0l1 5 5 1-5 1-1 5-1-5-5-1 5-1z"
-            fill="currentColor"
-          />
-        </svg>
-        <span className="text-base font-semibold tracking-tight lowercase">mwanga</span>
-      </div>
-    ),
+    id: "msi",
+    label: "MSI Reproductive Choices Nigeria",
+    src: "/images/clients/msi.png",
+    width: 186,
+    height: 160,
+    h: "h-10 sm:h-12",
   },
   {
-    id: "turaco",
-    label: "Turaco",
-    Logo: () => (
-      <span className="text-base font-extrabold tracking-tight lowercase">turaco</span>
-    ),
+    id: "aym-shafa",
+    label: "AYM Shafa",
+    src: "/images/clients/aym-shafa.png",
+    width: 424,
+    height: 160,
+    h: "h-8 sm:h-10",
   },
   {
-    id: "sterling",
-    label: "Sterling",
-    Logo: () => (
-      <div className="flex items-center gap-2">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="6.5" fill="currentColor" opacity="0.9" />
-          <circle cx="10.5" cy="6" r="5" fill="var(--trust-bg, #0b1220)" />
-        </svg>
-        <span className="text-base font-semibold tracking-tight">Sterling</span>
-      </div>
-    ),
-  },
-  {
-    id: "wemabank",
-    label: "Wema Bank",
-    Logo: () => (
-      <div className="flex items-center gap-2">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path
-            d="M1 3l3.5 12L9 6l4.5 9L17 3"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-          />
-        </svg>
-        <div className="flex flex-col leading-none">
-          <span className="text-sm font-extrabold tracking-tight">WEMA</span>
-          <span className="text-[8px] font-semibold tracking-[0.2em] opacity-70">BANK</span>
-        </div>
-      </div>
-    ),
+    id: "plac",
+    label: "Policy and Legal Advocacy Centre",
+    src: "/images/clients/plac.png",
+    width: 231,
+    height: 160,
+    h: "h-9 sm:h-11",
   },
 ];
 
-/* ─── Main Export ─── */
+/* The track scrolls by exactly half its width, so the visible strip is only
+   covered for the whole cycle if that half is itself wider than the viewport.
+   Six logos make one set roughly 1200px wide, so three sets per half keeps
+   ultra-wide displays gap-free. */
+const REPEAT = 6;
+
 export default function TrustLine() {
+  const marqueeItems = Array.from({ length: REPEAT }, () => CLIENTS).flat();
+
   return (
     <section
       aria-label="Trusted by top businesses and government agencies"
       className="relative"
-      style={{ background: "#0b1220" }}
+      style={
+        {
+          background: "var(--bg-2)",
+          borderBlock: "1px solid var(--border-2)",
+        } as CSSProperties
+      }
     >
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-10">
+      <div className="relative py-9 sm:py-10">
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, ease: EASE_OUT }}
-          className="text-center text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase mb-8"
-          style={{ color: "rgba(255,255,255,0.5)" }}
+          className="text-center text-[11px] sm:text-xs font-bold tracking-[0.25em] uppercase mb-8 px-4"
+          style={{ color: "var(--text-3)" }}
         >
           Trusted By Top Businesses and Government Agencies in Nigeria
         </motion.p>
 
-        <div className="flex flex-wrap items-center justify-center gap-x-10 sm:gap-x-14 gap-y-6">
-          {CLIENTS.map((client, i) => (
-            <motion.div
-              key={client.id}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, ease: EASE_OUT, delay: 0.05 * i }}
-              title={client.label}
-              className="transition-opacity duration-300"
-              style={{ color: "rgba(255,255,255,0.72)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "#ffffff"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.72)"; }}
-            >
-              <client.Logo />
-            </motion.div>
-          ))}
+        <div className="marquee">
+          <ul
+            className="marquee-track"
+            style={{ "--marquee-duration": "45s" } as CSSProperties}
+          >
+            {marqueeItems.map((client, i) => {
+              // Only the first set is real content; the rest exist to fill the
+              // loop, so they stay out of the accessibility tree and are
+              // dropped entirely when motion is reduced.
+              const isClone = i >= CLIENTS.length;
+              return (
+                <li
+                  key={`${client.id}-${i}`}
+                  data-clone={isClone ? "" : undefined}
+                  aria-hidden={isClone || undefined}
+                  className="client-mark shrink-0 px-7 sm:px-10 flex items-center"
+                >
+                  <Image
+                    src={client.src}
+                    alt={client.label}
+                    title={client.label}
+                    width={client.width}
+                    height={client.height}
+                    className={`${client.h} w-auto object-contain ${
+                      client.keepColor ? "" : "client-mark-mono"
+                    }`}
+                  />
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </section>

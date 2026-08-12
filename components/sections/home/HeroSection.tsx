@@ -2,356 +2,327 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedBackground from "./AnimatedBackground";
 
 const EASE_OUT = "easeOut" as const;
 
-/* ─── Light-mode decorative hero background ─── */
-function HeroLightBackground() {
+/* ─── Service slides — background photo + its copy ───
+   One source of truth so the image and the wording always agree.
+
+   `overlay` is the dark-scrim opacity per photo, not one blanket value — the
+   aim is the least overlay each photo can carry while white copy stays
+   legible. These are measured, not eyeballed: the mean relative luminance of
+   each photo under the copy column, solved for a ≥4.5:1 contrast ratio
+   against white. The phone shot is the brightest of the three by a wide
+   margin and needs roughly double the scrim the hardware shot does. */
+const SERVICE_SLIDES = [
+  {
+    id: "software-development",
+    label: "Software Development",
+    headline: "Software Development",
+    body: "Transform complex business challenges into fast, secure, and intuitive digital products (apps and websites)",
+    image: "/images/Software Development4.png",
+    overlayLight: 0.64,
+    overlayDark: 0.7,
+  },
+  {
+    id: "it-consultancy",
+    label: "IT Consultancy",
+    headline: "IT Consultancy",
+    body: "Stop Guessing Your Tech Strategy - Validate software choices, infrastructure investments, and security protocols before you spend.",
+    image: "/images/nigerian_office_team.webp",
+    overlayLight: 0.4,
+    overlayDark: 0.6,
+  },
+  {
+    id: "smart-hardware-infrastructure",
+    label: "Smart Hardware Infrastructure",
+    headline: "Smart Hardware Infrastructure",
+    body: "Connect the Physical World to the Cloud - Modernize operations with intelligent, secure, and reliable hardware infrastructure",
+    image: "/images/Smart Hardware Infrastructure (1).png",
+    overlayLight: 0.18,
+    overlayDark: 0.45,
+  },
+];
+
+/* Full-bleed imagery needs longer dwell than a text swap — 2.6s felt
+   strobe-like once photos were driving the change. Raised again once the
+   headline started rotating too: 5.2s is not long enough to read a
+   headline and a two-line paragraph before it moves. */
+const SLIDE_MS = 6800;
+
+/* ─── Background photo carousel ───
+   Decorative: the copy carousel already announces each service in text, so
+   these carry empty alt text and are hidden from assistive tech. */
+function HeroImageSlider({ index }: { index: number }) {
   return (
-    <div className="hero-light-bg absolute inset-0 overflow-hidden">
-      {/* Base mesh gradient — soft blue to mint */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(135deg, #eef3ff 0%, #f0f8fb 45%, #ecfaf3 100%)",
-        }}
-      />
-
-      {/* Top-right signal rings (telecom identity) */}
-      <svg
-        className="absolute pointer-events-none"
-        style={{ top: "-12%", right: "-6%", width: 620, height: 620, opacity: 0.8 }}
-        viewBox="0 0 560 560"
-        fill="none"
-        aria-hidden="true"
-      >
-        {[250, 195, 140, 88, 42].map((r, i) => (
-          <circle
-            key={r}
-            cx="280" cy="280" r={r}
-            stroke={`rgba(34,197,94,${0.09 + i * 0.03})`}
-            strokeWidth={i === 4 ? 1.5 : 1}
-            strokeDasharray={i % 2 === 0 ? "6 9" : "3 7"}
-            fill="none"
+    <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={SERVICE_SLIDES[index].id}
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1 }}
+          transition={{
+            opacity: { duration: 1.1, ease: EASE_OUT },
+            scale: { duration: SLIDE_MS / 1000 + 1.1, ease: "linear" },
+          }}
+        >
+          {/* Focal point held right of centre so the subject of each frame
+              sits clear of the copy column on portrait and tablet crops. */}
+          <Image
+            src={SERVICE_SLIDES[index].image}
+            alt=""
+            fill
+            priority={index === 0}
+            sizes="100vw"
+            className="object-cover object-[72%_center] sm:object-center"
           />
-        ))}
-        {/* Radial spokes */}
-        {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => {
-          const rad = (deg * Math.PI) / 180;
-          return (
-            <line
-              key={deg}
-              x1={280 + Math.cos(rad) * 42}
-              y1={280 + Math.sin(rad) * 42}
-              x2={280 + Math.cos(rad) * 250}
-              y2={280 + Math.sin(rad) * 250}
-              stroke="rgba(34,197,94,0.08)"
-              strokeWidth="0.8"
-              strokeDasharray="4 8"
-            />
-          );
-        })}
-        {/* Center node */}
-        <circle cx="280" cy="280" r="16" fill="rgba(34,197,94,0.08)" />
-        <circle cx="280" cy="280" r="6"  fill="rgba(34,197,94,0.18)" />
-        <circle cx="280" cy="280" r="2.5" fill="#22c55e" opacity="0.7" />
-        {/* Orbital node dots */}
-        {[0, 72, 144, 216, 288].map((deg) => {
-          const rad = (deg * Math.PI) / 180;
-          return (
-            <circle
-              key={deg}
-              cx={280 + Math.cos(rad) * 140}
-              cy={280 + Math.sin(rad) * 140}
-              r="3.5"
-              fill="rgba(34,197,94,0.3)"
-            />
-          );
-        })}
-      </svg>
-
-      {/* Green ambient glow — top right */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "0%", right: "5%",
-          width: 520, height: 520,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(34,197,94,0.17) 0%, rgba(34,197,94,0.06) 40%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-
-      {/* Atmospheric green glow directly behind the (centered) headline —
-          gives the copy the same "lit from behind" feel as dark mode */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "18%", left: "50%",
-          transform: "translateX(-50%)",
-          width: 880, height: 460,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(ellipse, rgba(34,197,94,0.11) 0%, rgba(34,197,94,0.04) 45%, transparent 72%)",
-          filter: "blur(48px)",
-        }}
-      />
-
-      {/* Indigo ambient glow — bottom left (depth) */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          bottom: "10%", left: "-8%",
-          width: 500, height: 500,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%)",
-          filter: "blur(52px)",
-        }}
-      />
-
-      {/* Soft center bloom */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "15%", left: "25%",
-          width: 700, height: 360,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(ellipse, rgba(255,255,255,0.55) 0%, transparent 70%)",
-          filter: "blur(24px)",
-        }}
-      />
-
-      {/* Dot grid */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        style={{ opacity: 0.55 }}
-        aria-hidden="true"
-      >
-        <defs>
-          <pattern id="hero-dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
-            <circle cx="1" cy="1" r="0.8" fill="rgba(34,197,94,0.35)" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hero-dots)" />
-      </svg>
-
-      {/* Diagonal network line (accent) */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
-        style={{ opacity: 0.32 }}
-        viewBox="0 0 1440 900"
-        preserveAspectRatio="xMidYMid slice"
-        fill="none"
-        aria-hidden="true"
-      >
-        {/* Abstract connection lines */}
-        <line x1="0"    y1="180" x2="360"  y2="80"   stroke="#22c55e" strokeWidth="0.8" strokeDasharray="8 12" />
-        <line x1="360"  y1="80"  x2="720"  y2="200"  stroke="#22c55e" strokeWidth="0.8" strokeDasharray="8 12" />
-        <line x1="720"  y1="200" x2="1100" y2="60"   stroke="#22c55e" strokeWidth="0.8" strokeDasharray="8 12" />
-        <line x1="1100" y1="60"  x2="1440" y2="180"  stroke="#22c55e" strokeWidth="0.8" strokeDasharray="8 12" />
-        {/* Node markers */}
-        <circle cx="360"  cy="80"  r="4" fill="rgba(34,197,94,0.35)" />
-        <circle cx="720"  cy="200" r="4" fill="rgba(34,197,94,0.35)" />
-        <circle cx="1100" cy="60"  r="4" fill="rgba(34,197,94,0.35)" />
-      </svg>
-
-      {/* Bottom edge fade to blend with next section */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
-        style={{
-          background: "linear-gradient(to bottom, transparent, rgba(236,250,243,0.6))",
-        }}
-      />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
 
-/* ─── Badge / Eyebrow ─── */
-function EyebrowBadge() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.1 }}
-      className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase"
-      style={{
-        background: "rgba(34, 197, 94, 0.08)",
-        border: "1px solid rgba(34, 197, 94, 0.25)",
-        color: "var(--green-text)",
-      }}
-    >
-      <span className="relative flex h-1.5 w-1.5">
-        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" />
-      </span>
-      Helping Public and Private Sectors Transform Through Technology
-    </motion.div>
-  );
-}
-
-/* ─── Headline ─── */
-function Headline() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.75, ease: EASE_OUT, delay: 0.25 }}
-      className="mt-6"
-    >
-      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.08]" style={{ color: "var(--text-1)" }}>
-        The{" "}
-        <span className="gradient-green relative inline-block">
-          Technology
-        </span>{" "}
-        African Organizations Need.
-      </h1>
-    </motion.div>
-  );
-}
-
-/* ─── Rotating product/service tagline ─── */
-const TAGLINE_SLIDES = [
-  "Software Development.",
-  "IT Consultancy.",
-  "Smart Hardware Infrastructure.",
-];
-
-function TaglineCarousel() {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % TAGLINE_SLIDES.length);
-    }, 2600);
-    return () => clearInterval(id);
-  }, []);
+/* ─── Hero copy — eyebrow, headline, paragraph ───
+   Crossfades on the same beat as the photo. Both frames are absolutely
+   positioned inside a reserved box: left in normal flow they would resize the
+   column as the wording changed and shunt the CTA buttons up and down on
+   every slide. The reserved height fits the longest pairing at each
+   breakpoint. */
+function HeroCopy({ index }: { index: number }) {
+  const slide = SERVICE_SLIDES[index];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.35 }}
-      className="mt-5 flex flex-wrap items-center justify-center gap-2"
-    >
-      <span className="text-sm sm:text-base font-medium" style={{ color: "var(--text-3)" }}>
-        All Products &amp; Services:
-      </span>
-      <span className="relative h-6 sm:h-7 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={TAGLINE_SLIDES[index]}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -14 }}
-            transition={{ duration: 0.4, ease: EASE_OUT }}
-            className="block text-sm sm:text-base font-semibold tracking-wide"
-            style={{ color: "var(--green-text)" }}
+    <div className="relative min-h-60 sm:min-h-64 lg:min-h-72">
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={slide.id}
+          className="absolute inset-x-0 top-0"
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{
+            opacity: { duration: 0.6, ease: EASE_OUT },
+            y: { duration: 0.75, ease: EASE_OUT },
+          }}
+        >
+          {/* Position marker only: the service name is the headline now, so
+              spelling it out here too would just say the same thing twice. */}
+          <p
+            className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.28em]"
+            style={{ color: "var(--text-4)" }}
           >
-            {TAGLINE_SLIDES[index]}
-          </motion.span>
-        </AnimatePresence>
-      </span>
-    </motion.div>
+            <span style={{ color: "var(--green-text)" }}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span className="mx-2.5">/</span>
+            {String(SERVICE_SLIDES.length).padStart(2, "0")}
+          </p>
+
+          <h1
+            className="mt-6 sm:mt-7 text-[2rem] sm:text-[2.75rem] lg:text-[3.25rem] xl:text-[3.5rem] font-extrabold tracking-[-0.035em] leading-[1.06]"
+            style={{ color: "var(--text-1)" }}
+          >
+            {slide.headline}
+          </h1>
+
+          {/* --text-2 rather than --text-3: at 66% white this paragraph sits
+              just under 4.5:1 over the brightest of the three photos. */}
+          <p
+            className="mt-6 sm:mt-7 max-w-112 text-[0.95rem] sm:text-base leading-relaxed"
+            style={{ color: "var(--text-2)" }}
+          >
+            {slide.body}
+          </p>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
 
-/* ─── Supporting sub-headline ─── */
-function SubHeading() {
-  return (
-    <motion.h2
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.45 }}
-      className="mt-6 max-w-2xl mx-auto text-base sm:text-lg font-normal leading-relaxed"
-      style={{ color: "var(--text-2)" }}
-    >
-      We bridge the gap between complex enterprise and business challenges
-      with simple, full scale digital solutions.
-    </motion.h2>
-  );
-}
-
-/* ─── CTA Buttons ─── */
+/* ─── CTA buttons — flat fills, no gradient or shine sweep ─── */
 function CTAButtons() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.6 }}
-      className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+      transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.45 }}
+      className="mt-9 sm:mt-11 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
     >
-      {/* Primary green button */}
       <Link
         href="/consultation"
-        className="relative group inline-flex items-center gap-3 px-7 py-3.5 rounded-xl font-semibold text-sm text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
-        style={{
-          background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-          boxShadow: "var(--cta-shadow)",
-        }}
+        className="group inline-flex items-center justify-center gap-2.5 min-h-12 px-7 rounded-full text-sm font-bold transition-transform duration-200 hover:-translate-y-0.5"
+        style={{ background: "var(--green-text)", color: "#04120a" }}
       >
-        {/* Shine sweep */}
-        <span
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background:
-              "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%)",
-          }}
-        />
-        <span className="relative">Explore Solutions</span>
+        Explore Solutions
         <svg
-          width="16"
-          height="16"
           viewBox="0 0 16 16"
-          fill="none"
-          className="relative transition-transform duration-300 group-hover:translate-x-1"
+          fill="currentColor"
+          className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1"
         >
           <path
-            d="M3 8H13M9 4l4 4-4 4"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            fillRule="evenodd"
+            d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
+            clipRule="evenodd"
           />
         </svg>
       </Link>
 
-      {/* Secondary glassmorphism button */}
       <Link
         href="/consultation"
-        className="group inline-flex items-center gap-3 px-7 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-0.5"
+        className="group inline-flex items-center justify-center gap-2.5 min-h-12 px-7 rounded-full text-sm font-semibold transition-colors duration-200"
         style={{
-          background: "var(--btn-2-bg)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
           border: "1px solid var(--btn-2-border)",
           color: "var(--text-1)",
-          boxShadow: "var(--btn-2-shadow)",
         }}
       >
-        <span>Contact Us</span>
+        Talk to Us
         <svg
-          width="16"
-          height="16"
           viewBox="0 0 16 16"
           fill="none"
-          className="transition-transform duration-300 group-hover:translate-x-1"
+          stroke="currentColor"
+          strokeWidth={1.6}
+          className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
         >
           <path
-            d="M13 5.5A5.5 5.5 0 0 1 7.5 11H5l-2 2V9.5A5.5 5.5 0 1 1 13 5.5z"
-            stroke="currentColor"
-            strokeWidth="1.3"
+            d="M5 11L11 5M11 5H6M11 5v5"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
       </Link>
     </motion.div>
+  );
+}
+
+/* ─── Slide progress (narrow screens) ───
+   On desktop each service in the index carries its own hairline, which reads
+   as progress because all three sit side by side. Below `sm` that row becomes
+   a horizontal scroller, so those hairlines no longer line up into anything
+   legible — this replaces them with three segments that state position and
+   dwell at a glance. The generous vertical padding is tap target, not
+   thickness: the bar itself stays 3px. */
+function SlideProgress({
+  index,
+  onSelect,
+}: {
+  index: number;
+  onSelect: (i: number) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2 sm:hidden">
+      {SERVICE_SLIDES.map((service, i) => {
+        const active = i === index;
+        return (
+          <button
+            key={service.id}
+            type="button"
+            onClick={() => onSelect(i)}
+            aria-label={`Show ${service.label}`}
+            aria-current={active ? "true" : undefined}
+            className="flex-1 py-2.5 cursor-pointer"
+          >
+            <span
+              className="block h-0.75 w-full overflow-hidden rounded-full"
+              style={{ background: "rgba(255,255,255,0.28)" }}
+            >
+              {active && (
+                <motion.span
+                  key={service.id + "-" + index}
+                  className="block h-full w-full origin-left rounded-full"
+                  style={{ background: "var(--green-text)" }}
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: SLIDE_MS / 1000, ease: "linear" }}
+                />
+              )}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─── Service index ───
+   Deliberately quiet: it states the full range, shows which frame is on
+   screen and lets you jump between them, but it should never compete with
+   the headline. On narrow screens it becomes a single scrollable row rather
+   than a stack, so it stays one line at the foot of the frame. */
+function ServiceIndex({
+  index,
+  onSelect,
+}: {
+  index: number;
+  onSelect: (i: number) => void;
+}) {
+  return (
+    <motion.nav
+      aria-label="Featured services"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: EASE_OUT, delay: 0.65 }}
+      className="border-t pt-4"
+      style={{ borderColor: "var(--border-2)" }}
+    >
+      <ul className="flex gap-7 overflow-x-auto sm:grid sm:grid-cols-3 sm:gap-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {SERVICE_SLIDES.map((service, i) => {
+          const active = i === index;
+          return (
+            <li key={service.id} className="shrink-0 min-w-44 sm:min-w-0">
+              <button
+                type="button"
+                onClick={() => onSelect(i)}
+                aria-current={active ? "true" : undefined}
+                className="group w-full text-left cursor-pointer"
+              >
+                <span className="flex items-baseline gap-2.5">
+                  <span
+                    className="text-[10px] font-mono tabular-nums transition-colors duration-300"
+                    style={{
+                      color: active ? "var(--green-text)" : "var(--text-4)",
+                    }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className="text-[13px] font-medium whitespace-nowrap transition-colors duration-300"
+                    style={{
+                      color: active ? "var(--text-2)" : "var(--text-4)",
+                    }}
+                  >
+                    {service.label}
+                  </span>
+                </span>
+
+                {/* Hairline: fills across the active slide's dwell time.
+                    Hidden below `sm`, where SlideProgress carries the dwell
+                    instead and two indicators would just compete. */}
+                <span
+                  className="mt-2.5 hidden sm:block h-px w-full overflow-hidden"
+                  style={{ background: "var(--border-2)" }}
+                >
+                  {active && (
+                    <motion.span
+                      key={service.id + "-" + index}
+                      className="block h-full origin-left"
+                      style={{ background: "var(--green-text)" }}
+                      initial={{ scaleX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: SLIDE_MS / 1000, ease: "linear" }}
+                    />
+                  )}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </motion.nav>
   );
 }
 
@@ -359,34 +330,74 @@ function CTAButtons() {
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
 
+  /* One timer drives the photo, the copy, the index and its progress bar, so
+     they can't drift. Keyed on `slide` (rather than a standing interval) so
+     picking a service from the index restarts its full dwell. */
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setSlide((prev) => (prev + 1) % SERVICE_SLIDES.length);
+    }, SLIDE_MS);
+    return () => clearTimeout(id);
+  }, [slide]);
+
   return (
     <section
       ref={ref}
-      className="relative w-full min-h-screen flex items-center overflow-hidden"
+      className="hero-on-media relative w-full min-h-screen flex flex-col overflow-hidden"
       aria-label="Hero section"
     >
-      {/* Light-mode decorative background (fades in via CSS) */}
-      <HeroLightBackground />
+      {/* 1. Service photo carousel — the hero's primary visual */}
+      <HeroImageSlider index={slide} />
 
-      {/* Animated particle canvas (dimmed in light mode via CSS) */}
-      <div className="hero-canvas-wrap absolute inset-0">
+      {/* 2. Readability scrim — a flat dark tint, no gradient or blur, so the
+             photo's own colours stay intact. Opacity is per-slide (see
+             SERVICE_SLIDES) and resolved per theme in CSS. */}
+      <div
+        className="hero-scrim absolute inset-0 pointer-events-none"
+        style={
+          {
+            "--overlay-light": SERVICE_SLIDES[slide].overlayLight,
+            "--overlay-dark": SERVICE_SLIDES[slide].overlayDark,
+          } as React.CSSProperties
+        }
+      />
+
+      {/* 3. Sparse drifting motes — the only decorative layer left */}
+      <div className="hero-canvas-wrap absolute inset-0 pointer-events-none">
         <AnimatedBackground />
       </div>
 
-      {/* Content wrapper — centered single column */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
-        <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
-          <EyebrowBadge />
-          <Headline />
-          <TaglineCarousel />
-          <SubHeading />
-          <CTAButtons />
+      {/* Content — one left column, capped short of the frame's midpoint so
+          the copy never runs across the subject of the photograph. The block
+          sits just below the optical centre; the index is pinned to the foot. */}
+      <div className="relative z-10 flex-1 flex flex-col w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-28 sm:pt-32 pb-8 sm:pb-10">
+        {/* min-w-0 on both rows: the service index is a horizontal scroller
+            whose items carry a min width, and a flex item defaults to
+            min-width:auto — without this it reports a min-content width wider
+            than the phone, which inflates the copy column past the viewport
+            and the section's overflow-hidden silently crops the paragraph. */}
+        <div className="flex-1 min-w-0 flex flex-col justify-center">
+          <div className="max-w-128 lg:translate-y-[3vh]">
+            <HeroCopy index={slide} />
+            <CTAButtons />
+          </div>
+        </div>
+
+        {/* The segments take the top slice of the old margin rather than
+            adding height, so the centred copy above doesn't shift up. */}
+        <div className="mt-8 sm:mt-16 min-w-0">
+          <SlideProgress index={slide} onSelect={setSlide} />
+          <div className="mt-3 sm:mt-0">
+            <ServiceIndex index={slide} onSelect={setSlide} />
+          </div>
         </div>
       </div>
 
       {/* Bottom gradient fade into page */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        className="hero-bottom-fade absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
         style={{
           background: "linear-gradient(to bottom, transparent, var(--bg))",
         }}

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const EASE_OUT = "easeOut" as const;
@@ -66,36 +67,63 @@ const SocialLinks = [
   },
 ];
 
-/* ─── Footer link columns ─── */
-const PRODUCT_LINKS = [
-  { label: "iGov", href: "/products/igov" },
-  { label: "CNX247", href: "/products/cnx247" },
-  { label: "iCoop", href: "/products/icoop" },
+/* ─── Navigation groups ───
+   Same links as before, regrouped. "Insights" is added to Company (the usual
+   home for a company's writing) using the existing /insights/blog route, so
+   the footer reaches it the way the main nav does. */
+type NavGroup = { id: string; heading: string; links: { label: string; href: string }[] };
+
+const NAV_GROUPS: NavGroup[] = [
+  {
+    id: "products",
+    heading: "Products",
+    links: [
+      { label: "iGov", href: "/products/igov" },
+      { label: "CNX247", href: "/products/cnx247" },
+      { label: "iCoop", href: "/products/icoop" },
+    ],
+  },
+  {
+    id: "services",
+    heading: "Services",
+    links: [
+      { label: "Network Infrastructure", href: "/services/network-infrastructure" },
+      { label: "Fibre Optic Solutions", href: "/services/fibre-optic-solutions" },
+      { label: "Enterprise VoIP", href: "/services/enterprise-voip" },
+      { label: "CCTV & Security", href: "/services/cctv-security" },
+      { label: "Server & Cloud Administration", href: "/services/server-cloud-administration" },
+      { label: "Managed IT Support", href: "/services/managed-it-support" },
+    ],
+  },
+  {
+    id: "industries",
+    heading: "Industries",
+    links: [
+      { label: "Gov / Public", href: "/testimonials/government-public" },
+      { label: "Cooperatives / Thrift", href: "/testimonials/cooperatives-thrift" },
+      { label: "Finance", href: "/testimonials/finance" },
+      { label: "SMEs / Corporate", href: "/testimonials/smes-corporate" },
+      { label: "Education", href: "/testimonials/education" },
+      { label: "Healthcare", href: "/testimonials/healthcare" },
+    ],
+  },
+  {
+    id: "company",
+    heading: "Company",
+    links: [
+      { label: "Company Overview", href: "/about/overview" },
+      { label: "Mission", href: "/about/mission" },
+      { label: "Team", href: "/team" },
+      { label: "Why Us?", href: "/about/why-us" },
+      { label: "Insights", href: "/insights/blog" },
+    ],
+  },
 ];
 
-const SERVICE_LINKS = [
-  { label: "Network Infrastructure", href: "/services/network-infrastructure" },
-  { label: "Fibre Optic Solutions", href: "/services/fibre-optic-solutions" },
-  { label: "Enterprise VoIP", href: "/services/enterprise-voip" },
-  { label: "CCTV & Security", href: "/services/cctv-security" },
-  { label: "Server & Cloud Administration", href: "/services/server-cloud-administration" },
-  { label: "Managed IT Support", href: "/services/managed-it-support" },
-];
-
-const INDUSTRY_LINKS = [
-  { label: "Gov / Public", href: "/testimonials/government-public" },
-  { label: "Cooperatives / Thrift", href: "/testimonials/cooperatives-thrift" },
-  { label: "Finance", href: "/testimonials/finance" },
-  { label: "SMEs / Corporate", href: "/testimonials/smes-corporate" },
-  { label: "Education", href: "/testimonials/education" },
-  { label: "Healthcare", href: "/testimonials/healthcare" },
-];
-
-const COMPANY_LINKS = [
-  { label: "Company Overview", href: "/about/overview" },
-  { label: "Mission", href: "/about/mission" },
-  { label: "Team", href: "/team" },
-  { label: "Why Us?", href: "/about/why-us" },
+/* Paired so the two desktop sub-columns end at roughly the same depth */
+const NAV_COLUMNS: NavGroup[][] = [
+  [NAV_GROUPS[1], NAV_GROUPS[0]], // Services, Products
+  [NAV_GROUPS[2], NAV_GROUPS[3]], // Industries, Company
 ];
 
 const LEGAL_LINKS = [
@@ -103,103 +131,136 @@ const LEGAL_LINKS = [
   { label: "Terms & Conditions", href: "/legal/terms-and-conditions" },
 ];
 
-/* ─── Logo wordmark ─── */
-function FooterLogo() {
+/* ─── Shared pieces ─── */
+function GroupHeading({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-2.5">
-      {/* Icon */}
-      <div
-        className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-        style={{
-          background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-          boxShadow: "0 0 16px rgba(34,197,94,0.35)",
-        }}
-      >
-        <svg viewBox="0 0 20 20" fill="none" className="w-4 h-4">
-          <path d="M2 10 C2 10 5 5 8 9 C11 13 13 5 16 9 C18 12 18 10 18 10" stroke="#000" strokeWidth="2" strokeLinecap="round" />
-          <circle cx="10" cy="17" r="1.5" fill="#000" />
-        </svg>
-      </div>
-      <div className="flex flex-col leading-none">
-        <span className="text-base font-extrabold tracking-tight" style={{ color: "var(--text-1)" }}>
-          Connexxion
-        </span>
-        <span className="text-[9px] font-semibold tracking-widest uppercase" style={{ color: "var(--green-text)" }}>
-          Telecom
-        </span>
-      </div>
-    </div>
+    <h4
+      className="text-[10px] font-bold tracking-[0.22em] uppercase"
+      style={{ color: "var(--text-4)" }}
+    >
+      {children}
+    </h4>
   );
 }
 
-/* ─── Column heading ─── */
-function ColHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex items-center gap-2 mb-5">
-      <span className="w-3 h-px" style={{ background: "#22c55e" }} />
-      <h4 className="text-xs font-bold tracking-widest uppercase" style={{ color: "var(--green-text)" }}>
-        {children}
-      </h4>
-    </div>
-  );
-}
-
-/* ─── Nav link ─── */
+/* No leading icon: an arrow on every row is what made the old columns read as
+   a dense list of bullets rather than navigation. */
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
       href={href}
-      className="group flex items-center gap-2 text-sm transition-colors duration-200"
+      className="block text-sm transition-colors duration-200 hover:text-(--text-1)"
       style={{ color: "var(--text-3)" }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-1)"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-3)"; }}
     >
-      <svg
-        viewBox="0 0 12 12"
-        fill="none"
-        className="w-2.5 h-2.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        stroke="var(--green-text)"
-        strokeWidth={2}
-      >
-        <path d="M2 6h8M6 2l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
       {children}
     </Link>
   );
 }
 
-/* ─── Contact row ─── */
-function ContactRow({
-  icon,
-  children,
-}: {
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
+function NavColumn({ groups }: { groups: NavGroup[] }) {
   return (
-    <div className="flex items-start gap-3">
-      <div
-        className="mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
-        style={{
-          background: "rgba(34,197,94,0.08)",
-          border: "1px solid rgba(34,197,94,0.16)",
-          color: "var(--green-text)",
-        }}
+    <div className="flex flex-col gap-9">
+      {groups.map((group) => (
+        <div key={group.id}>
+          <GroupHeading>{group.heading}</GroupHeading>
+          <ul className="mt-4 flex flex-col gap-2.5">
+            {group.links.map(({ label, href }) => (
+              <li key={label}>
+                <FooterLink href={href}>{label}</FooterLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* Mobile: the same groups collapse, so the footer doesn't become a screen and
+   a half of links. Contact is never collapsed — it is the one thing someone
+   scrolls down here to find. */
+function NavAccordion({
+  group,
+  isOpen,
+  onToggle,
+}: {
+  group: NavGroup;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const panelId = `footer-group-${group.id}`;
+  return (
+    <div style={{ borderTop: "1px solid var(--border-2)" }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="flex w-full items-center justify-between gap-4 min-h-13 py-3 text-left"
       >
-        {icon}
-      </div>
-      <div className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+        <span
+          className="text-sm font-bold"
+          style={{ color: isOpen ? "var(--text-1)" : "var(--text-2)" }}
+        >
+          {group.heading}
+        </span>
+        <span
+          className="relative w-3.5 h-3.5 shrink-0"
+          style={{ color: isOpen ? "var(--green-text)" : "var(--text-4)" }}
+          aria-hidden="true"
+        >
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2" style={{ background: "currentColor" }} />
+          <span
+            className="absolute inset-y-0 left-1/2 w-px transition-transform duration-300"
+            style={{
+              background: "currentColor",
+              transform: `translateX(-50%) scaleY(${isOpen ? 0 : 1})`,
+            }}
+          />
+        </span>
+      </button>
+
+      {isOpen && (
+        <ul className="pb-4 flex flex-col gap-3" id={panelId}>
+          {group.links.map(({ label, href }) => (
+            <li key={label}>
+              <FooterLink href={href}>{label}</FooterLink>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function ContactItem({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <span
+        className="block text-[10px] font-bold tracking-[0.18em] uppercase"
+        style={{ color: "var(--text-4)" }}
+      >
+        {label}
+      </span>
+      <div className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
         {children}
       </div>
     </div>
   );
 }
 
-/* ─── Background decoration ─── */
-function FooterBackground() {
+/* ─── Main Export ─── */
+export default function Footer() {
+  const year = new Date().getFullYear();
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+
   return (
-    <>
-      {/* Faint grid */}
+    <footer
+      className="relative overflow-hidden"
+      style={{ background: "var(--bg)", borderTop: "1px solid var(--border-2)" }}
+    >
+      {/* Faint grid only — the top-centre glow went with the rest of the
+          decorative layer. */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -209,101 +270,59 @@ function FooterBackground() {
           maskImage: "linear-gradient(180deg, black 0%, transparent 100%)",
         }}
       />
-      {/* Glow top-center */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
-        style={{
-          width: 600,
-          height: 200,
-          borderRadius: "50%",
-          background: "radial-gradient(ellipse, rgba(34,197,94,0.07) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-    </>
-  );
-}
 
-/* ─── Main Export ─── */
-export default function Footer() {
-  const year = new Date().getFullYear();
-
-  return (
-    <footer
-      className="relative overflow-hidden"
-      style={{
-        background: "var(--bg)",
-        borderTop: "1px solid var(--border-2)",
-      }}
-    >
-      <FooterBackground />
-
-      {/* Main grid */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12 lg:pt-20">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-10 lg:gap-8">
-
-          {/* ── Col 1: Brand / Tagline ── */}
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 pt-14 sm:pt-16 lg:pt-20 pb-8">
+        {/* Brand is given a third of the width and the largest type; the links
+            and contact share the rest. Order flips on mobile so Contact comes
+            straight after the brand, ahead of the collapsed navigation. */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 gap-x-8 xl:gap-x-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: EASE_OUT }}
-            className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-5"
+            className="lg:col-span-5 lg:order-1 flex flex-col gap-6 lg:pr-10"
           >
-            <FooterLogo />
+            {/* w-auto pairs with the height so next/image keeps the ratio
+                without warning, and self-start stops the column stretching the
+                box, which would leave object-contain centring the mark in dead
+                space. */}
+            <Image
+              src="/images/connexxion-logo.png"
+              alt="Connexxion Telecom & Solutions"
+              width={747}
+              height={182}
+              className="h-12 sm:h-14 w-auto self-start object-contain"
+            />
 
-            <p className="text-sm leading-relaxed max-w-xs" style={{ color: "var(--text-3)" }}>
-              Enterprise-grade connectivity and managed technology services,
-              powering Nigeria&apos;s most demanding industries.
+            <p className="text-sm sm:text-base leading-relaxed max-w-sm" style={{ color: "var(--text-3)" }}>
+              Technology that keeps organisations connected, productive and
+              moving.
             </p>
 
-            {/* Book appointment CTA */}
             <Link
               href="/consultation"
-              className="inline-flex items-center gap-2 self-start px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200"
-              style={{
-                background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-                color: "#000",
-                boxShadow: "0 0 16px rgba(34,197,94,0.25)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 28px rgba(34,197,94,0.45)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 16px rgba(34,197,94,0.25)";
-              }}
+              className="btn-pill group inline-flex items-center justify-center gap-2 self-start px-6 min-h-11 rounded-full text-sm font-bold transition-all duration-200"
+              style={{ background: "var(--green-text)", color: "#04120a" }}
             >
               Book Appointment
-              <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
-                <path d="M3 8H13M9 4l4 4-4 4" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1">
+                <path
+                  fillRule="evenodd"
+                  d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
+                  clipRule="evenodd"
+                />
               </svg>
             </Link>
 
-            {/* Social icons */}
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap items-center gap-5 pt-1">
               {SocialLinks.map(({ label, href, Icon }) => (
                 <a
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200"
-                  style={{
-                    background: "var(--bg-input)",
-                    border: "1px solid var(--border-1)",
-                    color: "var(--text-3)",
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.background = "rgba(34,197,94,0.1)";
-                    el.style.borderColor = "rgba(34,197,94,0.3)";
-                    el.style.color = "var(--green-text)";
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.background = "var(--bg-input)";
-                    el.style.borderColor = "var(--border-1)";
-                    el.style.color = "var(--text-3)";
-                  }}
+                  className="inline-flex items-center justify-center transition-colors duration-200 hover:text-(--green-text)"
+                  style={{ color: "var(--text-4)" }}
                 >
                   <Icon />
                 </a>
@@ -311,184 +330,124 @@ export default function Footer() {
             </div>
           </motion.div>
 
-          {/* ── Col 2: Contact ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.06 }}
-            className="flex flex-col gap-5"
-          >
-            <ColHeading>Contact</ColHeading>
-
-            <ContactRow
-              icon={
-                <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth={1.6}>
-                  <path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5S12.5 9.5 12.5 6c0-2.5-2-4.5-4.5-4.5z" strokeLinecap="round" />
-                  <circle cx="8" cy="6" r="1.5" />
-                </svg>
-              }
-            >
-              2A Iller Crescent, Off Katsina Ala,
-              <br />
-              Maitama, FCT Abuja, Nigeria
-            </ContactRow>
-
-            <ContactRow
-              icon={
-                <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth={1.6}>
-                  <path d="M2 3.5A1.5 1.5 0 013.5 2h.879a1 1 0 01.94.659l.8 2a1 1 0 01-.23 1.06l-.879.879a8.015 8.015 0 004.392 4.392l.879-.879a1 1 0 011.06-.23l2 .8a1 1 0 01.659.94V13.5A1.5 1.5 0 0112.5 15 10.5 10.5 0 012 3.5z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              }
-            >
-              <a href="tel:+2349016400000" className="block hover:text-gray-900 dark:hover:text-white transition-colors">
-                +234 0 901 640 0000
-              </a>
-              <a href="tel:+23409290541" className="block hover:text-gray-900 dark:hover:text-white transition-colors">
-                +234 09 290 5141
-              </a>
-            </ContactRow>
-
-            <ContactRow
-              icon={
-                <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth={1.6}>
-                  <path d="M2 4l6 5 6-5" strokeLinecap="round" />
-                  <rect x="1" y="3" width="14" height="10" rx="1.5" />
-                </svg>
-              }
-            >
-              <a href="mailto:info@connexxiontelecom.com" className="hover:text-gray-900 dark:hover:text-white transition-colors break-all">
-                info@connexxiontelecom.com
-              </a>
-            </ContactRow>
-
-            <ContactRow
-              icon={
-                <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth={1.6}>
-                  <path d="M8 1.5a5 5 0 100 10A5 5 0 008 1.5zm0 0V8m0 0l3 2" strokeLinecap="round" />
-                  <circle cx="8" cy="13.5" r="1" fill="currentColor" stroke="none" />
-                </svg>
-              }
-            >
-              <span>Mon – Sat &nbsp; 9:00 – 18:00</span>
-              <br />
-              <span style={{ color: "var(--text-4)" }}>Closed Sunday</span>
-            </ContactRow>
-          </motion.div>
-
-          {/* ── Col 3: Products ── */}
+          {/* Contact — wide enough that the address never breaks mid-word */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.12 }}
+            className="lg:col-span-3 lg:order-3 flex flex-col gap-6"
           >
-            <ColHeading>Products</ColHeading>
-            <ul className="flex flex-col gap-3">
-              {PRODUCT_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <FooterLink href={href}>{label}</FooterLink>
-                </li>
-              ))}
-            </ul>
+            <GroupHeading>Contact</GroupHeading>
+
+            <ContactItem label="Address">
+              2A Iller Crescent, Off Katsina Ala,
+              <br />
+              Maitama, FCT Abuja, Nigeria
+            </ContactItem>
+
+            <ContactItem label="Phone">
+              <a href="tel:+2349016400000" className="block whitespace-nowrap transition-colors duration-200 hover:text-(--text-1)">
+                +234 0 901 640 0000
+              </a>
+              <a href="tel:+23409290541" className="block whitespace-nowrap transition-colors duration-200 hover:text-(--text-1)">
+                +234 09 290 5141
+              </a>
+            </ContactItem>
+
+            <ContactItem label="Email">
+              <a
+                href="mailto:info@connexxiontelecom.com"
+                className="inline-block whitespace-nowrap transition-colors duration-200 hover:text-(--text-1)"
+              >
+                info@connexxiontelecom.com
+              </a>
+            </ContactItem>
+
+            <ContactItem label="Business Hours">
+              Mon – Sat &nbsp;9:00 – 18:00
+              <br />
+              <span style={{ color: "var(--text-4)" }}>Closed Sunday</span>
+            </ContactItem>
           </motion.div>
 
-          {/* ── Col 4: Services ── */}
+          {/* Navigation — two sub-columns on desktop */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.18 }}
+            transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.06 }}
+            className="hidden lg:grid lg:col-span-4 lg:order-2 grid-cols-2 gap-x-6"
           >
-            <ColHeading>Services</ColHeading>
-            <ul className="flex flex-col gap-3">
-              {SERVICE_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <FooterLink href={href}>{label}</FooterLink>
-                </li>
-              ))}
-            </ul>
+            {NAV_COLUMNS.map((groups, i) => (
+              <NavColumn key={i} groups={groups} />
+            ))}
           </motion.div>
 
-          {/* ── Col 5: Industries ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.24 }}
-          >
-            <ColHeading>Industries</ColHeading>
-            <ul className="flex flex-col gap-3">
-              {INDUSTRY_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <FooterLink href={href}>{label}</FooterLink>
-                </li>
+          {/* Navigation — collapsed on mobile */}
+          <div className="lg:hidden">
+            <GroupHeading>Explore</GroupHeading>
+            <div className="mt-3">
+              {NAV_GROUPS.map((group) => (
+                <NavAccordion
+                  key={group.id}
+                  group={group}
+                  isOpen={openGroup === group.id}
+                  onToggle={() => setOpenGroup(openGroup === group.id ? null : group.id)}
+                />
               ))}
-            </ul>
-          </motion.div>
+            </div>
+          </div>
+        </div>
 
-          {/* ── Col 6: Company ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.3 }}
+        {/* Brand signature — a watermark, not a headline. Hidden from screen
+            readers because the name is already in the legal line below. */}
+        <div
+          aria-hidden="true"
+          className="mt-16 lg:mt-20 select-none pointer-events-none overflow-hidden"
+        >
+          <span
+            className="block text-center font-extrabold leading-[0.85] tracking-[0.02em] whitespace-nowrap"
+            // --text-5 alone still reads as a grey headline at this size; the
+            // extra opacity takes it down to a watermark you notice second.
+            style={{
+              color: "var(--text-5)",
+              opacity: 0.45,
+              fontSize: "clamp(2.5rem, 13vw, 10rem)",
+            }}
           >
-            <ColHeading>Company</ColHeading>
-            <ul className="flex flex-col gap-3">
-              {COMPANY_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <FooterLink href={href}>{label}</FooterLink>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+            CONNEXXION
+          </span>
         </div>
 
         {/* ── Bottom bar ── */}
         <div
-          className="mt-14 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="mt-8 pt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           style={{ borderTop: "1px solid var(--border-2)" }}
         >
-          <p className="text-xs text-center sm:text-left" style={{ color: "var(--text-4)" }}>
+          <p className="text-xs" style={{ color: "var(--text-4)" }}>
             © {year} Connexxion Telecom Ltd. All rights reserved.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-5">
-            {LEGAL_LINKS.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className="text-xs transition-colors duration-200"
-                style={{ color: "var(--text-4)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-2)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "var(--text-4)"; }}
-              >
-                {label}
-              </Link>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
+            {LEGAL_LINKS.map(({ label, href }, i) => (
+              <React.Fragment key={label}>
+                {i > 0 && <span style={{ color: "var(--text-5)" }}>·</span>}
+                <Link
+                  href={href}
+                  className="transition-colors duration-200 hover:text-(--text-2)"
+                  style={{ color: "var(--text-4)" }}
+                >
+                  {label}
+                </Link>
+              </React.Fragment>
             ))}
-
-            {/* Green dot accent */}
-            <div
-              className="w-1 h-1 rounded-full"
-              style={{ background: "rgba(34,197,94,0.4)", boxShadow: "0 0 6px rgba(34,197,94,0.4)" }}
-            />
-
-            <span
-              className="inline-flex items-center gap-1.5 text-xs font-semibold"
-              style={{ color: "var(--text-3)" }}
-              title="Nigerian Communications Commission Registered"
-            >
-              <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5" stroke="var(--green-text)" strokeWidth={1.6}>
-                <path d="M8 1.5l5.5 2.2v3.5c0 3.5-2.3 6.4-5.5 7.3-3.2-.9-5.5-3.8-5.5-7.3V3.7L8 1.5z" strokeLinejoin="round" />
-                <path d="M5.5 8l1.7 1.7L10.5 6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+            <span style={{ color: "var(--text-5)" }}>·</span>
+            <span style={{ color: "var(--text-4)" }} title="Nigerian Communications Commission Registered">
               NCC Registered
             </span>
-
-            <span className="text-xs" style={{ color: "var(--text-4)" }}>
-              Nigeria
-            </span>
+            <span style={{ color: "var(--text-5)" }}>·</span>
+            <span style={{ color: "var(--text-4)" }}>Nigeria</span>
           </div>
         </div>
       </div>

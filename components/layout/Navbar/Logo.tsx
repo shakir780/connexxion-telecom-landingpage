@@ -4,13 +4,16 @@ import Image from "next/image";
 export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2.5 select-none shrink-0">
+      {/* Sized by height with w-auto: the old h-fit/w-fit pair rendered the
+          image at its declared 198x100 while the file was 198x66, stretching
+          it and tripping next/image's aspect-ratio warning. */}
       <Image
-        src="/images/telecomLogo.png"
-        alt="Connexxion Telecoms"
-        width={198}
-        height={100}
+        src="/images/connexxion-logo.png"
+        alt="Connexxion Telecom & Solutions"
+        width={747}
+        height={182}
         priority
-        className="h-fit w-fit object-contain"
+        className="h-10 sm:h-12 w-auto object-contain"
       />
       {/* <span
         className="hidden sm:flex flex-col leading-none pl-2.5"

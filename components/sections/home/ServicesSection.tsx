@@ -1,116 +1,106 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 
 /* ─── Ease presets ─── */
 const EASE_OUT = "easeOut" as const;
 
-/* ─── Service data ─── */
-const SERVICES = [
+/* ─── Service data ───
+   Grouped into three bands so seven offerings read as one system rather than
+   seven unrelated tiles. Copy is one sentence of business value each — the
+   long paragraphs belonged to a card layout that no longer exists.
+
+   Every service keeps its own image: the index on the right drives the single
+   large visual on the left, so the imagery is used once, deliberately, instead
+   of seven times as a gallery. */
+type Service = {
+  id: string;
+  title: string;
+  summary: string;
+  group: string;
+  image: string;
+  imageAlt: string;
+  caseStudyHref: string;
+};
+
+const GROUPS = [
+  { id: "connect", label: "Connect" },
+  { id: "compute", label: "Compute" },
+  { id: "secure", label: "Secure & Support" },
+];
+
+const SERVICES: Service[] = [
   {
     id: "network-infrastructure",
     title: "Network Infrastructure",
-    description:
-      "High-availability design, structured cabling, and LAN/WAN setup for enterprise environments.",
+    summary: "Reliable LAN/WAN infrastructure designed for growing organisations.",
+    group: "connect",
+    image: "/images/Network Infrastructure C2.webp",
+    imageAlt: "Telecom masts and antennas broadcasting across a city skyline",
     caseStudyHref: "/insights/case-studies/network-infrastructure",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="16" y="5" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="27" y="5" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="10" y="27" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <rect x="22" y="27" width="9" height="9" rx="2" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="9.5" y1="14" x2="14" y2="27" stroke="currentColor" strokeWidth="1.2" strokeDasharray="2 2" />
-        <line x1="20.5" y1="14" x2="20.5" y2="27" stroke="currentColor" strokeWidth="1.2" strokeDasharray="2 2" />
-        <line x1="31.5" y1="14" x2="26.5" y2="27" stroke="currentColor" strokeWidth="1.2" strokeDasharray="2 2" />
-        <circle cx="14.5" cy="27" r="1.5" fill="currentColor" />
-        <circle cx="26.5" cy="27" r="1.5" fill="currentColor" />
-      </svg>
-    ),
   },
   {
     id: "fibre-optic-solutions",
     title: "Fibre Optic Solutions",
-    description:
-      "Implementation of high-speed internet fibre networks with ultra low latency, including trenching, splicing, and long-term maintenance.",
+    summary: "High-speed fibre networks built for low latency and long-term reliability.",
+    group: "connect",
+    image: "/images/Fibre Optics Solutions C2.webp",
+    imageAlt: "Fibre optic cables and connectors carrying light through a switch",
     caseStudyHref: "/insights/case-studies/fibre-optic-solutions",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <path d="M4 20 C4 20 8 10 14 18 C20 26 24 10 30 18 C34 24 36 20 36 20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-        <path d="M4 26 C4 26 8 16 14 24 C20 32 24 16 30 24 C34 30 36 26 36 26" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.4" />
-        <path d="M4 14 C4 14 8 4 14 12 C20 20 24 4 30 12 C34 18 36 14 36 14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.4" />
-        <circle cx="36" cy="20" r="2.5" fill="currentColor" />
-        <circle cx="4" cy="20" r="2.5" fill="currentColor" />
-      </svg>
-    ),
   },
   {
     id: "enterprise-voip",
     title: "Enterprise VoIP",
-    description:
-      "Scalable voice communication systems for remote and office-based teams, reducing operational telephony costs.",
+    summary: "Business communication systems designed for distributed teams.",
+    group: "connect",
+    image: "/images/Enterprise Voip C2.webp",
+    imageAlt: "Desk VoIP handset and headset beside a connected globe",
     caseStudyHref: "/insights/case-studies/enterprise-voip",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <path d="M8 10h24a2 2 0 012 2v12a2 2 0 01-2 2H22l-5 5v-5H8a2 2 0 01-2-2V12a2 2 0 012-2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-        <line x1="13" y1="16" x2="27" y2="16" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        <line x1="13" y1="20" x2="22" y2="20" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      </svg>
-    ),
-  },
-  {
-    id: "cctv-security",
-    title: "CCTV & Security",
-    description:
-      "Intelligent surveillance systems with remote monitoring capabilities and integration with access control.",
-    caseStudyHref: "/insights/case-studies/cctv-security",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <rect x="6" y="14" width="20" height="12" rx="3" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="26" cy="20" r="4" stroke="currentColor" strokeWidth="1.6" />
-        <circle cx="26" cy="20" r="1.4" fill="currentColor" />
-        <path d="M6 17l-4-2v10l4-2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M14 26v4M14 34h6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        <path d="M30 10a4 4 0 018 0" stroke="currentColor" strokeWidth="1.2" strokeDasharray="2 2" strokeOpacity="0.6" />
-        <circle cx="34" cy="10" r="1.3" fill="currentColor" opacity="0.5" />
-      </svg>
-    ),
   },
   {
     id: "server-cloud-administration",
     title: "Server & Cloud Administration",
-    description:
-      "Managed hosting, server migration, and infrastructure-as-a-service (IaaS) support for reliable uptime.",
+    summary: "Managed hosting and migrations that keep critical systems available.",
+    group: "compute",
+    image: "/images/Server and Cloud Administraion C2.webp",
+    imageAlt: "Cloud icons linked to server stacks and workstations",
     caseStudyHref: "/insights/case-studies/server-cloud-administration",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <path d="M11 22a5 5 0 01.4-9.98A7 7 0 0125 10a6 6 0 015 6 5 5 0 01-1 9.9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M11 22h18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <rect x="10" y="27" width="20" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-        <circle cx="14" cy="30.5" r="1" fill="currentColor" />
-        <circle cx="18" cy="30.5" r="1" fill="currentColor" />
-      </svg>
-    ),
+  },
+  {
+    id: "bespoke-software-services",
+    title: "Bespoke Software Services",
+    summary: "Custom applications built around the way your team actually works.",
+    group: "compute",
+    image: "/images/Software Development C1.webp",
+    imageAlt: "Developer writing code across multiple screens",
+    caseStudyHref: "/insights/case-studies/bespoke-software-services",
+  },
+  {
+    id: "cctv-security",
+    title: "CCTV & Security",
+    summary: "Surveillance and access control you can monitor from anywhere.",
+    group: "secure",
+    // PLACEHOLDER: no CCTV photo was supplied, so this borrows the smart
+    // hardware shot. Swap in a surveillance image when one exists.
+    image: "/images/Smart Hardware Infrastructure C1.webp",
+    imageAlt: "Server racks and circuit hardware in a data centre aisle",
+    caseStudyHref: "/insights/case-studies/cctv-security",
   },
   {
     id: "managed-it-support",
     title: "Managed IT Support",
-    description:
-      "Dedicated 24/7/365 NOC support, troubleshooting, and proactive maintenance for your IT fleet.",
+    summary: "A 24/7 support desk that resolves issues before your team feels them.",
+    group: "secure",
+    image: "/images/Managed IT Support C2.webp",
+    imageAlt: "Support engineer on a headset working a helpdesk floor",
     caseStudyHref: "/insights/case-studies/managed-it-support",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-full h-full">
-        <rect x="4" y="8" width="32" height="18" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
-        <line x1="12" y1="26" x2="12" y2="32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="28" y1="26" x2="28" y2="32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="9" y1="32" x2="31" y2="32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M14 17l3 3 6-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
   },
 ];
+
+const GROUP_LABEL = Object.fromEntries(GROUPS.map((g) => [g.id, g.label]));
 
 /* ─── Trust badge icons ─── */
 const IconHeadset = () => (
@@ -134,222 +124,326 @@ const IconShield = () => (
   </svg>
 );
 
-/* ─── Trust badges below the grid ─── */
 const TRUST_BADGES = [
   { Icon: IconHeadset, text: "24/7/365 NOC Support" },
   { Icon: IconMap, text: "Nationwide Coverage" },
   { Icon: IconShield, text: "Enterprise-Grade SLAs" },
 ];
 
-/* ─── Background hex pattern ─── */
-function HexPattern() {
-  return (
-    <svg
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ opacity: 0.018 }}
-    >
-      <defs>
-        <pattern id="hex-svc" x="0" y="0" width="56" height="48" patternUnits="userSpaceOnUse">
-          <polygon
-            points="28,4 52,16 52,40 28,52 4,40 4,16"
-            fill="none"
-            stroke="#22c55e"
-            strokeWidth="0.8"
-          />
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#hex-svc)" />
-    </svg>
-  );
-}
-
-/* ─── Section Header ─── */
+/* ─── Section header — left-aligned, editorial ─── */
 function SectionHeader() {
   return (
-    <div className="flex flex-col items-center text-center gap-5 max-w-2xl mx-auto">
+    <div className="max-w-3xl">
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, ease: EASE_OUT }}
-        className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-[11px] font-bold tracking-widest uppercase"
-        style={{
-          background: "rgba(34,197,94,0.08)",
-          border: "1px solid rgba(34,197,94,0.22)",
-          color: "var(--green-text)",
-        }}
+        className="flex items-center gap-3"
       >
-        <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-        What We Offer
+        <span className="h-px w-7" style={{ background: "rgba(34,197,94,0.55)" }} />
+        <span
+          className="text-[11px] font-bold uppercase tracking-[0.22em]"
+          style={{ color: "var(--green-text)" }}
+        >
+          What We Offer
+        </span>
       </motion.div>
 
       <motion.h2
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.08 }}
-        className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1]"
+        transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.06 }}
+        className="mt-5 text-3xl sm:text-4xl lg:text-[3.25rem] font-extrabold tracking-tight leading-[1.05]"
         style={{ color: "var(--text-1)" }}
       >
-        We Handle the Tech.{" "}
-        <span className="gradient-green">You Focus on Business.</span>
+        From infrastructure to intelligent systems.
       </motion.h2>
+
+      <motion.p
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.12 }}
+        className="mt-5 text-base lg:text-lg leading-relaxed max-w-2xl"
+        style={{ color: "var(--text-2)" }}
+      >
+        We design, deploy and manage the technology that keeps modern
+        organisations connected, secure and moving forward.
+      </motion.p>
     </div>
   );
 }
 
-/* ─── Service Card ─── */
-function ServiceCard({
-  service,
-  index,
-}: {
-  service: (typeof SERVICES)[number];
-  index: number;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
+/* ─── The stage: one large visual, driven by whichever row is active ─── */
+function ServiceStage({ service }: { service: Service }) {
   return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, ease: EASE_OUT, delay: (index % 3) * 0.1 }}
-      whileHover={{ y: -6 }}
-      className="group relative flex flex-col gap-5 rounded-2xl p-6 cursor-default"
-      style={{
-        background: "var(--bg-card)",
-        border: "1px solid var(--border-1)",
-        boxShadow: "var(--shadow-md)",
-        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "rgba(34,197,94,0.28)";
-        (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-card-hover)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "var(--border-1)";
-        (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-md)";
-      }}
+    <div
+      className="relative overflow-hidden rounded-lg h-85 sm:h-110 lg:h-full lg:min-h-140"
+      style={{ border: "1px solid var(--border-1)" }}
     >
-      {/* Top green accent line — reveals on hover */}
+      {/* Every frame stays mounted and crossfades on opacity. Swapping a single
+          <Image> by key instead re-mounts it, so each rotation re-fetched the
+          next photo and showed an empty stage until it arrived. */}
+      {SERVICES.map((s) => {
+        const isActive = s.id === service.id;
+        return (
+          <div
+            key={s.id}
+            className="absolute inset-0 transition-opacity duration-500 ease-out"
+            style={{ opacity: isActive ? 1 : 0 }}
+            aria-hidden={!isActive}
+          >
+            <Image
+              src={s.image}
+              // Described once, on the frame actually on show; the others would
+              // otherwise stack seven descriptions into the accessibility tree.
+              alt={isActive ? s.imageAlt : ""}
+              fill
+              sizes="(max-width: 1024px) 100vw, 58vw"
+              className="object-cover"
+            />
+          </div>
+        );
+      })}
+
+      {/* Flat-to-dark scrim: the caption sits on photography in both themes, so
+          it needs its own ground rather than the page's. */}
       <div
-        className="absolute top-0 left-6 right-6 h-px rounded-full transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+        className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(34,197,94,0.6), transparent)",
+            "linear-gradient(to top, rgba(6,10,18,0.94) 0%, rgba(6,10,18,0.7) 34%, rgba(6,10,18,0.15) 70%, rgba(6,10,18,0.05) 100%)",
         }}
       />
 
-      {/* Ambient glow — hover only */}
-      <div
-        className="absolute -top-10 left-1/2 -translate-x-1/2 w-36 h-36 rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{
-          background: "radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)",
-          filter: "blur(20px)",
-        }}
-      />
-
-      {/* Icon */}
-      <div className="relative">
-        <div
-          className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300"
-          style={{
-            background: "rgba(34,197,94,0.08)",
-            border: "1px solid rgba(34,197,94,0.18)",
-            color: "var(--green-text)",
-            padding: "9px",
-          }}
+      <div className="absolute inset-x-0 bottom-0 p-6 sm:p-9">
+        <motion.div
+          key={service.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
         >
-          {service.icon}
-        </div>
-        {/* Icon glow blob */}
-        <div
-          className="absolute -inset-2 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-          style={{
-            background: "radial-gradient(circle at center, rgba(34,197,94,0.1) 0%, transparent 70%)",
-            filter: "blur(8px)",
-          }}
-        />
+          <span
+            className="text-[10px] font-bold uppercase tracking-[0.24em]"
+            style={{ color: "#4ade80" }}
+          >
+            {GROUP_LABEL[service.group]}
+          </span>
+          <h3 className="mt-3 text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            {service.title}
+          </h3>
+          <p className="mt-2.5 text-sm sm:text-base leading-relaxed max-w-md" style={{ color: "rgba(255,255,255,0.72)" }}>
+            {service.summary}
+          </p>
+          <Link
+            href={service.caseStudyHref}
+            className="group/cs mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white"
+          >
+            View Case Study
+            <svg
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              className="w-3.5 h-3.5 transition-transform duration-200 group-hover/cs:translate-x-1"
+              style={{ color: "#4ade80" }}
+            >
+              <path
+                fillRule="evenodd"
+                d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </Link>
+        </motion.div>
       </div>
-
-      {/* Title */}
-      <div className="flex flex-col gap-2">
-        <h3
-          className="text-base font-bold leading-snug transition-colors duration-200 group-hover:text-gray-900 dark:group-hover:text-white"
-          style={{ color: "var(--text-1)" }}
-        >
-          {service.title}
-        </h3>
-
-        {/* Description */}
-        <p
-          className="text-sm leading-relaxed"
-          style={{ color: "var(--text-3)" }}
-        >
-          {service.description}
-        </p>
-      </div>
-
-      {/* View case study link */}
-      <Link
-        href={service.caseStudyHref}
-        className="group/link inline-flex items-center gap-1.5 mt-auto"
-      >
-        <span
-          className="text-xs font-semibold transition-colors duration-200"
-          style={{ color: "var(--green-text)" }}
-        >
-          View Case Study
-        </span>
-        <motion.span
-          className="inline-flex"
-          style={{ color: "var(--green-text)" }}
-          initial={{ x: 0 }}
-          whileHover={{ x: 3 }}
-          transition={{ duration: 0.2 }}
-        >
-          <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5">
-            <path
-              fillRule="evenodd"
-              d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </motion.span>
-      </Link>
-
-      {/* Corner number */}
-      <span
-        className="absolute top-5 right-5 text-[11px] font-bold font-mono tabular-nums"
-        style={{ color: "var(--text-4)" }}
-      >
-        {String(index + 1).padStart(2, "0")}
-      </span>
-    </motion.div>
+    </div>
   );
 }
 
-/* ─── Trust badges row ─── */
+/* ─── Index row — a line of type, not a card ─── */
+function ServiceRow({
+  service,
+  number,
+  isActive,
+  onActivate,
+}: {
+  service: Service;
+  number: number;
+  isActive: boolean;
+  onActivate: () => void;
+}) {
+  return (
+    <li style={{ borderTop: "1px solid var(--border-2)" }}>
+      <Link
+        href={service.caseStudyHref}
+        onMouseEnter={onActivate}
+        onFocus={onActivate}
+        className="group relative flex items-baseline gap-4 py-4 pr-1"
+      >
+        {/* Active rule — absolutely placed in the gutter so switching rows
+            never nudges the text. It sits outside the row rather than being
+            pulled out with a negative margin, which would resolve each row's
+            auto width to 16px wider than its column. */}
+        <span
+          className="absolute -left-3 top-3 bottom-3 w-px origin-top transition-transform duration-300"
+          style={{
+            background: "var(--green-text)",
+            transform: `scaleY(${isActive ? 1 : 0})`,
+          }}
+        />
+        <span
+          className="font-mono text-[11px] tabular-nums shrink-0 w-5 transition-colors duration-200"
+          style={{ color: isActive ? "var(--green-text)" : "var(--text-4)" }}
+        >
+          {String(number).padStart(2, "0")}
+        </span>
+        <span className="flex-1 min-w-0">
+          <span
+            className="block text-base font-bold leading-snug transition-colors duration-200"
+            style={{ color: isActive ? "var(--text-1)" : "var(--text-2)" }}
+          >
+            {service.title}
+          </span>
+          <span className="block mt-1 text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
+            {service.summary}
+          </span>
+        </span>
+        <svg
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="w-3.5 h-3.5 shrink-0 self-center opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0"
+          style={{ color: "var(--green-text)" }}
+        >
+          <path
+            fillRule="evenodd"
+            d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </Link>
+    </li>
+  );
+}
+
+/* ─── Mobile composition ───
+   Below md the desktop's stage-plus-index becomes a tap accordion. The two are
+   separate compositions of the same content rather than one layout squeezed
+   down: no hover is involved, rows clear the 44px touch minimum, and only one
+   panel is open at a time so the section never runs away in length. */
+function MobileServiceRow({
+  service,
+  number,
+  isOpen,
+  onToggle,
+}: {
+  service: Service;
+  number: number;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const panelId = `service-panel-${service.id}`;
+  return (
+    <li style={{ borderTop: "1px solid var(--border-2)" }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        className="flex w-full items-center gap-4 min-h-16 py-4 text-left"
+      >
+        <span
+          className="font-mono text-[11px] tabular-nums shrink-0 w-5 transition-colors duration-200"
+          style={{ color: isOpen ? "var(--green-text)" : "var(--text-4)" }}
+        >
+          {String(number).padStart(2, "0")}
+        </span>
+        <span
+          className="flex-1 text-[17px] font-bold leading-snug transition-colors duration-200"
+          style={{ color: isOpen ? "var(--text-1)" : "var(--text-2)" }}
+        >
+          {service.title}
+        </span>
+        {/* Plus that becomes a minus — the vertical stroke collapses */}
+        <span
+          className="relative w-4 h-4 shrink-0"
+          style={{ color: isOpen ? "var(--green-text)" : "var(--text-3)" }}
+          aria-hidden="true"
+        >
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2" style={{ background: "currentColor" }} />
+          <span
+            className="absolute inset-y-0 left-1/2 w-px transition-transform duration-300"
+            style={{
+              background: "currentColor",
+              transform: `translateX(-50%) scaleY(${isOpen ? 0 : 1})`,
+            }}
+          />
+        </span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={panelId}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE_OUT }}
+            className="overflow-hidden"
+          >
+            <div className="pb-6 pl-9">
+              <div
+                className="relative w-full aspect-video rounded-md overflow-hidden"
+                style={{ border: "1px solid var(--border-1)" }}
+              >
+                <Image
+                  src={service.image}
+                  alt={service.imageAlt}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              </div>
+              <p className="mt-4 text-[15px] leading-relaxed" style={{ color: "var(--text-3)" }}>
+                {service.summary}
+              </p>
+              <Link
+                href={service.caseStudyHref}
+                className="mt-2 inline-flex items-center gap-2 min-h-11 text-[15px] font-semibold"
+                style={{ color: "var(--green-text)" }}
+              >
+                View Case Study
+                <svg viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+                  <path
+                    fillRule="evenodd"
+                    d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
+  );
+}
+
+/* ─── Trust line — plain type, no chips ─── */
 function TrustBadges() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.55, ease: EASE_OUT }}
-      className="flex flex-wrap justify-center gap-3"
+      className="flex flex-wrap items-center gap-x-8 gap-y-3"
     >
       {TRUST_BADGES.map(({ Icon, text }, i) => (
         <div
           key={i}
-          className="inline-flex items-center gap-2.5 px-4 py-2 rounded-xl text-xs font-semibold"
-          style={{
-            background: "var(--bg-input)",
-            border: "1px solid var(--border-1)",
-            color: "var(--text-2)",
-          }}
+          className="inline-flex items-center gap-2.5 text-xs font-semibold"
+          style={{ color: "var(--text-2)" }}
         >
           <span style={{ color: "var(--green-text)" }}>
             <Icon />
@@ -364,59 +458,38 @@ function TrustBadges() {
 /* ─── Custom solution CTA ─── */
 function CustomSolutionCTA() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.1 }}
-      className="flex justify-center"
+    <Link
+      href="/consultation"
+      className="btn-pill group inline-flex w-full sm:w-auto items-center justify-center gap-2.5 px-7 min-h-12 rounded-full text-sm font-bold transition-all duration-300 hover:-translate-y-0.5"
+      style={{ background: "var(--green-text)", color: "#04120a" }}
     >
-      <Link
-        href="/consultation"
-        className="relative group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-semibold overflow-hidden btn-shine transition-all duration-300 hover:-translate-y-0.5"
-        style={{
-          background: "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-          color: "#000",
-          boxShadow: "0 0 24px rgba(34,197,94,0.3), 0 4px 16px rgba(0,0,0,0.2)",
-        }}
-      >
-        Need a Custom Solution?
-        <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-          <path
-            fillRule="evenodd"
-            d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </Link>
-    </motion.div>
+      Need a Custom Solution?
+      <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1">
+        <path
+          fillRule="evenodd"
+          d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+          clipRule="evenodd"
+        />
+      </svg>
+    </Link>
   );
 }
 
-/* ─── Section divider (reused pattern from CompanyOverview) ─── */
+/* ─── Section divider (reused pattern) ─── */
 function SectionDivider() {
   return (
     <div className="flex items-center gap-4">
       <div
         className="flex-1 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, var(--border-2))",
-        }}
+        style={{ background: "linear-gradient(90deg, transparent, var(--border-2))" }}
       />
       <div
         className="w-1.5 h-1.5 rounded-full"
-        style={{
-          background: "rgba(34,197,94,0.5)",
-          boxShadow: "0 0 8px rgba(34,197,94,0.5)",
-        }}
+        style={{ background: "rgba(34,197,94,0.5)", boxShadow: "0 0 8px rgba(34,197,94,0.5)" }}
       />
       <div
         className="flex-1 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, var(--border-2), transparent)",
-        }}
+        style={{ background: "linear-gradient(90deg, var(--border-2), transparent)" }}
       />
     </div>
   );
@@ -424,67 +497,132 @@ function SectionDivider() {
 
 /* ─── Main Export ─── */
 export default function ServicesSection() {
+  // The first service is the default feature; hovering or tabbing the index
+  // swaps the stage. Touch devices never fire hover, so every row is also a
+  // plain link straight to its case study.
+  //
+  // The selection deliberately sticks rather than resetting on mouse-leave:
+  // reaching from a row across to the stage's "View Case Study" would
+  // otherwise swap that link's destination mid-reach.
+  const [activeId, setActiveId] = useState(SERVICES[0].id);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  // The mobile accordion tracks its own open row: the stage's rotation must
+  // not reach across and expand panels under someone's thumb while they read.
+  const [openId, setOpenId] = useState<string | null>(SERVICES[0].id);
+  const active = SERVICES.find((s) => s.id === activeId) ?? SERVICES[0];
+
+  // Matches the md breakpoint the two compositions switch on, so the timer
+  // only runs while the stage it drives is the one on screen.
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const sync = () => setIsDesktop(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  // Cycles the stage on its own so the section still shows its range to
+  // someone who never touches it, and hands control straight over the moment
+  // they do — pointing at or tabbing into the list holds the current service
+  // for as long as they stay there.
+  useEffect(() => {
+    if (isPaused || !isDesktop) return;
+    const timer = setInterval(() => {
+      setActiveId((current) => {
+        const i = SERVICES.findIndex((s) => s.id === current);
+        return SERVICES[(i + 1) % SERVICES.length].id;
+      });
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isPaused, isDesktop]);
+
   return (
-    <section
-      id="services"
-      className="relative overflow-hidden"
-      style={{
-        background: "var(--bg)",
-      }}
-    >
+    <section id="services" className="relative overflow-hidden" style={{ background: "var(--bg-2)" }}>
       <SectionDivider />
 
-      {/* Background texture */}
-      <HexPattern />
-
-      {/* Ambient orbs */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "-5%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 600,
-          height: 300,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(ellipse, rgba(34,197,94,0.05) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          bottom: "0%",
-          left: "20%",
-          width: 400,
-          height: 400,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(34,197,94,0.04) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-
-      {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-        {/* Header */}
+      {/* px-5 on phones: 16px left the rows feeling cramped against the edge */}
+      <div className="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-32">
         <SectionHeader />
 
-        {/* Cards grid — 3 columns, 2 rows */}
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {SERVICES.map((service, index) => (
-            <ServiceCard key={service.id} service={service} index={index} />
+        {/* Desktop / tablet: the editorial stage-and-index composition.
+            Pause covers the stage as well as the index — the rotation must not
+            move the "View Case Study" target while it is being reached for. */}
+        <div
+          className="mt-14 lg:mt-20 hidden md:grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocusCapture={() => setIsPaused(true)}
+          onBlurCapture={() => setIsPaused(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: EASE_OUT }}
+            className="lg:col-span-7"
+          >
+            <ServiceStage service={active} />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
+            className="lg:col-span-5 flex flex-col gap-8"
+          >
+            {GROUPS.map((group) => (
+              <div key={group.id}>
+                <div
+                  className="text-[10px] font-bold uppercase tracking-[0.24em]"
+                  style={{ color: "var(--text-4)" }}
+                >
+                  {group.label}
+                </div>
+                <ul className="mt-3">
+                  {SERVICES.filter((s) => s.group === group.id).map((service) => (
+                    <ServiceRow
+                      key={service.id}
+                      service={service}
+                      number={SERVICES.indexOf(service) + 1}
+                      isActive={service.id === activeId}
+                      onActivate={() => setActiveId(service.id)}
+                    />
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Mobile: the same services as a tap accordion */}
+        <div className="mt-10 md:hidden">
+          {GROUPS.map((group) => (
+            <div key={group.id} className="mb-6 last:mb-0">
+              <div
+                className="text-[10px] font-bold uppercase tracking-[0.24em]"
+                style={{ color: "var(--text-4)" }}
+              >
+                {group.label}
+              </div>
+              <ul className="mt-2">
+                {SERVICES.filter((s) => s.group === group.id).map((service) => (
+                  <MobileServiceRow
+                    key={service.id}
+                    service={service}
+                    number={SERVICES.indexOf(service) + 1}
+                    isOpen={openId === service.id}
+                    onToggle={() => setOpenId(openId === service.id ? null : service.id)}
+                  />
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
 
-        {/* Trust badges */}
-        <div className="mt-12">
+        <div className="mt-12 sm:mt-14 flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
           <TrustBadges />
-        </div>
-
-        {/* Custom solution CTA */}
-        <div className="mt-8">
           <CustomSolutionCTA />
         </div>
       </div>

@@ -144,11 +144,10 @@ export function MobileDrawer({
               <Link
                 href="/consultation"
                 onClick={onClose}
-                className="flex items-center justify-center gap-2 w-full px-5 py-3 rounded-xl font-semibold text-sm text-white"
+                className="btn-pill flex items-center justify-center gap-2 w-full px-5 py-3 rounded-full font-bold text-sm text-white"
                 style={{
                   background:
                     "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
-                  boxShadow: "0 0 24px rgba(34,197,94,0.3)",
                 }}
               >
                 Book Free Consultation
