@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import type { TeamMember } from "@/lib/team-data";
 
@@ -67,34 +68,16 @@ function StarBullet() {
 }
 
 /* ─── Decorative background ─── */
-function ProfileBackground({ gradient }: { gradient: string }) {
+function ProfileBackground() {
   return (
     <>
-      {/* Hero gradient backdrop */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: `linear-gradient(160deg, ${gradient.replace("linear-gradient(145deg, ", "").replace(")", "")} / 0.12) 0%, transparent 60%)`,
-          opacity: 0.6,
-        }}
-      />
-      {/* Dot grid */}
+      {/* Dot grid — a pattern of 1px dots, not a colour blend */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: "radial-gradient(rgba(34,197,94,0.08) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
           maskImage: "radial-gradient(ellipse 70% 60% at 30% 30%, black 10%, transparent 100%)",
-        }}
-      />
-      {/* Ambient glow top-right */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          top: "-10%", right: "-5%",
-          width: 500, height: 500, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)",
-          filter: "blur(60px)",
         }}
       />
     </>
@@ -110,29 +93,14 @@ function ProfileAvatar({ member }: { member: TeamMember }) {
       transition={{ duration: 0.65, ease: EASE_OUT, delay: 0.15 }}
       className="relative shrink-0"
     >
-      {/* Outer glow ring */}
-      <div
-        className="absolute -inset-3 rounded-full pointer-events-none"
-        style={{
-          background: `radial-gradient(circle, rgba(34,197,94,0.12) 0%, transparent 70%)`,
-          filter: "blur(16px)",
-        }}
-      />
       {/* Avatar circle */}
       <div
         className="relative w-44 h-44 rounded-full flex items-center justify-center overflow-hidden"
         style={{
-          background: member.avatarGradient,
+          background: member.avatarColor,
           boxShadow: "0 0 0 3px rgba(34,197,94,0.2), 0 0 0 7px rgba(34,197,94,0.06), 0 24px 60px rgba(0,0,0,0.35)",
         }}
       >
-        {/* Inner shimmer */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(145deg, rgba(255,255,255,0.18) 0%, transparent 55%)",
-          }}
-        />
         {/* Grid texture */}
         <svg className="absolute inset-0 w-full h-full opacity-10" aria-hidden="true">
           <defs>
@@ -142,26 +110,39 @@ function ProfileAvatar({ member }: { member: TeamMember }) {
           </defs>
           <rect width="100%" height="100%" fill="url(#av-grid)" />
         </svg>
-        <span
-          className="relative z-10 text-5xl font-black select-none"
-          style={{ color: "rgba(255,255,255,0.93)", letterSpacing: "0.06em", textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
-        >
-          {member.initials}
-        </span>
+        {member.photo ? (
+          <Image
+            src={member.photo}
+            alt={member.name}
+            fill
+            sizes="176px"
+            priority
+            className="relative z-10 object-cover"
+          />
+        ) : (
+          <span
+            className="relative z-10 text-5xl font-black select-none"
+            style={{ color: "rgba(255,255,255,0.93)", letterSpacing: "0.06em", textShadow: "0 2px 20px rgba(0,0,0,0.3)" }}
+          >
+            {member.initials}
+          </span>
+        )}
       </div>
 
-      {/* Experience badge */}
-      <div
-        className="absolute -bottom-2 -right-2 flex items-center justify-center w-12 h-12 rounded-full text-xs font-black"
-        style={{
-          background: "var(--bg-card)",
-          border: "2px solid rgba(34,197,94,0.35)",
-          color: "#22c55e",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        {member.experience}y
-      </div>
+      {/* Experience badge — only when the figure is actually published */}
+      {member.experience !== undefined && (
+        <div
+          className="absolute -bottom-2 -right-2 flex items-center justify-center w-12 h-12 rounded-full text-xs font-black"
+          style={{
+            background: "var(--bg-card)",
+            border: "2px solid rgba(34,197,94,0.35)",
+            color: "#22c55e",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          {member.experience}y
+        </div>
+      )}
     </motion.div>
   );
 }
@@ -243,7 +224,7 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
     <div className="relative" style={{ background: "var(--bg)" }}>
       {/* ─── Hero Section ─── */}
       <div className="relative overflow-hidden pt-24 pb-16 lg:pb-20">
-        <ProfileBackground gradient={member.avatarGradient} />
+        <ProfileBackground />
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back link */}
@@ -253,7 +234,7 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
             transition={{ duration: 0.4, ease: EASE_OUT }}
           >
             <Link
-              href="/#team"
+              href="/team"
               className="inline-flex items-center gap-2 text-sm font-medium mb-10 transition-colors duration-200"
               style={{ color: "var(--text-3)" }}
             >
@@ -387,24 +368,26 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
             </motion.div>
 
             {/* Achievements */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
-            >
-              <ProfileSectionHeading>Career Highlights</ProfileSectionHeading>
-              <div className="flex flex-col gap-3.5">
-                {member.achievements.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <CheckIcon />
-                    <p className="text-sm leading-relaxed" style={{ color: "var(--text-2)" }}>
-                      {item}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+            {member.achievements.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.1 }}
+              >
+                <ProfileSectionHeading>Career Highlights</ProfileSectionHeading>
+                <div className="flex flex-col gap-3.5">
+                  {member.achievements.map((item, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <CheckIcon />
+                      <p className="text-sm leading-relaxed" style={{ color: "var(--text-2)" }}>
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             {/* Leadership philosophy */}
             {member.philosophy && (
@@ -438,39 +421,43 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
           <div className="flex flex-col gap-10">
 
             {/* Areas of Expertise */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.08 }}
-            >
-              <ProfileSectionHeading>Areas of Expertise</ProfileSectionHeading>
-              <div className="flex flex-wrap gap-2">
-                {member.expertise.map((skill) => (
-                  <ExpertiseChip key={skill} label={skill} />
-                ))}
-              </div>
-            </motion.div>
+            {member.expertise.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.08 }}
+              >
+                <ProfileSectionHeading>Areas of Expertise</ProfileSectionHeading>
+                <div className="flex flex-wrap gap-2">
+                  {member.expertise.map((skill) => (
+                    <ExpertiseChip key={skill} label={skill} />
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             {/* Certifications */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.14 }}
-            >
-              <ProfileSectionHeading>Certifications</ProfileSectionHeading>
-              <div className="flex flex-col gap-2.5">
-                {member.certifications.map((cert) => (
-                  <div key={cert} className="flex items-start gap-2.5">
-                    <StarBullet />
-                    <span className="text-sm leading-snug" style={{ color: "var(--text-2)" }}>
-                      {cert}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+            {member.certifications.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.14 }}
+              >
+                <ProfileSectionHeading>Certifications</ProfileSectionHeading>
+                <div className="flex flex-col gap-2.5">
+                  {member.certifications.map((cert) => (
+                    <div key={cert} className="flex items-start gap-2.5">
+                      <StarBullet />
+                      <span className="text-sm leading-snug" style={{ color: "var(--text-2)" }}>
+                        {cert}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             {/* Education */}
             <motion.div
@@ -490,12 +477,16 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
                     <p className="text-sm font-semibold leading-snug" style={{ color: "var(--text-1)" }}>
                       {edu.degree}
                     </p>
-                    <p className="text-xs" style={{ color: "var(--text-3)" }}>
-                      {edu.institution}
-                    </p>
-                    <p className="text-[11px] font-mono" style={{ color: "var(--text-4)" }}>
-                      {edu.year}
-                    </p>
+                    {edu.institution && (
+                      <p className="text-xs" style={{ color: "var(--text-3)" }}>
+                        {edu.institution}
+                      </p>
+                    )}
+                    {edu.year !== undefined && (
+                      <p className="text-[11px] font-mono" style={{ color: "var(--text-4)" }}>
+                        {edu.year}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -516,35 +507,41 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
             >
               <div
                 className="h-px"
-                style={{ background: "linear-gradient(90deg, rgba(34,197,94,0.4), transparent)" }}
+                style={{ background: "rgba(34,197,94,0.4)" }}
               />
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
-                  Industry Experience
-                </span>
-                <span className="text-xl font-black" style={{ color: deptText }}>
-                  {member.experience}+
-                  <span className="text-sm font-medium ml-1" style={{ color: "var(--text-3)" }}>
-                    yrs
+              {member.experience !== undefined && (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
+                    Industry Experience
                   </span>
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
-                  Skill Areas
-                </span>
-                <span className="text-xl font-black" style={{ color: deptText }}>
-                  {member.expertise.length}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
-                  Certifications
-                </span>
-                <span className="text-xl font-black" style={{ color: deptText }}>
-                  {member.certifications.length}
-                </span>
-              </div>
+                  <span className="text-xl font-black" style={{ color: deptText }}>
+                    {member.experience}+
+                    <span className="text-sm font-medium ml-1" style={{ color: "var(--text-3)" }}>
+                      yrs
+                    </span>
+                  </span>
+                </div>
+              )}
+              {member.expertise.length > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
+                    Skill Areas
+                  </span>
+                  <span className="text-xl font-black" style={{ color: deptText }}>
+                    {member.expertise.length}
+                  </span>
+                </div>
+              )}
+              {member.certifications.length > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
+                    Certifications
+                  </span>
+                  <span className="text-xl font-black" style={{ color: deptText }}>
+                    {member.certifications.length}
+                  </span>
+                </div>
+              )}
             </motion.div>
           </div>
         </div>

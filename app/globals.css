@@ -5,6 +5,10 @@
 
 /* ─── Design token system ─── */
 :root {
+  /* Native controls — select popups, scrollbars, autofill — paint with the
+     platform's own surface. Without this the dark theme gets a white
+     dropdown that inherits the control's white text: white on white. */
+  color-scheme: dark;
   /* Legacy */
   --background: #080c14;
   --foreground: #f0f4f8;
@@ -36,6 +40,10 @@
 
   /* Navbar */
   --nav-scrolled-bg: rgba(8, 12, 20, 0.92);
+  /* Floating panels sit over photography, not over the page, so they
+     carry more body than the bar itself — at the bar's opacity the hero
+     image reads straight through the menu. */
+  --nav-panel-bg: rgba(10, 14, 22, 0.97);
   --nav-border: rgba(255, 255, 255, 0.06);
   --nav-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 
@@ -65,6 +73,8 @@
 
 /* ── Light theme ── */
 [data-theme="light"] {
+  color-scheme: light;
+
   /* Soft neutral base (not pure white) so white cards read as elevated */
   --bg:         #eef1f7;
   --bg-card:    #ffffff;
@@ -91,6 +101,7 @@
 
   /* Navbar — brighter glass than the page bg so it separates cleanly */
   --nav-scrolled-bg: rgba(255, 255, 255, 0.85);
+  --nav-panel-bg: #ffffff;
   --nav-border: rgba(15, 23, 42, 0.08);
   --nav-shadow: 0 8px 30px -10px rgba(15, 23, 42, 0.16);
 
@@ -177,43 +188,16 @@ body {
   background: rgba(34, 197, 94, 0.5);
 }
 
-/* Animated gradient text */
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+/* Select options are rendered by the OS, so they need their own solid
+   colours — the translucent card tokens do not apply inside a popup. */
+select option {
+  background-color: #0f1623;
+  color: #ffffff;
 }
 
-.gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #22c55e 50%, #a3e635 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 4s ease infinite;
-}
-
-[data-theme="light"] .gradient-text {
-  background: linear-gradient(135deg, #0f172a 0%, #16a34a 50%, #15803d 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Animated green gradient for headline accent spans.
-   Dark uses bright mint highlights; light swaps to deeper greens
-   because #86efac is nearly invisible on a pale background. */
-.gradient-green {
-  background-image: linear-gradient(135deg, #22c55e 0%, #86efac 50%, #22c55e 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 5s ease infinite;
-}
-
-[data-theme="light"] .gradient-green {
-  background-image: linear-gradient(135deg, #15803d 0%, #22c55e 55%, #166534 100%);
+[data-theme="light"] select option {
+  background-color: #ffffff;
+  color: #0f172a;
 }
 
 /* Pill buttons.
@@ -424,13 +408,6 @@ textarea:focus-visible {
   opacity: var(--overlay-light, 0.3);
 }
 
-/* The hero is a dark photographic band, so fading its lower edge into the
-   near-white page background (#eef1f7) laid a pale haze back over the
-   image. Dark mode fades into #080c14, which is seamless, so it keeps it. */
-[data-theme="light"] .hero-bottom-fade {
-  display: none;
-}
-
 /* Hero content sits on photography in BOTH themes, so it opts out of the
    page palette and uses on-media values instead. Scoping the tokens here
    means the markup keeps using the same var() names it always did.
@@ -451,12 +428,6 @@ textarea:focus-visible {
   --border-3: rgba(255, 255, 255, 0.28);
   --btn-2-bg: rgba(255, 255, 255, 0.1);
   --btn-2-border: rgba(255, 255, 255, 0.3);
-}
-
-/* Keep the bright headline gradient on media even in light mode
-   (must follow the [data-theme="light"] .gradient-green rule). */
-.hero-on-media .gradient-green {
-  background-image: linear-gradient(135deg, #22c55e 0%, #86efac 50%, #22c55e 100%);
 }
 
 /* Drifting motes: eased back further in light mode, where the scrim is
@@ -490,4 +461,20 @@ textarea:focus-visible {
   --green-text: #4ade80;
   --bg-input: rgba(255, 255, 255, 0.14);
   --border-3: rgba(255, 255, 255, 0.3);
+}
+
+/* ...but a dropdown or drawer panel is an opaque themed surface that merely
+   happens to live inside that transparent nav. The rule above repaints the
+   whole nav subtree in on-media white so the links read over the hero photo,
+   and those same tokens then put white text on a near-white panel — which is
+   why the light-mode dropdown came out blank. Anything inside a panel gets
+   the page's own palette back. Mirrors the [data-theme="light"] block at the
+   top of this file; keep the two in step. */
+[data-theme="light"] .nav-not-scrolled .nav-surface {
+  --text-1: #0f172a;
+  --text-2: rgba(15, 23, 42, 0.68);
+  --text-3: rgba(15, 23, 42, 0.54);
+  --green-text: #15803d;
+  --bg-input: rgba(15, 23, 42, 0.05);
+  --border-3: rgba(15, 23, 42, 0.16);
 }

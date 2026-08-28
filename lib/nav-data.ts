@@ -64,19 +64,6 @@ export const NAV_ENTRIES: NavEntry[] = [
   },
   {
     type: "list",
-    label: "Testimonials",
-    matchPrefixes: ["/testimonials"],
-    items: [
-      { label: "Gov / Public", href: "/testimonials/government-public" },
-      { label: "Cooperatives / Thrift", href: "/testimonials/cooperatives-thrift" },
-      { label: "Finance", href: "/testimonials/finance" },
-      { label: "SMEs / Corporate", href: "/testimonials/smes-corporate" },
-      { label: "Education", href: "/testimonials/education" },
-      { label: "Healthcare", href: "/testimonials/healthcare" },
-    ],
-  },
-  {
-    type: "list",
     label: "Insights",
     matchPrefixes: ["/insights"],
     items: [

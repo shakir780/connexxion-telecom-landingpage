@@ -130,9 +130,9 @@ function Stat({
 function SectionDivider() {
   return (
     <div className="flex items-center gap-4">
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--border-2))" }} />
+      <div className="flex-1 h-px" style={{ background: "var(--border-2)" }} />
       <div className="w-1.5 h-1.5 rounded-full" style={{ background: "rgba(34,197,94,0.5)", boxShadow: "0 0 8px rgba(34,197,94,0.5)" }} />
-      <div className="flex-1 h-px" style={{ background: "linear-gradient(90deg, var(--border-2), transparent)" }} />
+      <div className="flex-1 h-px" style={{ background: "var(--border-2)" }} />
     </div>
   );
 }

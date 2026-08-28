@@ -46,9 +46,9 @@ export function MobileDrawer({
           />
 
           <motion.div
-            className="fixed top-0 right-0 bottom-0 z-50 w-80 max-w-[88vw] flex flex-col"
+            className="nav-surface fixed top-0 right-0 bottom-0 z-50 w-80 max-w-[88vw] flex flex-col"
             style={{
-              background: "var(--nav-scrolled-bg)",
+              background: "var(--nav-panel-bg)",
               backdropFilter: "blur(24px)",
               WebkitBackdropFilter: "blur(24px)",
               borderLeft: "1px solid var(--border-green, rgba(34,197,94,0.15))",
@@ -147,7 +147,7 @@ export function MobileDrawer({
                 className="btn-pill flex items-center justify-center gap-2 w-full px-5 py-3 rounded-full font-bold text-sm text-white"
                 style={{
                   background:
-                    "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+                    "#22c55e",
                 }}
               >
                 Book Free Consultation

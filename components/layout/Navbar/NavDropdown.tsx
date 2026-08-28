@@ -47,10 +47,13 @@ export function NavDropdown({
             transition={{ duration: 0.18, ease: "easeOut" }}
             className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-40"
           >
+            {/* nav-surface: this panel is an opaque themed surface inside a
+                nav that repaints its subtree white over the hero photo — the
+                class hands it back the page palette (see globals.css). */}
             <div
-              className="rounded-2xl p-3 shadow-xl"
+              className="nav-surface rounded-2xl p-3 shadow-xl"
               style={{
-                background: "var(--nav-scrolled-bg)",
+                background: "var(--nav-panel-bg)",
                 backdropFilter: "blur(24px)",
                 WebkitBackdropFilter: "blur(24px)",
                 border: "1px solid var(--border-1)",

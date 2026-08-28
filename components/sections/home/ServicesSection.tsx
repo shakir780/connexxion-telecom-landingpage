@@ -214,7 +214,7 @@ function ServiceStage({ service }: { service: Service }) {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to top, rgba(6,10,18,0.94) 0%, rgba(6,10,18,0.7) 34%, rgba(6,10,18,0.15) 70%, rgba(6,10,18,0.05) 100%)",
+            "rgba(6,10,18,0.55)",
         }}
       />
 
@@ -481,7 +481,7 @@ function SectionDivider() {
     <div className="flex items-center gap-4">
       <div
         className="flex-1 h-px"
-        style={{ background: "linear-gradient(90deg, transparent, var(--border-2))" }}
+        style={{ background: "var(--border-2)" }}
       />
       <div
         className="w-1.5 h-1.5 rounded-full"
@@ -489,7 +489,7 @@ function SectionDivider() {
       />
       <div
         className="flex-1 h-px"
-        style={{ background: "linear-gradient(90deg, var(--border-2), transparent)" }}
+        style={{ background: "var(--border-2)" }}
       />
     </div>
   );

@@ -13,8 +13,12 @@ import { NavDropdown } from "./NavDropdown";
 import { MobileDrawer } from "./MobileDrawer";
 import { isEntryActive } from "./utils";
 
-/* ─── Main Navbar ─── */
-export default function Navbar() {
+/* ─── Main Navbar ───
+   `solid` pins the scrolled panel treatment on from the first paint. The
+   transparent state only makes sense over the home page's photographic hero;
+   on an ordinary page it leaves the bar reading as a bland empty strip, and
+   in light mode the on-media white text has nothing dark to sit on. */
+export default function Navbar({ solid = false }: { solid?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -48,12 +52,14 @@ export default function Navbar() {
     closeTimer.current = setTimeout(() => setOpenMenu(null), 150);
   };
 
+  const onPanel = solid || scrolled;
+
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500${!scrolled ? " nav-not-scrolled" : ""}`}
+        className={`fixed top-0 left-0 right-0 z-30 transition-all duration-500${!onPanel ? " nav-not-scrolled" : ""}`}
         style={
-          scrolled
+          onPanel
             ? {
                 background: "var(--nav-scrolled-bg)",
                 backdropFilter: "blur(20px)",
@@ -106,17 +112,10 @@ export default function Navbar() {
                 className="btn-pill relative group inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   background:
-                    "linear-gradient(135deg, #22c55e 0%, #16a34a 100%)",
+                    "#22c55e",
                 }}
               >
-                <span
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{
-                    background:
-                      "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%)",
-                  }}
-                />
-                <span className="relative">Book Free Consultation</span>
+                <span>Book Free Consultation</span>
               </Link>
             </div>
 
