@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ARTICLES, type Article } from "@/lib/insights-data";
 
 const EASE_OUT = "easeOut" as const;
 
@@ -14,46 +15,6 @@ const EASE_OUT = "easeOut" as const;
    renders whatever parts exist. Fill it in
    ("Aug 2026") and it appears automatically.
 ───────────────────────────────────────────── */
-type Article = {
-  id: string;
-  category: string;
-  title: string;
-  excerpt: string;
-  href: string;
-  readTime: string;
-  date?: string;
-};
-
-const ARTICLES: Article[] = [
-  {
-    id: "choosing-sme-software",
-    category: "Business Software",
-    title: "Choosing SME Software",
-    excerpt:
-      "A practical guide to evaluating and selecting the right business management software as your SME scales.",
-    href: "/insights/blog/choosing-sme-software",
-    readTime: "5 min read",
-  },
-  {
-    id: "digitising-cooperative-management",
-    category: "Cooperatives",
-    title: "Digitising Cooperative Management",
-    excerpt:
-      "How cooperative societies are moving from paper ledgers to digital platforms for savings, loans, and compliance.",
-    href: "/insights/blog/digitising-cooperative-management",
-    readTime: "4 min read",
-  },
-  {
-    id: "paperless-government-in-nigeria",
-    category: "GovTech",
-    title: "Paperless Government in Nigeria",
-    excerpt:
-      "Examining Nigeria's shift toward paperless, digital-first public service delivery — and what it means for agencies.",
-    href: "/insights/blog/paperless-government-in-nigeria",
-    readTime: "6 min read",
-  },
-];
-
 /* ─── Article metadata line ─── */
 function Meta({ article }: { article: Article }) {
   const parts = [article.category, article.readTime, article.date].filter(Boolean);
@@ -145,7 +106,7 @@ function FeaturedArticle({ article }: { article: Article }) {
       className="h-full"
     >
       <Link
-        href={article.href}
+        href={`/insights/blog/${article.slug}`}
         className="group flex flex-col h-full rounded-lg p-7 sm:p-9 transition-colors duration-300 border border-(--border-1) hover:border-[rgba(34,197,94,0.28)]"
         style={{ background: "var(--bg-card)" }}
       >
@@ -204,7 +165,7 @@ function ArticleRow({
       style={isFirst ? undefined : { borderTop: "1px solid var(--border-2)" }}
     >
       <Link
-        href={article.href}
+        href={`/insights/blog/${article.slug}`}
         className="group flex gap-4 sm:gap-5 py-6 lg:py-8"
       >
         <span
@@ -276,7 +237,7 @@ export default function InsightsSection() {
           <div className="flex flex-col">
             {secondary.map((article, i) => (
               <ArticleRow
-                key={article.id}
+                key={article.slug}
                 article={article}
                 number={i + 2}
                 isFirst={i === 0}

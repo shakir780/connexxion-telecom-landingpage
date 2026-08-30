@@ -541,9 +541,19 @@ export default function ConsultationClient() {
                         {sending ? "Sending…" : "Book Free Consultation"}
                       </button>
 
-                      <p className="text-xs" style={{ color: "var(--text-4)" }}>
+                      {/* The page that collects the data is the right place
+                          to link the policy governing it. */}
+                      <p className="text-xs leading-relaxed" style={{ color: "var(--text-3)" }}>
                         By submitting, you agree to be contacted by Connexxion
-                        Telecom about your request.
+                        Telecom about your request. See our{" "}
+                        <Link
+                          href="/legal/privacy-policy"
+                          className="underline underline-offset-2 transition-opacity duration-200 hover:opacity-80"
+                          style={{ color: "var(--green-text)" }}
+                        >
+                          Privacy Policy
+                        </Link>
+                        .
                       </p>
                     </motion.form>
                   )}

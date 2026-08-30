@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(curl -s -o /dev/null -w \"existing server: %{http_code}\\\\n\" http://localhost:3004/ --max-time 3)",
-      "Bash(curl -s http://localhost:3004/)"
-    ]
-  }
-}

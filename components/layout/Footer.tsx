@@ -425,29 +425,32 @@ export default function Footer() {
           className="mt-8 pt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           style={{ borderTop: "1px solid var(--border-2)" }}
         >
-          <p className="text-xs" style={{ color: "var(--text-4)" }}>
+          {/* --text-4 is 25% white: 2.16:1 on the dark theme, well under the
+              4.5:1 needed at this size. The legal row is small print, not
+              invisible print. */}
+          <p className="text-xs" style={{ color: "var(--text-2)" }}>
             © {year} Connexxion Telecom Ltd. All rights reserved.
           </p>
 
           <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
             {LEGAL_LINKS.map(({ label, href }, i) => (
               <React.Fragment key={label}>
-                {i > 0 && <span style={{ color: "var(--text-5)" }}>·</span>}
+                {i > 0 && <span style={{ color: "var(--text-4)" }}>·</span>}
                 <Link
                   href={href}
-                  className="transition-colors duration-200 hover:text-(--text-2)"
-                  style={{ color: "var(--text-4)" }}
+                  className="underline underline-offset-4 decoration-1 transition-colors duration-200 hover:text-(--text-1)"
+                  style={{ color: "var(--text-2)" }}
                 >
                   {label}
                 </Link>
               </React.Fragment>
             ))}
-            <span style={{ color: "var(--text-5)" }}>·</span>
-            <span style={{ color: "var(--text-4)" }} title="Nigerian Communications Commission Registered">
+            <span style={{ color: "var(--text-4)" }}>·</span>
+            <span style={{ color: "var(--text-2)" }} title="Nigerian Communications Commission Registered">
               NCC Registered
             </span>
-            <span style={{ color: "var(--text-5)" }}>·</span>
-            <span style={{ color: "var(--text-4)" }}>Nigeria</span>
+            <span style={{ color: "var(--text-4)" }}>·</span>
+            <span style={{ color: "var(--text-2)" }}>Nigeria</span>
           </div>
         </div>
       </div>
