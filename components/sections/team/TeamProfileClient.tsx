@@ -460,89 +460,97 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
             )}
 
             {/* Education */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.2 }}
-            >
-              <ProfileSectionHeading>Education</ProfileSectionHeading>
-              <div className="flex flex-col gap-4">
-                {member.education.map((edu, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col gap-0.5 pl-3"
-                    style={{ borderLeft: "2px solid var(--border-3)" }}
-                  >
-                    <p className="text-sm font-semibold leading-snug" style={{ color: "var(--text-1)" }}>
-                      {edu.degree}
-                    </p>
-                    {edu.institution && (
-                      <p className="text-xs" style={{ color: "var(--text-3)" }}>
-                        {edu.institution}
+            {member.education.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.2 }}
+              >
+                <ProfileSectionHeading>Education</ProfileSectionHeading>
+                <div className="flex flex-col gap-4">
+                  {member.education.map((edu, i) => (
+                    <div
+                      key={i}
+                      className="flex flex-col gap-0.5 pl-3"
+                      style={{ borderLeft: "2px solid var(--border-3)" }}
+                    >
+                      <p className="text-sm font-semibold leading-snug" style={{ color: "var(--text-1)" }}>
+                        {edu.degree}
                       </p>
-                    )}
-                    {edu.year !== undefined && (
-                      <p className="text-[11px] font-mono" style={{ color: "var(--text-4)" }}>
-                        {edu.year}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+                      {edu.institution && (
+                        <p className="text-xs" style={{ color: "var(--text-3)" }}>
+                          {edu.institution}
+                        </p>
+                      )}
+                      {edu.year !== undefined && (
+                        <p className="text-[11px] font-mono" style={{ color: "var(--text-4)" }}>
+                          {edu.year}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
-            {/* Stats panel */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.25 }}
-              className="rounded-2xl p-5 flex flex-col gap-4"
-              style={{
-                background: "var(--bg-card)",
-                border: "1px solid var(--border-1)",
-                boxShadow: "var(--shadow-sm)",
-              }}
-            >
-              <div
-                className="h-px"
-                style={{ background: "rgba(34,197,94,0.4)" }}
-              />
-              {member.experience !== undefined && (
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
-                    Industry Experience
-                  </span>
-                  <span className="text-xl font-black" style={{ color: deptText }}>
-                    {member.experience}+
-                    <span className="text-sm font-medium ml-1" style={{ color: "var(--text-3)" }}>
-                      yrs
+            {/* Stats panel — every row inside is optional, so the whole card is
+                suppressed when a member has none of them rather than leaving a
+                bare panel with just the hairline in it. */}
+            {(member.experience !== undefined ||
+              member.expertise.length > 0 ||
+              member.certifications.length > 0) && (
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.25 }}
+                className="rounded-2xl p-5 flex flex-col gap-4"
+                style={{
+                  background: "var(--bg-card)",
+                  border: "1px solid var(--border-1)",
+                  boxShadow: "var(--shadow-sm)",
+                }}
+              >
+                <div
+                  className="h-px"
+                  style={{ background: "rgba(34,197,94,0.4)" }}
+                />
+                {member.experience !== undefined && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
+                      Industry Experience
                     </span>
-                  </span>
-                </div>
-              )}
-              {member.expertise.length > 0 && (
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
-                    Skill Areas
-                  </span>
-                  <span className="text-xl font-black" style={{ color: deptText }}>
-                    {member.expertise.length}
-                  </span>
-                </div>
-              )}
-              {member.certifications.length > 0 && (
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
-                    Certifications
-                  </span>
-                  <span className="text-xl font-black" style={{ color: deptText }}>
-                    {member.certifications.length}
-                  </span>
-                </div>
-              )}
-            </motion.div>
+                    <span className="text-xl font-black" style={{ color: deptText }}>
+                      {member.experience}+
+                      <span className="text-sm font-medium ml-1" style={{ color: "var(--text-3)" }}>
+                        yrs
+                      </span>
+                    </span>
+                  </div>
+                )}
+                {member.expertise.length > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
+                      Skill Areas
+                    </span>
+                    <span className="text-xl font-black" style={{ color: deptText }}>
+                      {member.expertise.length}
+                    </span>
+                  </div>
+                )}
+                {member.certifications.length > 0 && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium" style={{ color: "var(--text-3)" }}>
+                      Certifications
+                    </span>
+                    <span className="text-xl font-black" style={{ color: deptText }}>
+                      {member.certifications.length}
+                    </span>
+                  </div>
+                )}
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
