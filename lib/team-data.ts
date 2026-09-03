@@ -114,6 +114,35 @@ export const TEAM_MEMBERS: TeamMember[] = [
     avatarColor: "#134e4a",
     photo: "/images/team/lauretta-chinenye.jpg",
   },
+  {
+    /* Provisional entry. The company has not published a written profile for
+       this role, so the copy below describes the remit of the GM Telecom
+       position using Connexxion's own service lines — it states nothing
+       personal about the holder. No degrees, certifications, awards or years
+       of experience are recorded here, and those arrays stay empty until the
+       company publishes them. Replace the name, tagline and bio with the
+       official copy when it exists. */
+    id: "3",
+    slug: "pius",
+    name: "Pius",
+    title: "General Manager, Telecom",
+    department: "Telecom",
+    tagline:
+      "General Manager for the telecom business, accountable for the network and managed-service delivery our clients run on.",
+    bio: [
+      "Pius is General Manager of Connexxion's telecom business, with responsibility for the delivery of the company's core network, infrastructure and managed-service lines.",
+      "His remit covers the teams that design, deploy and operate client environments — from network core and transmission through to the day-to-day managed services that keep those environments available.",
+    ],
+    expertise: [],
+    certifications: [],
+    achievements: [],
+    education: [],
+    social: {},
+    isLeadership: true,
+    initials: "P",
+    avatarColor: "#164e63",
+    photo: "/images/team/pius.jpg",
+  },
 ];
 
 /** Look up a single member by slug */
