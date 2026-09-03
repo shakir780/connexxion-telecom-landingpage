@@ -141,7 +141,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     isLeadership: true,
     initials: "P",
     avatarColor: "#164e63",
-    photo: "/images/team/pius.jpg",
+    photo: "/images/team/Mr.png",
   },
 ];
 
