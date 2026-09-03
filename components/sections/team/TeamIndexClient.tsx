@@ -3,8 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb } from "@/components/ui/section-parts";
 import { TEAM_MEMBERS, type TeamMember } from "@/lib/team-data";
 
@@ -416,18 +414,12 @@ function ClosingCTA() {
 /* ─── Main Export ─── */
 export default function TeamIndexClient() {
   return (
-    <div className="flex flex-col min-h-screen" style={{ background: "var(--bg)" }}>
-      {/* No photographic hero here, so the bar keeps its panel from the
-          first paint rather than fading in on scroll. */}
-      <Navbar solid />
-      <main className="flex-1">
-        <PageMasthead />
-        <LeadershipGrid />
-        <PullQuote />
-        <WiderTeam />
-        <ClosingCTA />
-      </main>
-      <Footer />
-    </div>
+    <>
+      <PageMasthead />
+      <LeadershipGrid />
+      <PullQuote />
+      <WiderTeam />
+      <ClosingCTA />
+    </>
   );
 }
