@@ -223,7 +223,7 @@ export default function TeamProfileClient({ member }: { member: TeamMember }) {
   return (
     <div className="relative" style={{ background: "var(--bg)" }}>
       {/* ─── Hero Section ─── */}
-      <div className="relative overflow-hidden pt-24 pb-16 lg:pb-20">
+      <div className="relative overflow-hidden pt-32 sm:pt-36 lg:pt-40 pb-16 lg:pb-20">
         <ProfileBackground />
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
