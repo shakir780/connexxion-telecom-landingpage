@@ -12,7 +12,11 @@ import NewsletterSection from "@/components/sections/home/NewsletterSection";
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen" style={{ background: "var(--bg)" }}>
-      <Navbar />
+      {/* Solid here too. The hero is a photo carousel whose scrim is tuned
+          per-slide for the copy column, not for the bar: the lightest slide
+          sits at 0.18 in light mode, and the transparent nav's white link
+          text is not readable against it. */}
+      <Navbar solid />
       <main className="flex-1">
         <HeroSection />
         <TrustLine />
