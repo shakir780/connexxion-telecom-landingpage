@@ -30,6 +30,7 @@ const PRODUCTS = [
     description: "CRM, HR, Payroll, Loan automation, document management",
     videoId: "4Fmw7odzLnw",
     demoHref: "/products/cnx247",
+    siteUrl: "https://www.cnx247.com/",
   },
   {
     id: "icoop",
@@ -40,6 +41,7 @@ const PRODUCTS = [
     description: "Track finance, savings, loan applications and more",
     videoId: "F2Ib73fEg9c",
     demoHref: "/products/icoop",
+    siteUrl: "https://www.icoop.ng/",
   },
 ];
 
@@ -171,13 +173,16 @@ function SectorLabel({ text }: { text: string }) {
   );
 }
 
+/* Off-site destinations need a plain anchor, not next/link: there is no
+   route to prefetch, and they open in a new tab so the visitor does not lose
+   their place on the homepage. */
 function ExploreLink({ name, href }: { name: string; href: string }) {
-  return (
-    <Link
-      href={href}
-      className="group/link inline-flex items-center gap-1.5 text-sm font-semibold transition-opacity duration-200 hover:opacity-80"
-      style={{ color: "var(--green-text)" }}
-    >
+  const external = href.startsWith("http");
+  const className =
+    "group/link inline-flex items-center gap-1.5 text-sm font-semibold transition-opacity duration-200 hover:opacity-80";
+  const style = { color: "var(--green-text)" };
+  const label = (
+    <>
       Explore {name}
       <svg
         viewBox="0 0 16 16"
@@ -190,6 +195,27 @@ function ExploreLink({ name, href }: { name: string; href: string }) {
           clipRule="evenodd"
         />
       </svg>
+    </>
+  );
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Explore ${name} (opens in a new tab)`}
+        className={className}
+        style={style}
+      >
+        {label}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={href} className={className} style={style}>
+      {label}
     </Link>
   );
 }
@@ -237,7 +263,7 @@ function ProductCard({
           {product.description}
         </p>
         <div className="mt-auto pt-3">
-          <ExploreLink name={product.name} href={product.demoHref} />
+          <ExploreLink name={product.name} href={product.siteUrl ?? product.demoHref} />
         </div>
       </div>
     </motion.article>
