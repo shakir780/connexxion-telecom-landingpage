@@ -71,7 +71,7 @@ const CNX247: SolutionPlatform = {
 };
 
 const IGOV: SolutionPlatform = {
-  name: "iGov",
+  name: "CNX 1GOV",
   role: "Public sector",
   body: "The all-in-one platform for governing bodies and agencies — built for compliance, engineered for scale.",
   href: "/products/igov",
@@ -409,6 +409,176 @@ export const SOLUTIONS: Solution[] = [
     closingHeading: "Start with how a caller reaches you today.",
     closingBody:
       "Tell us what happens when someone rings your main line, and what happens when the person they want is out of the office. That path is usually where the problem is.",
+  },
+  {
+    /* HR and Payroll are named CNX247 modules in the verified services copy,
+       so this page describes those modules. Nothing here claims headcount
+       limits, statutory tax tables, biometric hardware or payroll bureau
+       integrations — none of that is published. */
+    slug: "hr-management",
+    group: "Applications",
+    title: "HR Management",
+    topic: "HR Management",
+    metaTitle: "HR Management | Connexxion Telecom",
+    metaDescription:
+      "People records, leave, payroll and documents in one system — HR management delivered through CNX247, Connexxion Telecom's own ERP.",
+    intro:
+      "One record per employee, with the contract, the leave balance and the payslip attached to it, rather than spread across a spreadsheet, a drawer and somebody's memory.",
+    secondaryCta: { label: "See CNX247", href: "/products/cnx247" },
+    problemHeading: "The organisation knows less about its people than it thinks.",
+    problems: [
+      {
+        id: "spreadsheet",
+        title: "The staff list is a spreadsheet",
+        body: "One file, edited by several people, with no history of what changed or who changed it. The version on somebody's laptop is the one that gets used.",
+      },
+      {
+        id: "leave",
+        title: "Leave is agreed and then forgotten",
+        body: "Time off approved in a corridor or a message thread, never recorded anywhere. Balances are reconstructed from memory at the end of the year, and disputed.",
+      },
+      {
+        id: "payroll",
+        title: "Payroll is rebuilt every month",
+        body: "The same figures re-entered from the same sources, by hand, against a deadline. A typo is found after payment or not at all.",
+      },
+      {
+        id: "documents",
+        title: "Nobody can find the contract",
+        body: "Offer letters, confirmations and disciplinary records sit in email and filing cabinets. When one is needed, someone spends an afternoon looking for it.",
+      },
+    ],
+    capabilityHeading: "One employee record, from offer letter to payslip.",
+    capabilities: [
+      {
+        id: "records",
+        title: "A single employee record",
+        body: "Personal details, role, reporting line, contract and history in one place, with changes recorded rather than overwritten.",
+      },
+      {
+        id: "leave",
+        title: "Leave requests and balances",
+        body: "Time off requested, approved and deducted in the same system, so the balance is a number the record holds rather than one somebody works out.",
+      },
+      {
+        id: "payroll",
+        title: "Payroll runs",
+        body: "Payroll built from the employee records already in the system, so the inputs to a pay run are the same data the rest of HR uses.",
+      },
+      {
+        id: "documents",
+        title: "Documents against the person",
+        body: "Contracts, letters and signed forms attached to the employee they belong to, using the same document management the rest of the ERP uses.",
+      },
+      {
+        id: "loans",
+        title: "Staff loans and deductions",
+        body: "Loan automation is a CNX247 module, so an advance to an employee and its repayment through payroll are handled in one system rather than tracked alongside it.",
+      },
+      {
+        id: "reporting",
+        title: "Headcount and cost reporting",
+        body: "Who is employed, in which team, at what cost — drawn from the records themselves rather than assembled by hand when somebody asks.",
+      },
+    ],
+    whereHeading: "A module of the ERP, not a separate HR product.",
+    whereBody:
+      "HR and payroll are modules of CNX247, so people data sits beside the customer records, documents and finances of the same organisation. It is our own software — changing how an approval or a pay rule behaves is a roadmap conversation with the people who wrote it.",
+    platforms: [CNX247],
+    outcomes: [
+      "One record per employee that survives a change of HR staff",
+      "Leave balances that are recorded rather than reconstructed",
+      "Pay runs built from data already in the system",
+      "Contracts and letters findable in seconds",
+    ],
+    closingHeading: "Start with your current staff list.",
+    closingBody:
+      "Tell us where employee information lives today and what happens when someone joins or leaves. That handover is usually where the gaps show.",
+  },
+  {
+    /* Savings and loan applications are named iCoop capabilities, and loan
+       automation is a named CNX247 module, in the verified copy. This page
+       covers those. Not claimed: interest models, regulatory positions,
+       payment-provider integrations or portfolio sizes. */
+    slug: "savings-and-loan",
+    group: "Applications",
+    title: "Savings and Loan Application",
+    topic: "Savings and Loan Application",
+    metaTitle: "Savings and Loan Application | Connexxion Telecom",
+    metaDescription:
+      "Member savings, contributions and loan applications tracked end to end — delivered through iCoop for cooperatives and CNX247's loan automation.",
+    intro:
+      "Contributions recorded as they are received, loan applications that move through a visible process, and a balance a member can be told without anyone opening a ledger.",
+    secondaryCta: { label: "See iCoop", href: "/products/icoop" },
+    problemHeading: "The ledger and the members disagree.",
+    problems: [
+      {
+        id: "ledger",
+        title: "Balances live in one person's book",
+        body: "Contributions recorded by hand, in one place, by one person. When they are unavailable, nobody can answer what a member has saved.",
+      },
+      {
+        id: "applications",
+        title: "Loan applications stall unseen",
+        body: "A request is submitted and then waits. Neither the member nor the committee can say what stage it is at or who it is with.",
+      },
+      {
+        id: "repayments",
+        title: "Repayments tracked separately from savings",
+        body: "What a member owes and what they have saved sit in different records, so the position of a member is assembled by hand before any decision.",
+      },
+      {
+        id: "trust",
+        title: "Members cannot check their own position",
+        body: "Every balance enquiry is a phone call to an officer. The society spends its time answering questions the records could answer.",
+      },
+    ],
+    capabilityHeading: "From contribution to disbursement, in one record.",
+    capabilities: [
+      {
+        id: "members",
+        title: "Member records",
+        body: "One record per member holding contributions, savings and loan history, so their full position is visible in one place.",
+      },
+      {
+        id: "savings",
+        title: "Savings and contributions",
+        body: "Contributions recorded against the member as they are received, building a balance the system holds rather than one recalculated each period.",
+      },
+      {
+        id: "applications",
+        title: "Loan applications with a state",
+        body: "An application is a record with a stage and an owner, so what has been submitted, what is under review and what has been approved is visible rather than remembered.",
+      },
+      {
+        id: "automation",
+        title: "Loan automation",
+        body: "Loan automation is a module of our own ERP, so disbursement and repayment schedules are handled by the same system that holds the savings.",
+      },
+      {
+        id: "repayments",
+        title: "Repayments against the member",
+        body: "Repayments recorded against the loan and the member together, so outstanding balance and savings position are read from one record.",
+      },
+      {
+        id: "reporting",
+        title: "Position and arrears reporting",
+        body: "What is saved, what is lent and what is overdue, drawn from the records themselves rather than compiled for a committee meeting.",
+      },
+    ],
+    whereHeading: "Built for societies, on software we own.",
+    whereBody:
+      "iCoop is purpose built for cooperative and thrift societies, and loan automation is a module of CNX247 — both ours. Where a society's rules differ from how the software behaves, that is a roadmap conversation with the people who wrote it rather than a request to a third-party vendor.",
+    platforms: [ICOOP, CNX247],
+    outcomes: [
+      "A member's savings position answerable without opening a ledger",
+      "Loan applications with a visible stage and owner",
+      "Repayments and savings read from the same record",
+      "Arrears visible before the committee meets, not during it",
+    ],
+    closingHeading: "Start with how a member checks their balance.",
+    closingBody:
+      "Tell us how contributions are recorded today and what a loan application has to pass through. Those two paths show where the manual work actually is.",
   },
   {
     slug: "network-core",

@@ -58,7 +58,7 @@ const CAPABILITIES = [
 
 const PRODUCTS = [
   {
-    name: "iGov",
+    name: "CNX 1GOV",
     sector: "Public Sector",
     body: "The all-in-one platform for modern governing bodies and agencies.",
     href: "/products/igov",

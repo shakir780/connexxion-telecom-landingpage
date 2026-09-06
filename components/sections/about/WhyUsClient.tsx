@@ -22,7 +22,7 @@ const REASONS = [
   {
     id: "we-build-it",
     title: "We build the platforms, not just resell them",
-    body: "iGov, CNX247 and iCoop are our own products. When a workflow does not fit how your organisation actually operates, that is a roadmap conversation with the people who wrote the code — not a support ticket to a vendor in another timezone.",
+    body: "CNX 1GOV, CNX247 and iCoop are our own products. When a workflow does not fit how your organisation actually operates, that is a roadmap conversation with the people who wrote the code — not a support ticket to a vendor in another timezone.",
   },
   {
     id: "one-party",

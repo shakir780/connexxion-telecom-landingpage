@@ -4,6 +4,8 @@
    form, which reuses the solutions list for its category field.
 ───────────────────────────────────────────────────────────── */
 
+import { SOLUTIONS } from "@/lib/solutions-data";
+
 export interface SimpleLink {
   label: string;
   href: string;
@@ -22,13 +24,19 @@ export type NavEntry =
 
 export const SOLUTIONS_COLUMNS: GridColumn[] = [
   {
+    /* The first three point at the product pages rather than solution pages:
+       these are the platforms themselves, and Products has no top-level nav
+       entry of its own. Billing, CRM, Unified Communications and Self-Care
+       Portal keep their pages and stay listed on /solutions/applications;
+       they are simply no longer surfaced in the dropdown. */
     heading: "Applications",
     href: "/solutions/applications",
     items: [
-      { label: "Billing & Revenue Management", href: "/solutions/applications/billing-revenue-management" },
-      { label: "CRM & Customer Care", href: "/solutions/applications/crm-customer-care" },
-      { label: "Self-Care Portal", href: "/solutions/applications/self-care-portal" },
-      { label: "Unified Communications", href: "/solutions/applications/unified-communications" },
+      { label: "CNX 247 (ERP)", href: "/products/cnx247" },
+      { label: "CNX 1GOV (ERP)", href: "/products/igov" },
+      { label: "iCoop for Cooperatives", href: "/products/icoop" },
+      { label: "HR Management", href: "/solutions/applications/hr-management" },
+      { label: "Savings and Loan Application", href: "/solutions/applications/savings-and-loan" },
     ],
   },
   {
@@ -59,7 +67,7 @@ export const NAV_ENTRIES: NavEntry[] = [
   {
     type: "grid",
     label: "Solutions",
-    matchPrefixes: ["/solutions"],
+    matchPrefixes: ["/solutions", "/products"],
     columns: SOLUTIONS_COLUMNS,
   },
   {
@@ -77,8 +85,13 @@ export const NAV_ENTRIES: NavEntry[] = [
   { type: "link", label: "Contact", href: "/consultation" },
 ];
 
-/** Flat list of solution categories, used by the consultation form's category field. */
+/** Flat list of solution categories, used by the consultation form's category
+    field. Every solution page pre-selects this field through ?topic=, matching
+    on its own `topic` string, so the list has to cover all of them. It is
+    therefore built from the solutions data rather than from the dropdown: the
+    dropdown no longer lists every solution, and deriving it from there would
+    silently break the preselect on the pages left out. */
 export const SOLUTION_CATEGORIES: string[] = [
-  ...SOLUTIONS_COLUMNS.flatMap((col) => col.items.map((item) => item.label)),
+  ...SOLUTIONS.map((s) => s.topic),
   "Other",
 ];

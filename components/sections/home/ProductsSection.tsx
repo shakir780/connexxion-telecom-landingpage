@@ -12,7 +12,7 @@ const EASE_OUT = "easeOut" as const;
 const PRODUCTS = [
   {
     id: "igov",
-    name: "iGov",
+    name: "CNX 1GOV",
     label: "Public Sector",
     category: "Government Technology",
     boldDescription:
