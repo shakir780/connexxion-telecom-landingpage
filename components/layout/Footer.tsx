@@ -347,11 +347,8 @@ export default function Footer() {
             </ContactItem>
 
             <ContactItem label="Phone">
-              <a href="tel:+2349016400000" className="block whitespace-nowrap transition-colors duration-200 hover:text-(--text-1)">
-                +234 0 901 640 0000
-              </a>
-              <a href="tel:+23409290541" className="block whitespace-nowrap transition-colors duration-200 hover:text-(--text-1)">
-                +234 09 290 5141
+              <a href="tel:+2348163416011" className="block whitespace-nowrap transition-colors duration-200 hover:text-(--text-1)">
+                +234 816 341 6011
               </a>
             </ContactItem>
 
