@@ -14,8 +14,8 @@ const EASE_OUT = "easeOut" as const;
 /* Contact details are the same ones the footer publishes. They sit on this
    page too because a booking form that cannot reach anybody is a dead end —
    if delivery fails, the visitor still has a phone number in front of them. */
-const PHONE_DISPLAY = "+234 0 901 640 0000";
-const PHONE_HREF = "tel:+2349016400000";
+const PHONE_DISPLAY = "+234 816 341 6011";
+const PHONE_HREF = "tel:+2348163416011";
 const EMAIL = "info@connexxiontelecom.com";
 
 const STEPS = [

@@ -9,8 +9,8 @@ import type { LegalBlock, LegalDocument } from "@/lib/legal-data";
 
 const EASE_OUT = "easeOut" as const;
 
-const PHONE_DISPLAY = "+234 0 901 640 0000";
-const PHONE_HREF = "tel:+2349016400000";
+const PHONE_DISPLAY = "+234 816 341 6011";
+const PHONE_HREF = "tel:+2348163416011";
 const EMAIL = "info@connexxiontelecom.com";
 
 /* ─── Shared shell for legal documents ───
