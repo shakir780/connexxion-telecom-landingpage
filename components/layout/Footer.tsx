@@ -71,16 +71,18 @@ const SocialLinks = [
    Same links as before, regrouped. "Insights" is added to Company (the usual
    home for a company's writing) using the existing /insights/blog route, so
    the footer reaches it the way the main nav does. */
-type NavGroup = { id: string; heading: string; links: { label: string; href: string }[] };
+/* A product with no site yet has no href: FooterLink renders it as plain
+   text rather than a link to nowhere. */
+type NavGroup = { id: string; heading: string; links: { label: string; href?: string }[] };
 
 const NAV_GROUPS: NavGroup[] = [
   {
     id: "products",
     heading: "Products",
     links: [
-      { label: "CNX 1GOV", href: "/products/igov" },
-      { label: "CNX247", href: "/products/cnx247" },
-      { label: "iCoop", href: "/products/icoop" },
+      { label: "CNX 1GOV" },
+      { label: "CNX247", href: "https://www.cnx247.com/" },
+      { label: "iCoop", href: "https://www.icoop.ng/" },
     ],
   },
   {
@@ -145,13 +147,35 @@ function GroupHeading({ children }: { children: React.ReactNode }) {
 
 /* No leading icon: an arrow on every row is what made the old columns read as
    a dense list of bullets rather than navigation. */
-function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+function FooterLink({ href, children }: { href?: string; children: React.ReactNode }) {
+  const className = "block text-sm transition-colors duration-200 hover:text-(--text-1)";
+
+  // Nothing to link to yet — render the name, not a dead link.
+  if (!href) {
+    return (
+      <span className="block text-sm" style={{ color: "var(--text-4)" }}>
+        {children}{" "}
+        <span className="text-xs">(coming soon)</span>
+      </span>
+    );
+  }
+
+  if (href.startsWith("http")) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        style={{ color: "var(--text-3)" }}
+      >
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className="block text-sm transition-colors duration-200 hover:text-(--text-1)"
-      style={{ color: "var(--text-3)" }}
-    >
+    <Link href={href} className={className} style={{ color: "var(--text-3)" }}>
       {children}
     </Link>
   );

@@ -8,7 +8,8 @@ import { SOLUTIONS } from "@/lib/solutions-data";
 
 export interface SimpleLink {
   label: string;
-  href: string;
+  /** Absent means there is nowhere to go yet; render as plain text. */
+  href?: string;
 }
 
 export interface GridColumn {
@@ -24,17 +25,17 @@ export type NavEntry =
 
 export const SOLUTIONS_COLUMNS: GridColumn[] = [
   {
-    /* The first three point at the product pages rather than solution pages:
-       these are the platforms themselves, and Products has no top-level nav
-       entry of its own. Billing, CRM, Unified Communications and Self-Care
-       Portal keep their pages and stay listed on /solutions/applications;
-       they are simply no longer surfaced in the dropdown. */
+    /* The platforms link straight to their own sites rather than to a page
+       here. CNX 1GOV has no site yet, so it carries no href and renders as
+       plain text. Billing, CRM, Unified Communications and Self-Care Portal
+       keep their pages and stay listed on /solutions/applications; they are
+       simply no longer surfaced in the dropdown. */
     heading: "Applications",
     href: "/solutions/applications",
     items: [
-      { label: "CNX 247 (ERP)", href: "/products/cnx247" },
-      { label: "CNX 1GOV (ERP)", href: "/products/igov" },
-      { label: "iCoop for Cooperatives", href: "/products/icoop" },
+      { label: "CNX 247 (ERP)", href: "https://www.cnx247.com/" },
+      { label: "CNX 1GOV (ERP)" },
+      { label: "iCoop for Cooperatives", href: "https://www.icoop.ng/" },
       { label: "HR Management", href: "/solutions/applications/hr-management" },
       { label: "Savings and Loan Application", href: "/solutions/applications/savings-and-loan" },
     ],
@@ -67,7 +68,7 @@ export const NAV_ENTRIES: NavEntry[] = [
   {
     type: "grid",
     label: "Solutions",
-    matchPrefixes: ["/solutions", "/products"],
+    matchPrefixes: ["/solutions"],
     columns: SOLUTIONS_COLUMNS,
   },
   {

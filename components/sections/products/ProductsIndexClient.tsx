@@ -4,8 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb } from "@/components/ui/section-parts";
-import { PRODUCTS } from "@/lib/products-data";
+import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb, SmartLink, ComingSoon } from "@/components/ui/section-parts";
+import { PRODUCTS, productSite } from "@/lib/products-data";
 
 const EASE_OUT = "easeOut" as const;
 
@@ -74,8 +74,8 @@ export default function ProductsIndexClient() {
                   className="border-t"
                   style={{ borderColor: "var(--border-2)" }}
                 >
-                  <Link
-                    href={`/products/${product.slug}`}
+                  <SmartLink
+                    href={productSite(product.slug)}
                     className="group grid lg:grid-cols-12 gap-x-8 gap-y-3 py-8 lg:py-10"
                   >
                     <div className="lg:col-span-3">
@@ -104,15 +104,21 @@ export default function ProductsIndexClient() {
                       <p className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
                         {product.description}
                       </p>
-                      <span
-                        className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold"
-                        style={{ color: "var(--green-text)" }}
-                      >
-                        Explore {product.name}
-                        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
-                      </span>
+                      {productSite(product.slug) ? (
+                        <span
+                          className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold"
+                          style={{ color: "var(--green-text)" }}
+                        >
+                          Explore {product.name}
+                          <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
+                        </span>
+                      ) : (
+                        <span className="mt-1">
+                          <ComingSoon />
+                        </span>
+                      )}
                     </div>
-                  </Link>
+                  </SmartLink>
                 </motion.article>
               ))}
             </div>
