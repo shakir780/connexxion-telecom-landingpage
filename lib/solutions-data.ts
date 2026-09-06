@@ -28,10 +28,11 @@ export interface SolutionSection {
 }
 
 export interface SolutionPlatform {
+  /** Product slug, so the card can resolve the product's own site */
+  slug: string;
   name: string;
   role: string;
   body: string;
-  href: string;
 }
 
 export interface Solution {
@@ -64,24 +65,24 @@ export interface Solution {
 }
 
 const CNX247: SolutionPlatform = {
+  slug: "cnx247",
   name: "CNX247",
   role: "Business operations",
   body: "Our own ERP — CRM, payroll, loan automation and document management for commercial organisations.",
-  href: "/products/cnx247",
 };
 
 const IGOV: SolutionPlatform = {
+  slug: "igov",
   name: "CNX 1GOV",
   role: "Public sector",
   body: "The all-in-one platform for governing bodies and agencies — built for compliance, engineered for scale.",
-  href: "/products/igov",
 };
 
 const ICOOP: SolutionPlatform = {
+  slug: "icoop",
   name: "iCoop",
   role: "Cooperatives",
   body: "Member records, savings, contributions and loan applications for cooperative and thrift societies.",
-  href: "/products/icoop",
 };
 
 export const SOLUTIONS: Solution[] = [
@@ -95,7 +96,7 @@ export const SOLUTIONS: Solution[] = [
       "Invoicing, collections, payment reconciliation and loan automation running on one ledger — delivered through CNX247 and iCoop, platforms Connexxion builds and maintains in-house.",
     intro:
       "Invoicing, collections and reconciliation running on the same records as the rest of the business — so what you billed, what you were paid and what you are still owed are the same set of numbers.",
-    secondaryCta: { label: "See CNX247", href: "/products/cnx247" },
+    secondaryCta: { label: "See CNX247", href: "https://www.cnx247.com/" },
     problemHeading: "Most revenue is lost in the admin, not the market.",
     problems: [
       {
@@ -176,7 +177,7 @@ export const SOLUTIONS: Solution[] = [
       "One customer record, cases that cannot be forgotten, and calls tied to the history they belong to — CRM and customer care delivered through CNX247 and Connexxion's enterprise voice services.",
     intro:
       "One record per customer, every conversation attached to it, and nothing depending on whether the person who took the call remembers to write it down.",
-    secondaryCta: { label: "See CNX247", href: "/products/cnx247" },
+    secondaryCta: { label: "See CNX247", href: "https://www.cnx247.com/" },
     problemHeading: "The customer remembers. The organisation does not.",
     problems: [
       {
@@ -257,7 +258,7 @@ export const SOLUTIONS: Solution[] = [
       "Let members, customers and citizens check balances, pull statements, submit requests and track them — a self-service front onto the same records your staff already work in.",
     intro:
       "Let members, customers and citizens answer their own questions — balances, statements, requests and where a submission has got to — without joining a queue to do it.",
-    secondaryCta: { label: "See iCoop", href: "/products/icoop" },
+    secondaryCta: { label: "See iCoop", href: "https://www.icoop.ng/" },
     problemHeading: "Your desk spends its day answering the same four questions.",
     problems: [
       {
@@ -424,7 +425,7 @@ export const SOLUTIONS: Solution[] = [
       "People records, leave, payroll and documents in one system — HR management delivered through CNX247, Connexxion Telecom's own ERP.",
     intro:
       "One record per employee, with the contract, the leave balance and the payslip attached to it, rather than spread across a spreadsheet, a drawer and somebody's memory.",
-    secondaryCta: { label: "See CNX247", href: "/products/cnx247" },
+    secondaryCta: { label: "See CNX247", href: "https://www.cnx247.com/" },
     problemHeading: "The organisation knows less about its people than it thinks.",
     problems: [
       {
@@ -509,7 +510,7 @@ export const SOLUTIONS: Solution[] = [
       "Member savings, contributions and loan applications tracked end to end — delivered through iCoop for cooperatives and CNX247's loan automation.",
     intro:
       "Contributions recorded as they are received, loan applications that move through a visible process, and a balance a member can be told without anyone opening a ledger.",
-    secondaryCta: { label: "See iCoop", href: "/products/icoop" },
+    secondaryCta: { label: "See iCoop", href: "https://www.icoop.ng/" },
     problemHeading: "The ledger and the members disagree.",
     problems: [
       {

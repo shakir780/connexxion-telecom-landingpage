@@ -31,6 +31,8 @@ export interface Product {
   relatedSolutions: { slug: string; title: string }[];
   metaTitle: string;
   metaDescription: string;
+  /** The product's own public site. Absent means not launched yet. */
+  siteUrl?: string;
 }
 
 export const PRODUCTS: Product[] = [
@@ -54,6 +56,7 @@ export const PRODUCTS: Product[] = [
   {
     slug: "cnx247",
     name: "CNX247",
+    siteUrl: "https://www.cnx247.com/",
     label: "Business Operations",
     category: "Business Management Suite",
     boldDescription: "Unified tool designed to boost business productivity",
@@ -80,6 +83,7 @@ export const PRODUCTS: Product[] = [
   {
     slug: "icoop",
     name: "iCoop",
+    siteUrl: "https://www.icoop.ng/",
     label: "Cooperatives",
     category: "Cooperative Management",
     boldDescription: "Purpose built for cooperatives",
@@ -100,4 +104,12 @@ export const PRODUCTS: Product[] = [
 
 export function getProduct(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
+}
+
+/* Each product lives on its own site, so every "Explore" affordance points
+   off-site rather than at a page here. A product with no site is not launched
+   yet — callers must render it as plain text, not a dead link. CNX 1GOV is
+   currently the only one. */
+export function productSite(slug: string): string | undefined {
+  return getProduct(slug)?.siteUrl;
 }

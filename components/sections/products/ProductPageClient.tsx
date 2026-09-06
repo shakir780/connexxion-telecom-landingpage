@@ -4,8 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb } from "@/components/ui/section-parts";
-import { PRODUCTS, type Product } from "@/lib/products-data";
+import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb, SmartLink, ComingSoon } from "@/components/ui/section-parts";
+import { PRODUCTS, type Product, productSite } from "@/lib/products-data";
 
 const EASE_OUT = "easeOut" as const;
 
@@ -273,9 +273,9 @@ export default function ProductPageClient({ product }: { product: Product }) {
               <Eyebrow>The other platforms</Eyebrow>
               <div className="mt-8 grid sm:grid-cols-2 gap-4">
                 {others.map((other) => (
-                  <Link
+                  <SmartLink
                     key={other.slug}
-                    href={`/products/${other.slug}`}
+                    href={productSite(other.slug)}
                     className="group flex flex-col gap-2 p-6 rounded-xl border border-(--border-1) hover:border-[rgba(34,197,94,0.28)] transition-colors duration-300"
                     style={{ background: "var(--bg-card)" }}
                   >
@@ -291,14 +291,20 @@ export default function ProductPageClient({ product }: { product: Product }) {
                     <span className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
                       {other.boldDescription}
                     </span>
-                    <span
-                      className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold"
-                      style={{ color: "var(--green-text)" }}
-                    >
-                      Explore {other.name}
-                      <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" />
-                    </span>
-                  </Link>
+                    {productSite(other.slug) ? (
+                      <span
+                        className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold"
+                        style={{ color: "var(--green-text)" }}
+                      >
+                        Explore {other.name}
+                        <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" />
+                      </span>
+                    ) : (
+                      <span className="mt-2">
+                        <ComingSoon />
+                      </span>
+                    )}
+                  </SmartLink>
                 ))}
               </div>
             </motion.div>

@@ -1,14 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { productSite } from "@/lib/products-data";
 
 const EASE_OUT = "easeOut" as const;
 
 /* ─── Product data ───
    Names and copy are unchanged. `label` is the understated sector line that
    replaced the green category badge. A null `videoId` means there is no demo
-   reel yet and the panel says so. */
+   reel yet and the panel says so.
+
+   Destinations are not held here. Each product lives on its own site, and
+   productSite() in products-data owns those URLs. CNX 1GOV has no site yet,
+   so its card renders "Coming soon" instead of a link. */
 const PRODUCTS = [
   {
     id: "igov",
@@ -19,7 +23,6 @@ const PRODUCTS = [
       "The all-in-one platform for modern Governing Bodies and Agencies",
     description: "Built for Compliance, Engineered for Scale…",
     videoId: null as string | null,
-    demoHref: "/products/igov",
   },
   {
     id: "cnx247",
@@ -29,8 +32,6 @@ const PRODUCTS = [
     boldDescription: "Unified tool designed to boost business productivity",
     description: "CRM, HR, Payroll, Loan automation, document management",
     videoId: "4Fmw7odzLnw",
-    demoHref: "/products/cnx247",
-    siteUrl: "https://www.cnx247.com/",
   },
   {
     id: "icoop",
@@ -40,8 +41,6 @@ const PRODUCTS = [
     boldDescription: "Purpose built for cooperatives",
     description: "Track finance, savings, loan applications and more",
     videoId: "F2Ib73fEg9c",
-    demoHref: "/products/icoop",
-    siteUrl: "https://www.icoop.ng/",
   },
 ];
 
@@ -131,32 +130,6 @@ function SectionHeader() {
         </motion.p>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.55, ease: EASE_OUT, delay: 0.18 }}
-        className="lg:pb-2 shrink-0"
-      >
-        <Link
-          href="/products"
-          className="group inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200 hover:text-[var(--text-1)]"
-          style={{ color: "var(--text-3)" }}
-        >
-          View All Products
-          <svg
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1"
-          >
-            <path
-              fillRule="evenodd"
-              d="M2 8a.75.75 0 01.75-.75h8.69L8.22 4.03a.75.75 0 011.06-1.06l4.5 4.5a.75.75 0 010 1.06l-4.5 4.5a.75.75 0 01-1.06-1.06l3.22-3.22H2.75A.75.75 0 012 8z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </Link>
-      </motion.div>
     </div>
   );
 }
@@ -173,16 +146,28 @@ function SectorLabel({ text }: { text: string }) {
   );
 }
 
-/* Off-site destinations need a plain anchor, not next/link: there is no
-   route to prefetch, and they open in a new tab so the visitor does not lose
-   their place on the homepage. */
-function ExploreLink({ name, href }: { name: string; href: string }) {
-  const external = href.startsWith("http");
-  const className =
-    "group/link inline-flex items-center gap-1.5 text-sm font-semibold transition-opacity duration-200 hover:opacity-80";
-  const style = { color: "var(--green-text)" };
-  const label = (
-    <>
+/* Products live on their own sites, so this is an off-site anchor opened in
+   a new tab. A product with no site yet is not a link at all. */
+function ExploreLink({ name, href }: { name: string; href?: string }) {
+  if (!href) {
+    return (
+      <span
+        className="inline-flex items-center gap-1.5 text-sm font-semibold"
+        style={{ color: "var(--text-4)" }}
+      >
+        Coming soon
+      </span>
+    );
+  }
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Explore ${name} (opens in a new tab)`}
+      className="group/link inline-flex items-center gap-1.5 text-sm font-semibold transition-opacity duration-200 hover:opacity-80"
+      style={{ color: "var(--green-text)" }}
+    >
       Explore {name}
       <svg
         viewBox="0 0 16 16"
@@ -195,28 +180,7 @@ function ExploreLink({ name, href }: { name: string; href: string }) {
           clipRule="evenodd"
         />
       </svg>
-    </>
-  );
-
-  if (external) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Explore ${name} (opens in a new tab)`}
-        className={className}
-        style={style}
-      >
-        {label}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={href} className={className} style={style}>
-      {label}
-    </Link>
+    </a>
   );
 }
 
@@ -263,7 +227,7 @@ function ProductCard({
           {product.description}
         </p>
         <div className="mt-auto pt-3">
-          <ExploreLink name={product.name} href={product.siteUrl ?? product.demoHref} />
+          <ExploreLink name={product.name} href={productSite(product.id)} />
         </div>
       </div>
     </motion.article>

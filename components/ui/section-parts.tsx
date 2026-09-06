@@ -35,22 +35,79 @@ export function SectionDivider() {
   );
 }
 
+/* A destination that may be off-site, or may not exist yet.
+
+   next/link is for routes this app owns. An external product site has nothing
+   to prefetch and opens in its own tab. And an unlaunched product has nowhere
+   to go at all: rather than render a link that goes nowhere, this falls back to
+   a plain element carrying the same layout classes, so the card still looks
+   right but is not clickable. */
+export function SmartLink({
+  href,
+  className,
+  style,
+  children,
+}: {
+  href?: string;
+  className?: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}) {
+  if (!href) {
+    return (
+      <div className={className} style={style}>
+        {children}
+      </div>
+    );
+  }
+  if (href.startsWith("http")) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={className}
+        style={style}
+      >
+        {children}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={className} style={style}>
+      {children}
+    </Link>
+  );
+}
+
 export function ArrowLink({
   href,
   children,
 }: {
-  href: string;
+  href?: string;
   children: React.ReactNode;
 }) {
   return (
-    <Link
+    <SmartLink
       href={href}
       className="group/link inline-flex items-center gap-1.5 text-sm font-semibold transition-opacity duration-200 hover:opacity-80"
       style={{ color: "var(--green-text)" }}
     >
       {children}
       <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover/link:translate-x-1" />
-    </Link>
+    </SmartLink>
+  );
+}
+
+/* Shown where an Explore link would be, for a product with no site yet. */
+export function ComingSoon() {
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 text-sm font-semibold"
+      style={{ color: "var(--text-4)" }}
+    >
+      Coming soon
+    </span>
   );
 }
 

@@ -4,7 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Eyebrow, SectionDivider, ArrowLink, Breadcrumb } from "@/components/ui/section-parts";
+import { Eyebrow, SectionDivider, ArrowLink, Breadcrumb, ComingSoon } from "@/components/ui/section-parts";
+import { productSite } from "@/lib/products-data";
 import TrustLine from "@/components/sections/home/TrustLine";
 
 const EASE_OUT = "easeOut" as const;
@@ -34,7 +35,7 @@ const PILLARS = [
     id: "platforms",
     heading: "Our own software platforms",
     body: "Three products built in-house for the sectors we know best: governing bodies and agencies, business operations, and cooperatives. They are ours end to end, so the roadmap answers to the people using them.",
-    href: "/products/igov",
+    href: "#platforms",
     linkLabel: "Explore the products",
   },
   {
@@ -58,22 +59,22 @@ const CAPABILITIES = [
 
 const PRODUCTS = [
   {
+    slug: "igov",
     name: "CNX 1GOV",
     sector: "Public Sector",
     body: "The all-in-one platform for modern governing bodies and agencies.",
-    href: "/products/igov",
   },
   {
+    slug: "cnx247",
     name: "CNX247",
     sector: "Business Operations",
     body: "CRM, HR, payroll, loan automation and document management in one suite.",
-    href: "/products/cnx247",
   },
   {
+    slug: "icoop",
     name: "iCoop",
     sector: "Cooperatives",
     body: "Purpose built for cooperatives — finance, savings and loan applications.",
-    href: "/products/icoop",
   },
 ];
 
@@ -303,7 +304,7 @@ function CapabilitiesAndProducts() {
             </ul>
           </div>
 
-          <div className="lg:col-span-7">
+          <div id="platforms" className="lg:col-span-7">
             <SectionHeading eyebrow="Our platforms" title="Software we own, not resell." />
             <div className="mt-8 flex flex-col gap-4">
               {PRODUCTS.map((product, i) => (
@@ -332,7 +333,13 @@ function CapabilitiesAndProducts() {
                     {product.body}
                   </p>
                   <div className="mt-4">
-                    <ArrowLink href={product.href}>Explore {product.name}</ArrowLink>
+                    {productSite(product.slug) ? (
+                      <ArrowLink href={productSite(product.slug)}>
+                        Explore {product.name}
+                      </ArrowLink>
+                    ) : (
+                      <ComingSoon />
+                    )}
                   </div>
                 </motion.div>
               ))}

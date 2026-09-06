@@ -4,7 +4,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb } from "@/components/ui/section-parts";
+import { Eyebrow, SectionDivider, ArrowRight, Breadcrumb, SmartLink, ComingSoon } from "@/components/ui/section-parts";
+import { productSite } from "@/lib/products-data";
 import { groupSlug, type Solution } from "@/lib/solutions-data";
 
 const EASE_OUT = "easeOut" as const;
@@ -84,13 +85,13 @@ function PageMasthead({ solution }: { solution: Solution }) {
             Book a Consultation
             <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
           </Link>
-          <Link
+          <SmartLink
             href={solution.secondaryCta.href}
             className="inline-flex items-center justify-center gap-2.5 min-h-12 px-7 rounded-full text-sm font-semibold transition-colors duration-200"
             style={{ border: "1px solid var(--border-3)", color: "var(--text-1)" }}
           >
             {solution.secondaryCta.label}
-          </Link>
+          </SmartLink>
         </motion.div>
       </div>
     </section>
@@ -252,9 +253,9 @@ function WhereItRuns({ solution }: { solution: Solution }) {
             {solution.platforms && (
             <div className="grid sm:grid-cols-2 gap-4">
               {solution.platforms.map((p) => (
-                <Link
+                <SmartLink
                   key={p.name}
-                  href={p.href}
+                  href={productSite(p.slug)}
                   className="group flex flex-col gap-2 p-6 rounded-xl border border-(--border-1) hover:border-[rgba(34,197,94,0.28)] transition-colors duration-300"
                   style={{ background: "var(--bg-card)" }}
                 >
@@ -270,14 +271,20 @@ function WhereItRuns({ solution }: { solution: Solution }) {
                   <span className="text-sm leading-relaxed" style={{ color: "var(--text-3)" }}>
                     {p.body}
                   </span>
-                  <span
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold"
-                    style={{ color: "var(--green-text)" }}
-                  >
-                    Explore {p.name}
-                    <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" />
-                  </span>
-                </Link>
+                  {productSite(p.slug) ? (
+                    <span
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold"
+                      style={{ color: "var(--green-text)" }}
+                    >
+                      Explore {p.name}
+                      <ArrowRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-1" />
+                    </span>
+                  ) : (
+                    <span className="mt-2">
+                      <ComingSoon />
+                    </span>
+                  )}
+                </SmartLink>
               ))}
             </div>
             )}
