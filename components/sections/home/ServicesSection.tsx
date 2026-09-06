@@ -461,7 +461,7 @@ function CustomSolutionCTA() {
     <Link
       href="/consultation"
       className="btn-pill group inline-flex w-full sm:w-auto items-center justify-center gap-2.5 px-7 min-h-12 rounded-full text-sm font-bold transition-all duration-300 hover:-translate-y-0.5"
-      style={{ background: "var(--green-text)", color: "#04120a" }}
+      style={{ background: "var(--green-text)", color: "var(--on-green)" }}
     >
       Need a Custom Solution?
       <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1">
