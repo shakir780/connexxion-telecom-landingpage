@@ -147,7 +147,7 @@ export function MobileDrawer({
                 className="btn-pill flex items-center justify-center gap-2 w-full px-5 py-3 rounded-full font-bold text-sm text-white"
                 style={{
                   background:
-                    "#22c55e",
+                    "var(--green-fill)",
                 }}
               >
                 Book Free Consultation

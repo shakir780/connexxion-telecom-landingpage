@@ -372,7 +372,7 @@ export default function ConsultationClient() {
                         <Link
                           href="/"
                           className="group inline-flex items-center justify-center gap-2.5 min-h-12 px-7 rounded-full text-sm font-bold transition-transform duration-200 hover:-translate-y-0.5"
-                          style={{ background: "var(--green-text)", color: "var(--on-green)" }}
+                          style={{ background: "var(--green-fill)", color: "var(--on-green)" }}
                         >
                           Back to Home
                           <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
@@ -536,7 +536,7 @@ export default function ConsultationClient() {
                         type="submit"
                         disabled={sending}
                         className="btn-pill inline-flex items-center justify-center gap-2.5 mt-1 min-h-12 px-7 rounded-full font-bold text-sm transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0 disabled:cursor-not-allowed"
-                        style={{ background: "var(--green-text)", color: "var(--on-green)" }}
+                        style={{ background: "var(--green-fill)", color: "var(--on-green)" }}
                       >
                         {sending ? "Sending…" : "Book Free Consultation"}
                       </button>

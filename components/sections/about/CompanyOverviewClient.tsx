@@ -431,7 +431,7 @@ function ClosingCTA() {
             <Link
               href="/consultation"
               className="group inline-flex items-center justify-center gap-2.5 min-h-12 px-7 rounded-full text-sm font-bold transition-transform duration-200 hover:-translate-y-0.5"
-              style={{ background: "var(--green-text)", color: "var(--on-green)" }}
+              style={{ background: "var(--green-fill)", color: "var(--on-green)" }}
             >
               Book a Consultation
               <svg
