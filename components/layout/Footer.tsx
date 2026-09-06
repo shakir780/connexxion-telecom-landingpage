@@ -303,7 +303,7 @@ export default function Footer() {
             <Link
               href="/consultation"
               className="btn-pill group inline-flex items-center justify-center gap-2 self-start px-6 min-h-11 rounded-full text-sm font-bold transition-all duration-200"
-              style={{ background: "var(--green-text)", color: "var(--on-green)" }}
+              style={{ background: "var(--green-fill)", color: "var(--on-green)" }}
             >
               Book Appointment
               <svg viewBox="0 0 16 16" fill="currentColor" className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1">

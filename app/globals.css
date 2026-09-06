@@ -50,12 +50,13 @@
   /* Theme-aware accents — #22c55e reads fine on dark but fails
      contrast on light surfaces, so light mode swaps these darker. */
   --green-text: #22c55e;
-  /* Label colour for a solid --green-text fill. The green token is a *text*
-     colour whose two values are tuned for reading on the page background, so
-     when it is used as a button fill the readable label flips per theme:
-     near-black on dark mode's bright #22c55e (8.41:1), white on light mode's
-     dark #15803d (5.02:1). White in dark mode would be 2.28:1. */
-  --on-green: #04120a;
+  /* A green that is legible as *text* on a dark page is too light to carry a
+     white label as a *fill*: white on #22c55e is 2.28:1. So the two jobs get
+     two tokens. --green-fill is the solid CTA background and is the same dark
+     green in both themes, which puts every button at white-on-#15803d,
+     5.02:1. Do not collapse it back into --green-text. */
+  --green-fill: #15803d;
+  --on-green: #ffffff;
   --accent-indigo: #818cf8;
   --accent-teal: #2dd4bf;
   --danger: #f87171;
@@ -113,6 +114,7 @@
 
   /* Theme-aware accents — darker greens for WCAG contrast on light */
   --green-text: #15803d;
+  --green-fill: #15803d;
   --on-green: #ffffff;
   --accent-indigo: #4f46e5;
   --accent-teal: #0d9488;
@@ -431,7 +433,6 @@ textarea:focus-visible {
   --text-3: rgba(255, 255, 255, 0.66);
   --text-4: rgba(255, 255, 255, 0.5);
   --green-text: #4ade80;
-  --on-green: #04120a;
   --border-2: rgba(255, 255, 255, 0.14);
   --border-3: rgba(255, 255, 255, 0.28);
   --btn-2-bg: rgba(255, 255, 255, 0.1);
@@ -467,7 +468,6 @@ textarea:focus-visible {
   --text-2: rgba(255, 255, 255, 0.82);
   --text-3: rgba(255, 255, 255, 0.66);
   --green-text: #4ade80;
-  --on-green: #04120a;
   --bg-input: rgba(255, 255, 255, 0.14);
   --border-3: rgba(255, 255, 255, 0.3);
 }

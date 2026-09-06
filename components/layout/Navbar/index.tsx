@@ -112,7 +112,7 @@ export default function Navbar({ solid = false }: { solid?: boolean }) {
                 className="btn-pill relative group inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm text-white overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
                 style={{
                   background:
-                    "#22c55e",
+                    "var(--green-fill)",
                 }}
               >
                 <span>Book Free Consultation</span>
