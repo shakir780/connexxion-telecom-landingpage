@@ -144,7 +144,7 @@ export default function ServicesIndexClient() {
               <Link
                 href="/consultation"
                 className="group inline-flex items-center justify-center gap-2.5 min-h-12 px-7 rounded-full text-sm font-bold shrink-0 transition-transform duration-200 hover:-translate-y-0.5"
-                style={{ background: "var(--green-text)", color: "#04120a" }}
+                style={{ background: "var(--green-text)", color: "var(--on-green)" }}
               >
                 Book a Consultation
                 <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />

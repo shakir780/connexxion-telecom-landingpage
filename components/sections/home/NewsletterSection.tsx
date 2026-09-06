@@ -161,7 +161,7 @@ export default function NewsletterSection() {
                         type="submit"
                         disabled={loading}
                         className="btn-pill group inline-flex shrink-0 items-center justify-center gap-2 px-6 min-h-12 rounded-lg font-bold text-sm transition-all duration-300 disabled:opacity-70"
-                        style={{ background: "var(--green-text)", color: "#04120a" }}
+                        style={{ background: "var(--green-text)", color: "var(--on-green)" }}
                       >
                         {loading ? "Subscribing…" : "Subscribe"}
                         {!loading && (
