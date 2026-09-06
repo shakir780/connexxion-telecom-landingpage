@@ -36,7 +36,7 @@ export interface Product {
 export const PRODUCTS: Product[] = [
   {
     slug: "igov",
-    name: "iGov",
+    name: "CNX 1GOV",
     label: "Public Sector",
     category: "Government Technology",
     boldDescription:
@@ -47,9 +47,9 @@ export const PRODUCTS: Product[] = [
     audience:
       "Ministries, agencies and governing bodies digitising the processes citizens and staff deal with every day.",
     relatedSolutions: [{ slug: "self-care-portal", title: "Self-Care Portal" }],
-    metaTitle: "iGov — Government Technology Platform | Connexxion Telecom",
+    metaTitle: "CNX 1GOV — Government Technology Platform | Connexxion Telecom",
     metaDescription:
-      "iGov is Connexxion Telecom's all-in-one platform for modern governing bodies and agencies — built for compliance, engineered for scale.",
+      "CNX 1GOV is Connexxion Telecom's all-in-one platform for modern governing bodies and agencies — built for compliance, engineered for scale.",
   },
   {
     slug: "cnx247",

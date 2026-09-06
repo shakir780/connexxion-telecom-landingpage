@@ -78,7 +78,7 @@ const NAV_GROUPS: NavGroup[] = [
     id: "products",
     heading: "Products",
     links: [
-      { label: "iGov", href: "/products/igov" },
+      { label: "CNX 1GOV", href: "/products/igov" },
       { label: "CNX247", href: "/products/cnx247" },
       { label: "iCoop", href: "/products/icoop" },
     ],
