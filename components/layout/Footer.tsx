@@ -130,7 +130,6 @@ const NAV_COLUMNS: NavGroup[][] = [
 
 const LEGAL_LINKS = [
   { label: "Privacy Policy", href: "/legal/privacy-policy" },
-  { label: "Terms & Conditions", href: "/legal/terms-and-conditions" },
 ];
 
 /* ─── Shared pieces ─── */
