@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { validateEmail } from "@/lib/form-validation";
 
 const EASE_OUT = "easeOut" as const;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /* ─── Checkmark icon ─── */
 function CheckIcon() {
@@ -27,39 +27,45 @@ function CheckIcon() {
 /* ─── Main Export ───
    A contained panel on the page's own dark ground rather than a full-bleed
    green band: the green is a tint and a border, and the CTA button carries the
-   only solid fill. Submit behaviour is unchanged. */
+   only solid fill. Sign-ups go to /api/newsletter. */
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!email.trim()) {
-      setError("Please enter your email address.");
-      return;
-    }
-    if (!EMAIL_RE.test(email)) {
-      setError("Enter a valid email address.");
+    const invalid = validateEmail(email);
+    if (invalid) {
+      setError(invalid);
       return;
     }
 
     setError("");
     setLoading(true);
 
-    // TODO: replace with a real call to your CRM / email marketing platform
-    // (e.g. Mailchimp, HubSpot, ConvertKit, Brevo) once a provider + API
-    // credentials are available — e.g.:
-    // await fetch("/api/newsletter", {
-    //   method: "POST",
-    //   body: JSON.stringify({ email }),
-    // });
-    await new Promise((resolve) => setTimeout(resolve, 600));
-
-    setLoading(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          website: new FormData(e.currentTarget).get("website") ?? "",
+        }),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error ?? "We couldn't sign you up just now. Please try again.");
+      }
+    } catch {
+      setError("We couldn't reach the server. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -119,7 +125,7 @@ export default function NewsletterSection() {
                   >
                     <CheckIcon />
                     <p className="text-sm font-semibold">
-                      You&apos;re subscribed! Check your inbox to confirm.
+                      You&apos;re subscribed. Thanks for signing up!
                     </p>
                   </motion.div>
                 ) : (
@@ -132,6 +138,13 @@ export default function NewsletterSection() {
                     onSubmit={handleSubmit}
                     noValidate
                   >
+                    {/* Bot trap: off-screen, skipped by keyboard and screen
+                        readers. The API discards sign-ups that fill it. */}
+                    <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+                      <label htmlFor="newsletter-website">Website</label>
+                      <input id="newsletter-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+                    </div>
+
                     <div className="flex flex-col sm:flex-row gap-2.5">
                       <div className="flex-1">
                         <label htmlFor="newsletter-email" className="sr-only">

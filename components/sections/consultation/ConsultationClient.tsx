@@ -8,6 +8,11 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Eyebrow, ArrowRight, Breadcrumb } from "@/components/ui/section-parts";
 import { SOLUTION_CATEGORIES } from "@/lib/nav-data";
+import {
+  validateConsultation as validate,
+  type ConsultationErrors,
+  type ConsultationInput,
+} from "@/lib/form-validation";
 
 const EASE_OUT = "easeOut" as const;
 
@@ -33,14 +38,7 @@ const STEPS = [
   },
 ];
 
-interface FormState {
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  category: string;
-  message: string;
-}
+type FormState = ConsultationInput;
 
 const INITIAL_STATE: FormState = {
   name: "",
@@ -51,20 +49,18 @@ const INITIAL_STATE: FormState = {
   message: "",
 };
 
-type FormErrors = Partial<Record<keyof FormState, string>>;
+type FormErrors = ConsultationErrors;
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_RE = /^[+()\d][\d\s()-]{6,}$/;
-
-function validate(values: FormState): FormErrors {
-  const errors: FormErrors = {};
-  if (!values.name.trim()) errors.name = "Please enter your full name.";
-  if (!values.email.trim()) errors.email = "Please enter your email address.";
-  else if (!EMAIL_RE.test(values.email)) errors.email = "Enter a valid email address.";
-  if (!values.phone.trim()) errors.phone = "Please enter a phone number.";
-  else if (!PHONE_RE.test(values.phone)) errors.phone = "Enter a valid phone number.";
-  if (!values.category) errors.category = "Please select a category.";
-  return errors;
+/* ─── Bot trap ───
+   Off-screen and skipped by keyboard and screen readers, so only bots that
+   fill in every field reach it. The API discards anything that does. */
+function Honeypot() {
+  return (
+    <div aria-hidden="true" className="absolute -left-[9999px] w-px h-px overflow-hidden">
+      <label htmlFor="website">Website</label>
+      <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+    </div>
+  );
 }
 
 /* ─── Field wrapper ─── */
@@ -138,8 +134,9 @@ export default function ConsultationClient() {
       setValues((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const website = new FormData(e.currentTarget).get("website") ?? "";
     const nextErrors = validate(values);
     setErrors(nextErrors);
     setFailure(null);
@@ -150,7 +147,7 @@ export default function ConsultationClient() {
       const res = await fetch("/api/consultation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, website }),
       });
 
       if (res.ok) {
@@ -400,6 +397,8 @@ export default function ConsultationClient() {
                       noValidate
                       className="flex flex-col gap-5"
                     >
+                      <Honeypot />
+
                       <div className="grid sm:grid-cols-2 gap-5">
                         <Field label="Full Name" htmlFor="name" error={errors.name}>
                           <input
